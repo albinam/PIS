@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PISDatabaseImplement.Migrations
 {
-    public partial class _1 : Migration
+    public partial class InitialCreate : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -36,7 +36,7 @@ namespace PISDatabaseImplement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -51,7 +51,7 @@ namespace PISDatabaseImplement.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.Id);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -92,9 +92,9 @@ namespace PISDatabaseImplement.Migrations
                 {
                     table.PrimaryKey("PK_LibraryCards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LibraryCards_User_ReaderId",
+                        name: "FK_LibraryCards_Users_ReaderId",
                         column: x => x.ReaderId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -142,9 +142,9 @@ namespace PISDatabaseImplement.Migrations
                 {
                     table.PrimaryKey("PK_Contracts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Contracts_User_LibrarianId",
+                        name: "FK_Contracts_Users_LibrarianId",
                         column: x => x.LibrarianId,
-                        principalTable: "User",
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -249,7 +249,7 @@ namespace PISDatabaseImplement.Migrations
                 name: "Genres");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Users");
         }
     }
 }

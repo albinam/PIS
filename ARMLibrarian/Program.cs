@@ -2,19 +2,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PISCoursework
+namespace ARMLibrarian
 {
     public class Program
     {
-        public static UserViewModel Librarian = null;
-        public static UserViewModel Reader = null;
-        public static UserViewModel Accountant = null;
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();

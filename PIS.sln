@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PISCoursework", "PISCoursew
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PISDatabaseImplement", "PISDatabaseImplement\PISDatabaseImplement.csproj", "{87BCE7B3-A775-4E2E-992A-736C6F3D59B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PISBusinessLogic", "PISBusinessLogic\PISBusinessLogic.csproj", "{71C17B10-2E0F-488B-87C9-8614354643B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PISBusinessLogic", "PISBusinessLogic\PISBusinessLogic.csproj", "{71C17B10-2E0F-488B-87C9-8614354643B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

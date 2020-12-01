@@ -4,14 +4,12 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using PISBusinessLogic.Interfaces;
-using PISDatabaseImplement.Implements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PISCoursework
+namespace ARMLibrarian
 {
     public class Startup
     {
@@ -26,7 +24,6 @@ namespace PISCoursework
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddTransient<IUserLogic, UserLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

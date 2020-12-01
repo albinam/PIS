@@ -227,7 +227,7 @@ namespace PISDatabaseImplement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PISDatabaseimplements.Models.Book", b =>

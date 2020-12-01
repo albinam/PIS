@@ -10,8 +10,8 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201130202425_1")]
-    partial class _1
+    [Migration("20201201095516_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -229,7 +229,7 @@ namespace PISDatabaseImplement.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("PISDatabaseimplements.Models.Book", b =>

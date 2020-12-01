@@ -25,6 +25,7 @@ namespace PISDatabaseImplements
         public DbSet<Genre> Genres { get; set; }
         public DbSet<LibraryCard> LibraryCards { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 
 }

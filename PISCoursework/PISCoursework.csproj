@@ -14,7 +14,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PISBusinessLogic\PISBusinessLogic.csproj" />
     <ProjectReference Include="..\PISDatabaseImplement\PISDatabaseImplement.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Controllers\ControllersLibrarian\" />
   </ItemGroup>
 
 </Project>

@@ -10,7 +10,7 @@ namespace PISBusinessLogic.BindingModels
     public class UserBindingModel
     {
         [DataMember]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [DataMember]
         public string FIO { get; set; }
         [DataMember]
