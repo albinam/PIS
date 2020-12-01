@@ -11,7 +11,7 @@ namespace PISDatabaseimplements.Models
         public int Id { get; set; }
         public DateTime DateFrom { get; set; }
         public DateTime DateTo { get; set; }
-        public Book Book { get; set; }
-        public LibraryCard LibraryCard { get; set; }
+        public virtual Book Book { get; set; }
+        public virtual LibraryCard LibraryCard { get; set; }
     }
 }

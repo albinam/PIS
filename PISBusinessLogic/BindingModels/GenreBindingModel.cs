@@ -10,7 +10,7 @@ namespace PISBusinessLogic.BindingModels
     public class GenreBindingModel
     {
         [DataMember]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [DataMember]
         public string Name { get; set; }
         [DataMember]

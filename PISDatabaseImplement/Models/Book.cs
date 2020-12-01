@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PISBusinessLogic;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -13,7 +14,9 @@ namespace PISDatabaseimplements.Models
         public string Author { get; set; }
         public string PublishingHouse { get; set; }
         public string Year { get; set; }
-        public Genre Genre { get; set; }
+        public Status Status { get; set; }
+        public int GenreId { get; set; }
+        public virtual Genre Genre { get; set; }
 
     }
 }

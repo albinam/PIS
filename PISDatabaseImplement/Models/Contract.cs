@@ -15,7 +15,7 @@ namespace PISDatabaseimplements.Models
         public double Sum { get; set; }
         [ForeignKey("ContractId")]
         public virtual List<BookContract> BookContracts { get; set; }
-        public LibraryCard LibraryCard { get; set; }
-        public User Librarian { get; set; }
+        public virtual LibraryCard LibraryCard { get; set; }
+        public virtual User Librarian { get; set; }
     }
 }

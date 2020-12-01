@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PISDatabaseImplement.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class _1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -64,7 +64,7 @@ namespace PISDatabaseImplement.Migrations
                     Author = table.Column<string>(nullable: true),
                     PublishingHouse = table.Column<string>(nullable: true),
                     Year = table.Column<string>(nullable: true),
-                    GenreId = table.Column<int>(nullable: true)
+                    GenreId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,7 +74,7 @@ namespace PISDatabaseImplement.Migrations
                         column: x => x.GenreId,
                         principalTable: "Genres",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

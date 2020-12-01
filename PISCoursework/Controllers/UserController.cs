@@ -13,8 +13,7 @@ namespace PISCoursework.Controllers
     public class UserController : Controller
     {
         private readonly IUserLogic _user;
-        private readonly int passwordMinLength = 6;
-        private readonly int passwordMaxLength = 20;
+
         public UserController(IUserLogic user)
         {
             _user = user;

@@ -18,7 +18,7 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
-                        @if (Program.Librarian == null && Program.Reader==null && Program.Accountant == null)
+                        @if (Program.Librarian == null && Program.Reader == null && Program.Accountant == null)
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -38,8 +38,13 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
-                            <li> <p>Это библиотекарь</p></li>
-                           
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="AddBook">Добавить книгу</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="ListOfBooks">Список книг</a>
+                            </li>
+
                         }
                     </ul>
                 </div>

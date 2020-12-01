@@ -18,8 +18,4 @@
     <ProjectReference Include="..\PISDatabaseImplement\PISDatabaseImplement.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Controllers\ControllersLibrarian\" />
-  </ItemGroup>
-
 </Project>

@@ -12,7 +12,7 @@ namespace PISDatabaseimplements.Models
         public DateTime DateReturn { get; set; }
         public double Price { get; set; }
         public double Fine { get; set; }
-        public Book Book { get; set; }
-        public Contract Contract { get; set; }
+        public virtual Book Book { get; set; }
+        public virtual Contract Contract { get; set; }
     }
 }

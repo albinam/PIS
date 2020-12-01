@@ -10,8 +10,8 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201201095516_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20201201173928_1")]
+    partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -31,7 +31,7 @@ namespace PISDatabaseImplement.Migrations
                     b.Property<string>("Author")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GenreId")
+                    b.Property<int>("GenreId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -236,7 +236,9 @@ namespace PISDatabaseImplement.Migrations
                 {
                     b.HasOne("PISDatabaseimplements.Models.Genre", "Genre")
                         .WithMany()
-                        .HasForeignKey("GenreId");
+                        .HasForeignKey("GenreId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PISDatabaseimplements.Models.BookContract", b =>

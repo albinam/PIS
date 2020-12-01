@@ -12,6 +12,7 @@ namespace PISBusinessLogic.ViewModels
         public string Author { get; set; }
         public string PublishingHouse { get; set; }
         public string Year { get; set; }
+        public Status Status { get; set; }
         public int GenreId { get; set; }
     }
 }
