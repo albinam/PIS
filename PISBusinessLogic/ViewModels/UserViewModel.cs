@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PISBusinessLogic.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,6 +15,6 @@ namespace PISBusinessLogic.ViewModels
         public string Email { get; set; }
         public string Comission { get; set; }
         public string ComissionPercent { get; set; }
-        public string Role { get; set; }
+        public Roles Role { get; set; }
     }
 }

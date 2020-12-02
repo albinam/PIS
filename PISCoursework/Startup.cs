@@ -29,6 +29,7 @@ namespace PISCoursework
             services.AddTransient<IUserLogic, UserLogic>();
             services.AddTransient<IBookLogic, BookLogic>();
             services.AddTransient<IGenreLogic, GenreLogic>();
+            services.AddTransient<ILibraryCardLogic, LibraryCardLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

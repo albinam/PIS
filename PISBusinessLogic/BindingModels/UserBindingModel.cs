@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PISBusinessLogic.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -24,6 +25,6 @@ namespace PISBusinessLogic.BindingModels
         [DataMember]
         public string ComissionPercent { get; set; }
         [DataMember]
-        public string Role { get; set; }
+        public Roles Role { get; set; }
     }
 }

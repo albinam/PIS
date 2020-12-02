@@ -10,7 +10,7 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201201173928_1")]
+    [Migration("20201202153140_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +39,9 @@ namespace PISDatabaseImplement.Migrations
 
                     b.Property<string>("PublishingHouse")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("Year")
                         .HasColumnType("nvarchar(max)");
@@ -168,7 +171,7 @@ namespace PISDatabaseImplement.Migrations
                     b.Property<string>("PlaceOfWork")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReaderId")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -176,7 +179,7 @@ namespace PISDatabaseImplement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReaderId");
+                    b.HasIndex("UserId");
 
                     b.ToTable("LibraryCards");
                 });
@@ -221,8 +224,8 @@ namespace PISDatabaseImplement.Migrations
                     b.Property<string>("Password")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("Salary")
                         .HasColumnType("nvarchar(max)");
@@ -278,7 +281,9 @@ namespace PISDatabaseImplement.Migrations
                 {
                     b.HasOne("PISDatabaseimplements.Models.User", "Reader")
                         .WithMany()
-                        .HasForeignKey("ReaderId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

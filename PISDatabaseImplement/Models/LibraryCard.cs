@@ -12,6 +12,7 @@ namespace PISDatabaseimplements.Models
         public string Year { get; set; }
         public string PlaceOfWork { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public int UserId { get; set; }
         public virtual User Reader { get; set; }
     }
 }

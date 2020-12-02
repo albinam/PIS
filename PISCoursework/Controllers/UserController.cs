@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PISBusinessLogic.BindingModels;
+using PISBusinessLogic.Enums;
 using PISBusinessLogic.Interfaces;
 using PISCoursework.Models;
 using System;
@@ -35,15 +36,15 @@ namespace PISCoursework.Controllers
                 ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
                 return View(user);
             }
-            if (userView.Role == "Библиотекарь")
+            if (userView.Role == Roles.Библиотекарь)
             {
                 Program.Librarian = userView;
             }
-            if (userView.Role == "Читатель")
+            if (userView.Role == Roles.Читатель)
             {
                 Program.Reader = userView;
             }
-            if (userView.Role == "Бухгалтер")
+            if (userView.Role == Roles.Бухгалтер)
             {
                 Program.Accountant = userView;
             }

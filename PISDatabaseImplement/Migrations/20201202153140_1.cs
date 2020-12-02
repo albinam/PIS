@@ -47,7 +47,7 @@ namespace PISDatabaseImplement.Migrations
                     Email = table.Column<string>(nullable: true),
                     Comission = table.Column<string>(nullable: true),
                     ComissionPercent = table.Column<string>(nullable: true),
-                    Role = table.Column<string>(nullable: true)
+                    Role = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -64,6 +64,7 @@ namespace PISDatabaseImplement.Migrations
                     Author = table.Column<string>(nullable: true),
                     PublishingHouse = table.Column<string>(nullable: true),
                     Year = table.Column<string>(nullable: true),
+                    Status = table.Column<int>(nullable: false),
                     GenreId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -86,17 +87,17 @@ namespace PISDatabaseImplement.Migrations
                     Year = table.Column<string>(nullable: true),
                     PlaceOfWork = table.Column<string>(nullable: true),
                     DateOfBirth = table.Column<DateTime>(nullable: false),
-                    ReaderId = table.Column<int>(nullable: true)
+                    UserId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_LibraryCards", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LibraryCards_Users_ReaderId",
-                        column: x => x.ReaderId,
+                        name: "FK_LibraryCards_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -220,9 +221,9 @@ namespace PISDatabaseImplement.Migrations
                 column: "LibraryCardId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LibraryCards_ReaderId",
+                name: "IX_LibraryCards_UserId",
                 table: "LibraryCards",
-                column: "ReaderId");
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
