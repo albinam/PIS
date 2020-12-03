@@ -20,7 +20,7 @@ namespace PISDatabaseImplements
         }
         public DbSet<Book> Books { get; set; }
         public DbSet<Contract> Contracts { get; set; }
-        public DbSet<BookContract> BookContracts { get; set; }
+        public DbSet<ContractBook> ContractBooks { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<LibraryCard> LibraryCards { get; set; }

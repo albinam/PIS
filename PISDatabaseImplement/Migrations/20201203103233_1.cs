@@ -135,9 +135,11 @@ namespace PISDatabaseImplement.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Date = table.Column<DateTime>(nullable: false),
+                    DateReturn = table.Column<DateTime>(nullable: false),
                     Sum = table.Column<double>(nullable: false),
-                    LibraryCardId = table.Column<int>(nullable: true),
-                    LibrarianId = table.Column<int>(nullable: true)
+                    Fine = table.Column<double>(nullable: false),
+                    LibraryCardId = table.Column<int>(nullable: false),
+                    LibrarianId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -147,7 +149,7 @@ namespace PISDatabaseImplement.Migrations
                         column: x => x.LibrarianId,
                         principalTable: "Users",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Contracts_LibraryCards_LibraryCardId",
                         column: x => x.LibraryCardId,
@@ -157,43 +159,30 @@ namespace PISDatabaseImplement.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BookContracts",
+                name: "ContractBooks",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    DateReturn = table.Column<DateTime>(nullable: false),
-                    Price = table.Column<double>(nullable: false),
-                    Fine = table.Column<double>(nullable: false),
-                    BookId = table.Column<int>(nullable: true),
-                    ContractId = table.Column<int>(nullable: true)
+                    BookId = table.Column<int>(nullable: false),
+                    ContractId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BookContracts", x => x.Id);
+                    table.PrimaryKey("PK_ContractBooks", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BookContracts_Books_BookId",
+                        name: "FK_ContractBooks_Books_BookId",
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BookContracts_Contracts_ContractId",
+                        name: "FK_ContractBooks_Contracts_ContractId",
                         column: x => x.ContractId,
                         principalTable: "Contracts",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookContracts_BookId",
-                table: "BookContracts",
-                column: "BookId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BookContracts_ContractId",
-                table: "BookContracts",
-                column: "ContractId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_BookId",
@@ -209,6 +198,16 @@ namespace PISDatabaseImplement.Migrations
                 name: "IX_Books_GenreId",
                 table: "Books",
                 column: "GenreId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContractBooks_BookId",
+                table: "ContractBooks",
+                column: "BookId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ContractBooks_ContractId",
+                table: "ContractBooks",
+                column: "ContractId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Contracts_LibrarianId",
@@ -229,25 +228,25 @@ namespace PISDatabaseImplement.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "BookContracts");
+                name: "Bookings");
 
             migrationBuilder.DropTable(
-                name: "Bookings");
+                name: "ContractBooks");
 
             migrationBuilder.DropTable(
                 name: "Payments");
 
             migrationBuilder.DropTable(
-                name: "Contracts");
-
-            migrationBuilder.DropTable(
                 name: "Books");
 
             migrationBuilder.DropTable(
-                name: "LibraryCards");
+                name: "Contracts");
 
             migrationBuilder.DropTable(
                 name: "Genres");
+
+            migrationBuilder.DropTable(
+                name: "LibraryCards");
 
             migrationBuilder.DropTable(
                 name: "Users");

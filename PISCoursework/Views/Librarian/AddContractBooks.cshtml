@@ -7,8 +7,7 @@
     <h1>Книги</h1>
 </div>
 <hr />
-<p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/AddBook">добавить книгу</a></strong></p>
-<form asp-controller="Librarian" asp-action="ListOfBooks" method="get">
+<form asp-controller="Librarian" asp-action="AddContractBooks" method="get">
     <div class="col-sm-8">
         Найти книги в наличии<br />
         По названию:
@@ -26,9 +25,11 @@
             }
         </select>
         <br />
+        <input type="hidden" value="@ViewBag.FIO" name="FIO" />
         <input type="submit" value="найти" class="btn btn-info btn-sm" />
     </div>
 </form>
+@Html.ActionLink("заключить", "AddContractBooks", new { FIO = ViewBag.FIO, id = ViewBag.Create })
 <table class="table">
     <tr>
         <td>Название</td>
@@ -38,6 +39,7 @@
         <td>Год издания</td>
         <td>Цена проката</td>
         <td>Статус</td>
+        <td>Добавить в договор</td>
     </tr>
     @foreach (var genre in ViewBag.Genres)
     {
@@ -54,6 +56,7 @@
                     <td>@book.Year</td>
                     <td>@genre.Price</td>
                     <td>@book.Status</td>
+                    <td>  @Html.ActionLink("заключить", "AddContractBooks", new { FIO = ViewBag.FIO, id = @book.Id })</td>
                 </tr>
             }
         }

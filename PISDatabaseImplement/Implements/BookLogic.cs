@@ -62,7 +62,7 @@ namespace PISDatabaseImplement.Implements
             {
                 return context.Books
                  .Where(rec => model == null
-                   || rec.Id == model.Id)             
+                   || rec.Id == model.Id ||(rec.Name==model.Name && rec.Status==model.Status) || (rec.GenreId==model.GenreId && rec.Status == model.Status) || (rec.Author == model.Author && rec.Status == model.Status))             
                .Select(rec => new BookViewModel
                {
                    Id = rec.Id,

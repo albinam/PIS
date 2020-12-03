@@ -10,7 +10,7 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201202153140_1")]
+    [Migration("20201203103233_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,37 +53,6 @@ namespace PISDatabaseImplement.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("PISDatabaseimplements.Models.BookContract", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("BookId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ContractId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("DateReturn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<double>("Fine")
-                        .HasColumnType("float");
-
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BookId");
-
-                    b.HasIndex("ContractId");
-
-                    b.ToTable("BookContracts");
-                });
-
             modelBuilder.Entity("PISDatabaseimplements.Models.Booking", b =>
                 {
                     b.Property<int>("Id")
@@ -122,10 +91,16 @@ namespace PISDatabaseImplement.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LibrarianId")
+                    b.Property<DateTime>("DateReturn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Fine")
+                        .HasColumnType("float");
+
+                    b.Property<int>("LibrarianId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("LibraryCardId")
+                    b.Property<int>("LibraryCardId")
                         .HasColumnType("int");
 
                     b.Property<double>("Sum")
@@ -138,6 +113,28 @@ namespace PISDatabaseImplement.Migrations
                     b.HasIndex("LibraryCardId");
 
                     b.ToTable("Contracts");
+                });
+
+            modelBuilder.Entity("PISDatabaseimplements.Models.ContractBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ContractId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ContractId");
+
+                    b.ToTable("ContractBooks");
                 });
 
             modelBuilder.Entity("PISDatabaseimplements.Models.Genre", b =>
@@ -244,17 +241,6 @@ namespace PISDatabaseImplement.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("PISDatabaseimplements.Models.BookContract", b =>
-                {
-                    b.HasOne("PISDatabaseimplements.Models.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookId");
-
-                    b.HasOne("PISDatabaseimplements.Models.Contract", "Contract")
-                        .WithMany("BookContracts")
-                        .HasForeignKey("ContractId");
-                });
-
             modelBuilder.Entity("PISDatabaseimplements.Models.Booking", b =>
                 {
                     b.HasOne("PISDatabaseimplements.Models.Book", "Book")
@@ -270,11 +256,30 @@ namespace PISDatabaseImplement.Migrations
                 {
                     b.HasOne("PISDatabaseimplements.Models.User", "Librarian")
                         .WithMany()
-                        .HasForeignKey("LibrarianId");
+                        .HasForeignKey("LibrarianId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PISDatabaseimplements.Models.LibraryCard", "LibraryCard")
                         .WithMany()
-                        .HasForeignKey("LibraryCardId");
+                        .HasForeignKey("LibraryCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("PISDatabaseimplements.Models.ContractBook", b =>
+                {
+                    b.HasOne("PISDatabaseimplements.Models.Book", "Book")
+                        .WithMany()
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PISDatabaseimplements.Models.Contract", "Contract")
+                        .WithMany("BookContracts")
+                        .HasForeignKey("ContractId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PISDatabaseimplements.Models.LibraryCard", b =>

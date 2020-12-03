@@ -12,9 +12,13 @@ namespace PISDatabaseimplements.Models
     {
         public int Id { get; set; }
         public DateTime Date { get;set;}
+        public DateTime DateReturn { get; set; }
         public double Sum { get; set; }
+        public double Fine { get; set; }
+        public int LibraryCardId { get; set; }
+        public int LibrarianId { get; set; }
         [ForeignKey("ContractId")]
-        public virtual List<BookContract> BookContracts { get; set; }
+        public virtual List<ContractBook> BookContracts { get; set; }
         public virtual LibraryCard LibraryCard { get; set; }
         public virtual User Librarian { get; set; }
     }
