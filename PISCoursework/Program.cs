@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PISBusinessLogic.BindingModels;
 using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;

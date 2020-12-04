@@ -36,8 +36,25 @@ namespace PISDatabaseImplement.Implements
                             element.LibrarianId = model.LibrarianId;
                             element.DateReturn = model.DateReturn;
                             element.Fine = model.Fine;
+                            var groupBooks = model.ContractBooks
+                              .GroupBy(rec => rec.BookId)
+                              .Select(rec => new
+                              {
+                                  BookId = rec.Key
+                              });
+
+                            foreach (var groupBook in groupBooks)
+                            {
+                                context.ContractBooks.Add(new ContractBook
+                                {
+                                    ContractId = element.Id,
+                                    BookId = groupBook.BookId
+                                });
+                                context.SaveChanges();
+                            }
                             context.SaveChanges();
                         }
+
                         else
                         {
                             element.LibraryCardId = model.LibraryCardId;
@@ -105,10 +122,10 @@ namespace PISDatabaseImplement.Implements
                     ReaderFIO = rec.LibraryCard.Reader.FIO,
                     LibrarianId = rec.LibrarianId,
                     LibrarianFIO = rec.Librarian.FIO,
-                    DateReturn=rec.DateReturn,
-                    Fine=rec.Fine,
+                    DateReturn = rec.DateReturn,
+                    Fine = rec.Fine,
                     Sum = rec.Sum,
-                    Date = rec.Date,                  
+                    Date = rec.Date,
                     ContractBooks = GetContractBookViewModel(rec)
                 })
             .ToList();

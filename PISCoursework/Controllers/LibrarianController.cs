@@ -82,6 +82,7 @@ namespace PISCoursework.Controllers
         public IActionResult Readers()
         {
             ViewBag.Users = _user.Read(null);
+            ViewBag.Create = -1;
             return View();
         }
         [HttpGet]
@@ -97,6 +98,7 @@ namespace PISCoursework.Controllers
                         users.Add(user);
                 }
                 ViewBag.Users = users;
+                ViewBag.Create = -1;
                 return View();
             }
             var Users2 = _user.Read(new UserBindingModel
@@ -109,6 +111,7 @@ namespace PISCoursework.Controllers
                 if (user.Role == Roles.Читатель)
                     users2.Add(user);
             }
+            ViewBag.Create = -1;
             ViewBag.Users = users2;
             return View();
         }
@@ -184,11 +187,11 @@ namespace PISCoursework.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddContractBooks(string FIO, int id,  BookBindingModel model)
+        public ActionResult AddContractBooks(string Email, int id,  BookBindingModel model)
         {
             ViewBag.Genres = _genre.Read(null);
+            ViewBag.FIO = Email;
             ViewBag.Create = -1;
-            ViewBag.FIO = FIO;
             var freebooks = _book.Read(null);
             List<BookViewModel> freeBooks = new List<BookViewModel>();
             foreach (var book in freebooks)
@@ -197,16 +200,29 @@ namespace PISCoursework.Controllers
                     freeBooks.Add(book);
             }
             ViewBag.Books = freeBooks;
-            if (model.Author != null || model.GenreId != 0 || model.Name != null)
+            if ((model.Author != null || model.GenreId != 0 || model.Name != null) && (id == 0 || id == -1))
+            {       
+                return BookSearch(model);
+            }
+            if ((model.Author != null || model.GenreId != 0 || model.Name != null) && (id != 0 && id != -1))
             {
+                var contract = _contract.Read(null).LastOrDefault();
+                var listOfBooks = _contract.Read(new ContractBindingModel
+                {
+                    Id = contract.Id
+                }).FirstOrDefault();
+                if (listOfBooks.ContractBooks.Count != 0)
+                {
+                    ViewBag.ContractBooks = listOfBooks.ContractBooks;
+                }
                 return BookSearch(model);
             }
             int libraryCard=0;
-            if (FIO != null)
+            if (Email != null)
             {
                 var user = _user.Read(new UserBindingModel
                 {
-                    FIO = FIO
+                    Email = Email
                 }).FirstOrDefault();
                 var libraryCard1 = _libraryCard.Read(new LibraryCardBindingModel
                 {
@@ -236,10 +252,42 @@ namespace PISCoursework.Controllers
                 {
                     BookId = id,
                 });
-                return View(model);
-            }
+                var contract = _contract.Read(null).LastOrDefault();
+                _contract.CreateOrUpdate(new ContractBindingModel
+                {
+                    Id = contract.Id,
+                    Date = contract.Date,
+                    DateReturn = contract.DateReturn,
+                    Sum = contract.Sum+getSum(contractBooks),
+                    Fine = 0,
+                    LibraryCardId = contract.LibrarianId,
+                    LibrarianId = Program.Librarian.Id,
+                    ContractBooks = contractBooks
+                }) ;
+                var listOfBooks = _contract.Read(new ContractBindingModel
+                {
+                    Id = contract.Id
+                }).FirstOrDefault();
+                if (listOfBooks.ContractBooks.Count != 0)
+                {
+                    ViewBag.ContractBooks = listOfBooks;
+                }
+                ViewBag.Genres = _genre.Read(null);
+                ViewBag.FIO = Email;
+                ViewBag.Create = -1;
+                freebooks = _book.Read(null);
+                freeBooks = new List<BookViewModel>();
+                foreach (var book1 in freebooks)
+                {
+                    if (book1.Status == Status.Свободна)
+                        freeBooks.Add(book1);
+                }
+                ViewBag.Books = freeBooks;
+               
+                return View();
+            }                      
             if (id == -1)
-            {
+            {               
                 _contract.CreateOrUpdate(new ContractBindingModel
                 {
                     Date = DateTime.Now,
@@ -253,7 +301,31 @@ namespace PISCoursework.Controllers
             }
             return View(model);
         }
-
+        
+        public double getSum(List<ContractBookBindingModel> contractBooks)
+        {
+            double sum = 0;
+            if (contractBooks != null)
+            {
+                foreach (var book in contractBooks)
+                {
+                    var b = _book.Read(new BookBindingModel
+                    {
+                        Id = book.BookId
+                    }).FirstOrDefault();
+                    var g = _genre.Read(new GenreBindingModel
+                    {
+                        Id = b.GenreId
+                    }).FirstOrDefault();
+                    sum += g.Price;
+                }
+                return sum;
+            }
+            else
+            {
+                return 0;
+            }             
+        }
         public ActionResult BookSearch(BookBindingModel model)
         {
             ViewBag.Genres = _genre.Read(null);

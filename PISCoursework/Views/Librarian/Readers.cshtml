@@ -18,6 +18,8 @@
 
         <td>ФИО</td>
         <td>Логин</td>
+        <td>Читательский билет</td>
+        <td>Заключить договор</td>
     </tr>
 
     @foreach (PISBusinessLogic.ViewModels.UserViewModel user in ViewBag.Users)
@@ -26,11 +28,10 @@
             <td>@user.FIO</td>
             <td>@user.Email</td>
             <td>
-            <td>
                 <a class="btn btn-info btn-sm" href="/Librarian/AddLibraryCard/@user.Id">просмотреть читательский билет</a>
             </td>
             <td>
-                @Html.ActionLink("заключить", "AddContractBooks", new { FIO = @user.FIO })
+                @Html.ActionLink("заключить договор", "AddContractBooks", new { email = @user.Email, id=ViewBag.Create}, new { @class = "btn btn-info" })
             </td>
         </tr>
     }
