@@ -167,25 +167,7 @@ namespace PISCoursework.Controllers
             return BookSearch(model);
 
         }
-        [HttpGet]
-        public ActionResult NewContract(int id)
-        {
-            ViewBag.UserId = id;
-            ViewBag.User = _user.Read(new UserBindingModel
-            {
-                Id = id
-            }).FirstOrDefault();
-            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
-            {
-                UserId = id
-            }).FirstOrDefault();
-            if (ViewBag.Exists == null)
-            {
-                RedirectToAction("AddLibraryCard");
-            }
-            return View();
-        }
-
+       
         [HttpGet]
         public ActionResult AddContractBooks(string Email, int id,  BookBindingModel model)
         {
@@ -301,7 +283,65 @@ namespace PISCoursework.Controllers
             }
             return View(model);
         }
-        
+        [HttpGet]
+        public ActionResult ListOfContracts(int id,string FIO)
+        {
+            ViewBag.Genres = _genre.Read(null);
+            ViewBag.Contracts = _contract.Read(null);
+            var Users = _user.Read(null);
+            List<UserViewModel> users = new List<UserViewModel>();
+            List<LibraryCardViewModel> cards = new List<LibraryCardViewModel>();
+            foreach (var user in Users)
+            {
+                if (user.Role == Roles.Читатель)
+                    users.Add(user);
+                var card = _libraryCard.Read(new LibraryCardBindingModel
+                {
+                    UserId = user.Id
+                }).FirstOrDefault();
+                if(card!=null)
+                    cards.Add(card);
+            }
+            ViewBag.LibraryCards = cards;
+            ViewBag.Users = users;
+            if (id == 0 && FIO == null )
+            {
+                return View();
+            }
+            else
+            {
+                
+                if (id != 0 && FIO == null)
+                {
+                    ViewBag.Contracts = _contract.Read(new ContractBindingModel
+                    {
+                        Id = id
+                    });
+                    return View(id);
+                }
+                if (id == 0 && FIO != null)
+                {
+                    var readers = _user.Read(new UserBindingModel
+                    {
+                        FIO = FIO
+                    });
+                    foreach(var reader in readers)
+                    {
+                        var card = _libraryCard.Read(new LibraryCardBindingModel
+                        {
+                            UserId = reader.Id
+                        }).FirstOrDefault();
+                        ViewBag.Contracts = _contract.Read(new ContractBindingModel
+                        {
+                            LibraryCardId = card.Id
+                        });
+                    }
+                    return View();
+                }
+                ModelState.AddModelError("", "Введите хотя бы один параметр поиска");
+                return View();
+            }
+        }
         public double getSum(List<ContractBookBindingModel> contractBooks)
         {
             double sum = 0;
