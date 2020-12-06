@@ -7,6 +7,7 @@ namespace PISBusinessLogic
     public enum Status
     {
         Свободна=0,
-        Занята=1
+        Выдана=1,
+        Забронирована=2
     }
 }

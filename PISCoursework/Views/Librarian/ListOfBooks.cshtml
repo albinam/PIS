@@ -8,25 +8,44 @@
 </div>
 <hr />
 <p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/AddBook">добавить книгу</a></strong></p>
+<hr />
+<p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/Books">выборки по книгам</a></strong></p>
+<hr />
+<p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/BookPrice">коррекция стоимости проката</a></strong></p>
+<hr />
 <form asp-controller="Librarian" asp-action="ListOfBooks" method="get">
-    <div class="col-sm-8">
-        Найти книги в наличии<br />
-        По названию:
-        @Html.TextBoxFor(x => x.Name)
-        <br />
-        По автору:
-        @Html.TextBoxFor(x => x.Author)
-        <br />
-        По жанру:
-        <select class="custom-select custom-select-sm" name="GenreId" id="GenreId">
-            <option value="" selected disabled hidden>Выберите жанр</option>
-            @foreach (PISBusinessLogic.ViewModels.GenreViewModel genre in ViewBag.Genres)
-            {
-                <option value="@genre.Id">@genre.Name</option>
-            }
-        </select>
-        <br />
-        <input type="submit" value="найти" class="btn btn-info btn-sm" />
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">По названию:</label>
+        <div class="col-sm-4">
+            @Html.TextBoxFor(x => x.Name)
+            <br />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">По автору:</label>
+        <div class="col-sm-4">
+            @Html.TextBoxFor(x => x.Author)
+            <br />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">По жанру:</label>
+        <div class="col-sm-4">
+            <select class="custom-select" name="GenreId" id="GenreId">
+                <option value="" selected disabled hidden>Выберите жанр</option>
+                @foreach (PISBusinessLogic.ViewModels.GenreViewModel genre in ViewBag.Genres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <div class="col-sm-4">
+            <input type="submit" value="найти" class="btn btn-info" />
+            <hr />
+        </div>
     </div>
 </form>
 <table class="table">

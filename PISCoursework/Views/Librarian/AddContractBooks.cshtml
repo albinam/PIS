@@ -59,7 +59,6 @@
             <td>Жанр</td>
             <td>Издательство</td>
             <td>Год издания</td>
-            <td>Цена проката</td>
         </tr>
         @foreach (var genre in ViewBag.Genres)
         {
@@ -74,7 +73,6 @@
                         <td>@genre.Name</td>
                         <td>@book.PublishingHouse</td>
                         <td>@book.Year</td>
-                        <td>@genre.Price</td>
                     </tr>
                 }
             }

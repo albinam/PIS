@@ -7,7 +7,6 @@ using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PISCoursework.Controllers
 {
@@ -167,9 +166,9 @@ namespace PISCoursework.Controllers
             return BookSearch(model);
 
         }
-       
+
         [HttpGet]
-        public ActionResult AddContractBooks(string Email, int id,  BookBindingModel model)
+        public ActionResult AddContractBooks(string Email, int id, BookBindingModel model)
         {
             ViewBag.Genres = _genre.Read(null);
             ViewBag.FIO = Email;
@@ -183,7 +182,7 @@ namespace PISCoursework.Controllers
             }
             ViewBag.Books = freeBooks;
             if ((model.Author != null || model.GenreId != 0 || model.Name != null) && (id == 0 || id == -1))
-            {       
+            {
                 return BookSearch(model);
             }
             if ((model.Author != null || model.GenreId != 0 || model.Name != null) && (id != 0 && id != -1))
@@ -199,7 +198,7 @@ namespace PISCoursework.Controllers
                 }
                 return BookSearch(model);
             }
-            int libraryCard=0;
+            int libraryCard = 0;
             if (Email != null)
             {
                 var user = _user.Read(new UserBindingModel
@@ -212,7 +211,7 @@ namespace PISCoursework.Controllers
                 }).FirstOrDefault();
                 libraryCard = libraryCard1.Id;
             }
-          
+
             var contractBooks = new List<ContractBookBindingModel>();
             if (id != 0 && id != -1)
             {
@@ -228,7 +227,7 @@ namespace PISCoursework.Controllers
                     Author = book.Author,
                     PublishingHouse = book.PublishingHouse,
                     Year = book.Year,
-                    Status = Status.Занята
+                    Status = Status.Выдана
                 });
                 contractBooks.Add(new ContractBookBindingModel
                 {
@@ -240,12 +239,12 @@ namespace PISCoursework.Controllers
                     Id = contract.Id,
                     Date = contract.Date,
                     DateReturn = contract.DateReturn,
-                    Sum = contract.Sum+getSum(contractBooks),
+                    Sum = contract.Sum + getSum(contractBooks),
                     Fine = 0,
                     LibraryCardId = contract.LibrarianId,
                     LibrarianId = Program.Librarian.Id,
                     ContractBooks = contractBooks
-                }) ;
+                });
                 var listOfBooks = _contract.Read(new ContractBindingModel
                 {
                     Id = contract.Id
@@ -265,11 +264,11 @@ namespace PISCoursework.Controllers
                         freeBooks.Add(book1);
                 }
                 ViewBag.Books = freeBooks;
-               
+
                 return View();
-            }                      
+            }
             if (id == -1)
-            {               
+            {
                 _contract.CreateOrUpdate(new ContractBindingModel
                 {
                     Date = DateTime.Now,
@@ -284,7 +283,7 @@ namespace PISCoursework.Controllers
             return View(model);
         }
         [HttpGet]
-        public ActionResult ListOfContracts(int id,string FIO)
+        public ActionResult ListOfContracts(int id, string FIO)
         {
             ViewBag.Genres = _genre.Read(null);
             ViewBag.Contracts = _contract.Read(null);
@@ -299,18 +298,18 @@ namespace PISCoursework.Controllers
                 {
                     UserId = user.Id
                 }).FirstOrDefault();
-                if(card!=null)
+                if (card != null)
                     cards.Add(card);
             }
             ViewBag.LibraryCards = cards;
             ViewBag.Users = users;
-            if (id == 0 && FIO == null )
+            if (id == 0 && FIO == null)
             {
                 return View();
             }
             else
             {
-                
+
                 if (id != 0 && FIO == null)
                 {
                     ViewBag.Contracts = _contract.Read(new ContractBindingModel
@@ -325,7 +324,7 @@ namespace PISCoursework.Controllers
                     {
                         FIO = FIO
                     });
-                    foreach(var reader in readers)
+                    foreach (var reader in readers)
                     {
                         var card = _libraryCard.Read(new LibraryCardBindingModel
                         {
@@ -364,7 +363,67 @@ namespace PISCoursework.Controllers
             else
             {
                 return 0;
-            }             
+            }
+        }
+        public ActionResult Books(int type)
+        {
+            ViewBag.Type = type;
+            //свободные и выданные
+            if (type == 1)
+            {
+                ViewBag.Genres = _genre.Read(null);
+                List<BookViewModel> books = new List<BookViewModel>();
+                var Books = _book.Read(null);
+                foreach(var book in Books)
+                {
+                    if (book.Status == Status.Выдана || book.Status == Status.Свободна)
+                        books.Add(book);
+                }
+                ViewBag.Books = books;
+                return View();
+            }
+            if (type == 2)
+            {
+                ViewBag.Genres = _genre.Read(null);
+                List<BookViewModel> books = new List<BookViewModel>();
+                var Books = _book.Read(null);
+                foreach (var book in Books)
+                {
+                    if (book.Status == Status.Забронирована)
+                        books.Add(book);
+                }
+                ViewBag.Books = books;
+                return View();
+            }
+            return View();
+        }
+      
+        public ActionResult BookPrice(int GenreId,string Percent)
+        {
+            if (GenreId != 0 && Percent != "")
+            {
+                ViewBag.Genres = _genre.Read(null);
+                var genre = _genre.Read(new GenreBindingModel
+                {
+                    Id = GenreId
+                }).FirstOrDefault();
+                Percent= Percent.Replace(".", ",");
+                double percent = Convert.ToDouble(Percent);
+                _genre.CreateOrUpdate(new GenreBindingModel
+                {
+                    Id = GenreId,
+                    Name = genre.Name,
+                    Price = genre.Price * percent
+                });
+                ModelState.AddModelError("", "Цена успешно изменена");
+                return View();
+            }
+            else
+            {
+                ViewBag.Genres = _genre.Read(null);
+                ModelState.AddModelError("", "Выберите жанр и/или введите коэффициент изменения");
+                return View();
+            }
         }
         public ActionResult BookSearch(BookBindingModel model)
         {
