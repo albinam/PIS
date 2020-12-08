@@ -19,7 +19,7 @@
             </div>
             <div class="col-sm-8">
                 Год: <br>
-                @Html.TextBoxFor(x => x.Year)<br>
+                @DateTime.Now.Year<br>
             </div>
             <div class="col-sm-8">
                 Место работы:<br>
@@ -27,6 +27,7 @@
             </div>
             <input type="hidden" value="@ViewBag.UserId" name="UserId" />
             @Html.ValidationSummary(true, "", new { @style = "color: black" })
+            <br/>
             <div class="col-sm-8">
                 <input type="submit" value="Сохранить" class="btn btn-info btn-sm" />
             </div>

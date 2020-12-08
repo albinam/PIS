@@ -116,30 +116,67 @@ namespace PISCoursework.Controllers
             return View();
         }
         [HttpGet]
-        public ActionResult AddLibraryCard(int id)
+        public ActionResult AddLibraryCard(int id, bool prolong)
         {
-            ViewBag.UserId = id;
-            ViewBag.User = _user.Read(new UserBindingModel
+            if (prolong == false)
             {
-                Id = id
-            }).FirstOrDefault();
-            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
+                ViewBag.UserId = id;
+                ViewBag.User = _user.Read(new UserBindingModel
+                {
+                    Id = id
+                }).FirstOrDefault();
+                ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
+                {
+                    UserId = id
+                });
+                return View();
+            }
+            else
             {
-                UserId = id
-            });
-            return View();
+                ViewBag.UserId = id;
+                ViewBag.User = _user.Read(new UserBindingModel
+                {
+                    Id = id
+                }).FirstOrDefault();
+                var exists = _libraryCard.Read(new LibraryCardBindingModel
+                {
+                    UserId = id
+                });
+
+                foreach (var exist in exists)
+                {
+                    _libraryCard.CreateOrUpdate(new LibraryCardBindingModel
+                    {
+                        Id= exist.Id,
+                        DateOfBirth = exist.DateOfBirth,
+                        Year = DateTime.Now.Year.ToString(),
+                        PlaceOfWork = exist.PlaceOfWork,
+                        UserId = exist.UserId
+                    });
+                }
+                var reader = _libraryCard.Read(new LibraryCardBindingModel
+                {
+                    UserId = id
+                });
+                ViewBag.Exists = reader;
+                return View();
+            }
         }
         [HttpPost]
         public ActionResult AddLibraryCard(LibraryCardBindingModel model)
         {
+            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                UserId = model.UserId
+            });
             if (model.DateOfBirth == null)
             {
                 ModelState.AddModelError("", "Введите дату рождения");
                 return View(model);
             }
-            if (model.Year == null)
+            if (model.DateOfBirth > DateTime.Now.Date)
             {
-                ModelState.AddModelError("", "Введите год");
+                ModelState.AddModelError("", "Дата рождения не может быть позднее нынешней даты");
                 return View(model);
             }
             if (model.PlaceOfWork == null)
@@ -147,13 +184,15 @@ namespace PISCoursework.Controllers
                 ModelState.AddModelError("", "Введите место работы");
                 return View(model);
             }
+
             _libraryCard.CreateOrUpdate(new LibraryCardBindingModel
             {
                 DateOfBirth = model.DateOfBirth,
-                Year = model.Year,
+                Year = DateTime.Now.Year.ToString(),
                 PlaceOfWork = model.PlaceOfWork,
                 UserId = model.UserId
             });
+
             return RedirectToAction("Readers");
         }
         [HttpGet]
@@ -290,10 +329,10 @@ namespace PISCoursework.Controllers
             var Contracts = _contract.Read(null);
             var Users = _user.Read(null);
             double fine = 1;
-        
-            foreach(var contract in Contracts)
+
+            foreach (var contract in Contracts)
             {
-                int date = (DateTime.Now.Date - contract.DateReturn.Date ).Days;
+                int date = (DateTime.Now.Date - contract.DateReturn.Date).Days;
                 List<ContractBookBindingModel> list = new List<ContractBookBindingModel>();
                 list = ConvertModels(contract.ContractBooks);
                 if (date > 0)
@@ -308,7 +347,7 @@ namespace PISCoursework.Controllers
                         Sum = contract.Sum,
                         ContractBooks = list,
                         Fine = fine * date
-                    }) ;
+                    });
                 }
             }
             var contracts = _contract.Read(null);
@@ -370,22 +409,76 @@ namespace PISCoursework.Controllers
         {
             return View();
         }
+        public IActionResult Charts()
+        {
+            return View();
+        }
+        public IActionResult DateReport()
+        {
+            return View();
+        }
+        [HttpPost]
+        public ActionResult DateReport(DateTime month)
+        {
+            DateTime date = new DateTime();
+            if (month == date)
+            {
+                ModelState.AddModelError("", "Введите дату");
+                return View();
+            }
+            int month2 = month.Month;
+            var Contracts = _contract.Read(null);
+            List<ContractViewModel> contracts = new List<ContractViewModel>();
+            foreach(var contract in Contracts)
+            {
+                if (contract.Date.Month == month2)
+                {
+                    contracts.Add(contract);
+                }
+            }
+            DateTime first= contracts.FirstOrDefault().Date.Date;
+            int last = contracts.LastOrDefault().Id.Value;
+            List<DateTime> dates = new List<DateTime>();
+            dates.Add(first);
+            List<double> sums = new List<double>();
+            double sum = 0;
+            foreach(var c in contracts)
+            {
+                if(dates.LastOrDefault().Date== c.Date.Date)
+                {
+                    sum += c.Sum + c.Fine;
+                }
+                if(c.Id == last)
+                {
+                    sums.Add(sum);
+                }
+                else if(c.Id != last && dates.LastOrDefault().Date != c.Date.Date)
+                {
+                    sums.Add(sum);
+                    sum = 0;
+                    dates.Add(c.Date.Date);
+                }
+            }
+            ViewBag.Dates = dates;
+            ViewBag.Sum = sums;
+            return View();
+        }
         [HttpGet]
         public JsonResult Chart()
         {
             var Genres = _genre.Read(null);
             List<Chart> chart = new List<Chart>();
-            foreach( var genre in Genres)
+            foreach (var genre in Genres)
             {
                 int count = 0;
                 var Books = _book.Read(null);
                 foreach (var book in Books)
                 {
-                        if (book.Status == Status.Выдана && book.GenreId==genre.Id)
-                        {
-                            count++;
-                        }
-                    
+                    if (book.Status == Status.Выдана && book.GenreId == genre.Id)
+                    {
+                        count++;
+                    }
+
                 }
                 chart.Add(new Chart { GenreName = genre.Name, Count = count });
             }
@@ -395,16 +488,17 @@ namespace PISCoursework.Controllers
         {
             if (list == null) return null;
             List<ContractBookBindingModel> list2 = new List<ContractBookBindingModel>();
-            foreach (var l in list) {
+            foreach (var l in list)
+            {
                 list2.Add(new ContractBookBindingModel
                 {
                     Id = l.Id,
-                    BookId=l.BookId,
-                    ContractId=l.ContractId
+                    BookId = l.BookId,
+                    ContractId = l.ContractId
 
                 });
             }
-            return list2;        
+            return list2;
         }
         public double getSum(List<ContractBookBindingModel> contractBooks)
         {

@@ -1,58 +1,15 @@
-﻿<title>@ViewData["Title"] - Column Chart</title>
-<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+﻿
+@{
+    ViewData["Title"] = "Отчеты";
+}
 
-<div id="chart_div"></div>
-<script type="text/javascript">
+<div class="text-center text-info">
+    <h1>Отчеты</h1>
+</div>
+<hr />
+<p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/Charts">Диаграмма выданных книг по жанрам</a></strong></p>
+<hr />
+<hr />
+<p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/DateReport">Стоимость по датам</a></strong></p>
+<hr />
 
-
-    google.charts.load('current', {
-        packages: ['corechart', 'bar']
-    });
-    google.charts.setOnLoadCallback(LoadData);
-
-    function LoadData() {
-        $.ajax({
-
-            url: 'Librarian/Chart',
-            dataType: "json",
-            type: "GET",
-            error: function(xhr, status, error) {
-                var err = eval("(" + xhr.responseText + ")");
-                toastr.error(err.message);
-            },
-            success: function(data) {
-                PopulationChart(data);
-                return false;
-            }
-        });
-        return false;
-    }
-
-    function PopulationChart(data) {
-        var dataArray = [
-            ['genreName','count']
-        ];
-        $.each(data, function(i, item) {
-            dataArray.push([item.genreName, item.count]);
-        });
-        var data = google.visualization.arrayToDataTable(dataArray);
-        var options = {
-            title: 'Выданные книги по жанрам ',
-            chartArea: {
-                width: '50%'
-            },
-            colors: ['#b0120a', '#7b1fa2', '#ffab91', '#d95f02'],
-            hAxis: {
-                title: 'Выданные книги по жанрам',
-                minValue: 0
-            },
-            vAxis: {
-                title: 'Количество'
-            }
-        };
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-
-        chart.draw(data, options);
-        return false;
-    }
-</script>  
