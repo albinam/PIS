@@ -6,6 +6,9 @@
 <div class="text-center text-info">
     <h1>Читатели</h1>
 </div>
+<hr />
+<p> <strong> <a class="btn btn-info btn-sm" href="/Librarian/ReadersWithOverdue">Читатели просрочившие срок сдачи книг</a></strong></p>
+<hr />
 <form asp-controller="Librarian" asp-action="Readers" method="get">
     <div class="col-sm-8">
         Найти по ФИО:
@@ -31,7 +34,7 @@
                 <a class="btn btn-info btn-sm" href="/Librarian/AddLibraryCard/@user.Id">просмотреть читательский билет</a>
             </td>
             <td>
-                @Html.ActionLink("заключить договор", "AddContractBooks", new { email = @user.Email, id=ViewBag.Create}, new { @class = "btn btn-info" })
+                @Html.ActionLink("заключить договор", "AddContractBooks", new { email = @user.Email, id = ViewBag.Create }, new { @class = "btn btn-info" })
             </td>
         </tr>
     }

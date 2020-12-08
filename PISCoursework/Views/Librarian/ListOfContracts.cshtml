@@ -28,7 +28,7 @@
         </div>
     </div>
 </form>
-<hr/>
+<hr />
 
 @foreach (var contract in ViewBag.Contracts)
 {
@@ -46,6 +46,7 @@
                     <p>Дата: @contract.Date</p>
                     <p>Дата возврата книг: @contract.DateReturn</p>
                     <p>Стоимость: @contract.Sum</p>
+                    <p>Штраф: @contract.Fine</p>
                     <table class="table">
                         <tr>
                             <td>Название</td>

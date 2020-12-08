@@ -58,7 +58,10 @@ namespace PISCoursework
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+                endpoints.MapControllerRoute(
+                   name: "Librarian",
+                   pattern: "Librarian/{controller=Home}/{action=Index}/{id?}");
+        });
         }
     }
 }
