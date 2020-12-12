@@ -31,7 +31,7 @@ namespace PISCoursework.Controllers
                 Email = user.Login,
                 Password = user.Password
             }).FirstOrDefault();
-            if (userView == null)
+            if (userView == null || userView.Password == null)
             {
                 ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
                 return View(user);

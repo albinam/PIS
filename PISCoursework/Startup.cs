@@ -61,7 +61,7 @@ namespace PISCoursework
                 endpoints.MapControllerRoute(
                    name: "Librarian",
                    pattern: "Librarian/{controller=Home}/{action=Index}/{id?}");
-        });
+            });
         }
     }
 }

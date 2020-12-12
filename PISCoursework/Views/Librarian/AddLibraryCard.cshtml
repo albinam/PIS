@@ -10,7 +10,7 @@
 {
 
     <p>Читательский билет не найден, заполните следующие поля для создания</p>
-    @using (Html.BeginForm("AddLibraryCard", "Librarian", FormMethod.Post))
+    @using (Html.BeginForm("AddLibraryCard", "Readers", FormMethod.Post))
     {
         <p>
             <div class="col-sm-8">
@@ -38,7 +38,7 @@
 }
 else
 {
-    @using (Html.BeginForm("AddLibraryCard", "Librarian", FormMethod.Get))
+    @using (Html.BeginForm("AddLibraryCard", "Readers", FormMethod.Get))
     {
 
         foreach (var m in ViewBag.Exists)

@@ -21,37 +21,23 @@
                         @if (Program.Librarian == null && Program.Reader == null && Program.Accountant == null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Вход</a>
                             </li>
                         }
                         @if (Program.Librarian != null)
                         {
+                          
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="ListOfBooks">Список книг</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Readers" asp-action="Readers">Читатели</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="AddBook">Добавить книгу</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Readers" asp-action="ListOfContracts">Договоры</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="ListOfBooks">Список книг</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="Readers">Читатели</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="ListOfContracts">Договоры</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Librarian" asp-action="Reports">Отчеты</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Reports">Отчеты</a>
                             </li>
 
                         }
