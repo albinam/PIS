@@ -18,6 +18,7 @@ namespace PISCoursework.Controllers
         private readonly IUserLogic _user;
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
+        private Validation validation;
         public ReadersController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract)
         {
             _book = book;
@@ -25,6 +26,7 @@ namespace PISCoursework.Controllers
             _user = user;
             _libraryCard = libraryCard;
             _contract = contract;
+            validation = new Validation();
         }
         
         public IActionResult Readers()
@@ -117,22 +119,11 @@ namespace PISCoursework.Controllers
             {
                 UserId = model.UserId
             });
-            if (model.DateOfBirth == null)
+            if (validation.addLibraryCard(model) != "")
             {
-                ModelState.AddModelError("", "Введите дату рождения");
+                ModelState.AddModelError("", validation.addLibraryCard(model));
                 return View("Views/Librarian/AddLibraryCard.cshtml");
-            }
-            if (model.DateOfBirth > DateTime.Now.Date)
-            {
-                ModelState.AddModelError("", "Дата рождения не может быть позднее нынешней даты");
-                return View("Views/Librarian/AddLibraryCard.cshtml");
-            }
-            if (model.PlaceOfWork == null)
-            {
-                ModelState.AddModelError("", "Введите место работы");
-                return View("Views/Librarian/AddLibraryCard.cshtml");
-            }
-
+            }          
             _libraryCard.CreateOrUpdate(new LibraryCardBindingModel
             {
                 DateOfBirth = model.DateOfBirth,
@@ -447,7 +438,7 @@ namespace PISCoursework.Controllers
             }
             ViewBag.Contracts = contracts;
             ViewBag.Readers = readers;
-            if (date == dat1)
+            if (validation.readersWithOverdue(date))
             {
                 ModelState.AddModelError("", "Выберите дату");
                 return View("Views/Librarian/ReadersWithOverdue.cshtml");
@@ -473,7 +464,7 @@ namespace PISCoursework.Controllers
                     Name = model.Name,
                     Status = Status.Свободна
                 });
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по жанру
             if (model.GenreId != 0 && model.Name == null && model.Author == null)
@@ -483,7 +474,7 @@ namespace PISCoursework.Controllers
                     GenreId = model.GenreId,
                     Status = Status.Свободна
                 });
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по автору
             if (model.GenreId == 0 && model.Name == null && model.Author != null)
@@ -493,7 +484,7 @@ namespace PISCoursework.Controllers
                     Author = model.Author,
                     Status = Status.Свободна
                 });
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по жанру и названию
             if (model.GenreId != 0 && model.Name != null && model.Author == null)
@@ -510,7 +501,7 @@ namespace PISCoursework.Controllers
                         Books.Add(book);
                 }
                 ViewBag.Books = Books;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             // по всем трем
             if (model.GenreId != 0 && model.Name != null && model.Author != null)
@@ -527,7 +518,7 @@ namespace PISCoursework.Controllers
                         Books.Add(book);
                 }
                 ViewBag.Books = Books;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по жанру и автору
             if (model.GenreId != 0 && model.Name == null && model.Author != null)
@@ -544,7 +535,7 @@ namespace PISCoursework.Controllers
                         Books.Add(book);
                 }
                 ViewBag.Books = Books;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по автору и названию
             if (model.GenreId == 0 && model.Name != null && model.Author != null)
@@ -561,14 +552,14 @@ namespace PISCoursework.Controllers
                         Books.Add(book);
                 }
                 ViewBag.Books = Books;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
-            if (model.GenreId == 0 && model.Name == null && model.Author == null)
+            if (validation.bookSearch(model))
             {
                 ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
-            return View("Views/Librarian/AddContractBooks.cshtml");
+            return View("Views/Librarian/ListOfBooks.cshtml");
         }
     }
 }

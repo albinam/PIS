@@ -17,6 +17,7 @@ namespace PISCoursework.Controllers.Librarian
         private readonly IUserLogic _user;
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
+        private Validation validation;
         public BooksController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract)
         {
             _book = book;
@@ -24,6 +25,7 @@ namespace PISCoursework.Controllers.Librarian
             _user = user;
             _libraryCard = libraryCard;
             _contract = contract;
+            validation = new Validation();
         }
         public IActionResult AddBook()
         {
@@ -38,33 +40,11 @@ namespace PISCoursework.Controllers.Librarian
                 ViewBag.Genres = _genre.Read(null);
                 return View(model);
             }
-            if (model.Name == null)
+            if (validation.addBook(model) != "")
             {
                 ViewBag.Genres = _genre.Read(null);
-                ModelState.AddModelError("", "Введите название");
+                ModelState.AddModelError("", validation.addBook(model));
                 return View("Views/Librarian/AddBook.cshtml");
-            }
-            if (model.Author == null)
-            {
-                ViewBag.Genres = _genre.Read(null);
-                ModelState.AddModelError("", "Введите автора");
-                return View("Views/Librarian/AddBook.cshtml");
-            }
-            if (model.PublishingHouse == null)
-            {
-                ViewBag.Genres = _genre.Read(null);
-                ModelState.AddModelError("", "Введите издательство");
-                return View("Views/Librarian/AddBook.cshtml");
-            }
-            if (model.Year == null)
-            {
-                ViewBag.Genres = _genre.Read(null);
-                ModelState.AddModelError("", "Введите год издания");
-                return View("Views/Librarian/AddBook.cshtml");
-            }
-            if (model.Name != null && model.PublishingHouse != null && model.Year != null && model.Author != null)
-            {
-                ModelState.AddModelError("", "Книга успешно добавлена");
             }
             _book.CreateOrUpdate(new BookBindingModel
             {
@@ -75,7 +55,7 @@ namespace PISCoursework.Controllers.Librarian
                 GenreId = model.GenreId,
                 Status = Status.Свободна
             });
-
+            ModelState.AddModelError("", "Книга успешно добавлена");
             return RedirectToAction("ListOfBooks");
         }
         [HttpGet]
@@ -91,7 +71,7 @@ namespace PISCoursework.Controllers.Librarian
         }
         public ActionResult BookPrice(int GenreId, string Percent)
         {
-            if (GenreId != 0 && Percent != "")
+            if (validation.bookPrice(GenreId,Percent))
             {
                 ViewBag.Genres = _genre.Read(null);
                 var genre = _genre.Read(new GenreBindingModel
@@ -225,7 +205,7 @@ namespace PISCoursework.Controllers.Librarian
                 ViewBag.Books = Books;
                 return View("Views/Librarian/ListOfBooks.cshtml");
             }
-            if (model.GenreId == 0 && model.Name == null && model.Author == null)
+            if (validation.bookSearch(model))
             {
                 ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
                 return View("Views/Librarian/ListOfBooks.cshtml");
