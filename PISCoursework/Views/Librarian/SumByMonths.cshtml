@@ -1,0 +1,64 @@
+﻿@{
+    ViewData["Title"] = "Суммарная стоимости выданных книг по дням месяца";
+}
+<div class="text-center text-info">
+    <h1>Количество выданных книг по читателям и месяцам года</h1>
+</div>
+<hr />
+<table class="table">
+    <tr>
+        <td>Читатель</td>
+        <td>Январь</td>
+        <td>Февраль</td>
+        <td>Март</td>
+        <td>Апрель</td>
+        <td>Май</td>
+        <td>Июнь</td>
+        <td>Июль</td>
+        <td>Август</td>
+        <td>Сентябрь</td>
+        <td>Октябрь</td>
+        <td>Ноябрь</td>
+        <td>Декабрь</td>
+    </tr>
+    @foreach(var r in ViewBag.Readers) {
+    @foreach (var i in ViewBag.Count)
+    {
+        @foreach (var k in i)
+        {
+            if (k.Key == r.Id)
+            {
+            <tr>
+                <td>@r.ReaderFIO</td>
+            
+                <td>@k.Value.Item1</td>
+            
+                <td>@k.Value.Item2</td>
+            
+                <td>@k.Value.Item3</td>
+            
+                <td>@k.Value.Item4</td>
+            
+                <td>@k.Value.Item5</td>
+            
+                <td>@k.Value.Item6</td>
+            
+                <td>@k.Value.Item7.Item1</td>
+            
+                <td>@k.Value.Item7.Item2</td>
+           
+                <td>@k.Value.Item7.Item3</td>
+            
+                <td>@k.Value.Item7.Item4</td>
+           
+                <td>@k.Value.Item7.Item5</td>
+            
+                <td>@k.Value.Item7.Item6</td>
+            </tr>
+            }
+        }
+        }
+    }
+
+</table>
+

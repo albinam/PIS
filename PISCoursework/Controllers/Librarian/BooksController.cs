@@ -212,5 +212,38 @@ namespace PISCoursework.Controllers.Librarian
             }
             return View("Views/Librarian/ListOfBooks.cshtml");
         }
+        public ActionResult Books(int type)
+        {
+            ViewBag.Type = type;
+            //свободные и выданные
+            if (type == 1)
+            {
+                ViewBag.Genres = _genre.Read(null);
+                List<BookViewModel> books = new List<BookViewModel>();
+                var Books = _book.Read(null);
+                foreach (var book in Books)
+                {
+                    if (book.Status == Status.Выдана || book.Status == Status.Свободна)
+                        books.Add(book);
+                }
+                ViewBag.Books = books;
+                return View("Views/Librarian/Books.cshtml");
+            }
+            if (type == 2)
+            {
+                ViewBag.Genres = _genre.Read(null);
+                List<BookViewModel> books = new List<BookViewModel>();
+                var Books = _book.Read(null);
+                foreach (var book in Books)
+                {
+                    if (book.Status == Status.Забронирована)
+                        books.Add(book);
+                }
+                ViewBag.Books = books;
+                return View("Views/Librarian/Books.cshtml");
+            }
+            return View("Views/Librarian/Books.cshtml");
+        }
+
     }
 }

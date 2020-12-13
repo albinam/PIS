@@ -28,10 +28,14 @@ namespace PISCoursework.Controllers.Librarian
         }
         public IActionResult Reports()
         {
+            var contracts = _contract.Read(null);
+            contracts.OrderBy(x => x.LibraryCardId);
+            contracts.GroupBy(x => x.LibraryCardId);
             return View("Views/Librarian/Reports.cshtml");
         }
         public IActionResult Charts()
         {
+
             return View("Views/Librarian/Charts.cshtml");
         }
         public IActionResult DateReport()
@@ -63,12 +67,12 @@ namespace PISCoursework.Controllers.Librarian
             var last = _contract.Read(null).LastOrDefault();
             double sum = 0;
             foreach (var c in contracts)
-            {          
-                    dates.Add(c.Date.Date);              
-                    sums.Add(c.Sum+c.Fine);                   
+            {
+                dates.Add(c.Date.Date);
+                sums.Add(c.Sum + c.Fine);
             }
             dates.Add(date);
-            for (int i = 0; i < dates.Count-1; i++)
+            for (int i = 0; i < dates.Count - 1; i++)
             {
                 if (dates[i] != dates[i + 1])
                 {
@@ -107,6 +111,109 @@ namespace PISCoursework.Controllers.Librarian
                 chart.Add(new Chart { GenreName = genre.Name, Count = count });
             }
             return Json(chart);
-        }      
+        }
+        public ActionResult SumByMonths()
+        {
+            var contracts = _contract.Read(null);
+            contracts.OrderBy(x => x.LibraryCardId);
+            contracts.Add(new ContractViewModel());
+
+            List<Dictionary<int, (int, int, int, int, int, int, Tuple<int, int, int, int, int, int>)>> dict = new List<Dictionary<int, (int, int, int, int, int, int, Tuple<int, int, int, int, int, int>)>>();
+
+            var readers = _user.Read(null);
+            List<LibraryCardViewModel> list = new List<LibraryCardViewModel>();
+            foreach (var reader in readers)
+            {
+                var card = _libraryCard.Read(new LibraryCardBindingModel
+                {
+                    UserId = reader.Id
+                }).FirstOrDefault();
+                if (card != null)
+                {
+                    list.Add(card);
+                }
+
+            }
+            foreach (var reader in list)
+            {
+                Dictionary<int, (int, int, int, int, int, int, Tuple<int, int, int, int, int, int>)> count = new Dictionary<int, (int, int, int, int, int, int, Tuple<int, int, int, int, int, int>)>();
+                int count1 = 0;
+                int count2 = 0;
+                int count3 = 0;
+                int count4 = 0;
+                int count5 = 0;
+                int count6 = 0;
+                int count7 = 0;
+                int count8 = 0;
+                int count9 = 0;
+                int count10 = 0;
+                int count11 = 0;
+                int count12 = 0;
+                var contract = _contract.Read(new ContractBindingModel
+                {
+                    LibraryCardId = reader.Id
+                });
+                foreach (var c in contract)
+                {
+                    if (c.Date.Month == 1)
+                    {
+                        count1 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 2)
+                    {
+                        count2 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 3)
+                    {
+                        count3 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 4)
+                    {
+                        count4 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 5)
+                    {
+                        count5 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 6)
+                    {
+                        count6 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 7)
+                    {
+
+                        count7 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 8)
+                    {
+                        count8 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 9)
+                    {
+                        count9 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 10)
+                    {
+                        count10 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 11)
+                    {
+                        count11 += c.ContractBooks.Count;
+                    }
+                    if (c.Date.Month == 12)
+                    {
+                        count12 += c.ContractBooks.Count;
+                    }
+
+                }
+                Tuple<int, int, int, int, int, int> tuple = Tuple.Create(count7, count8, count9, count10, count11, count12);
+                count.Add(reader.Id, (count1, count2, count3, count4, count5, count6, tuple));
+                dict.Add(count);
+            }
+            ViewBag.Count = dict;
+            ViewBag.Readers = list;
+            return View("Views/Librarian/SumByMonths.cshtml");
+
+        }
     }
 }
