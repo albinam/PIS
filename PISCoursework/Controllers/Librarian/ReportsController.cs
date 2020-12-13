@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PISBusinessLogic;
 using PISBusinessLogic.BindingModels;
+using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISCoursework.Models;
@@ -18,13 +19,15 @@ namespace PISCoursework.Controllers.Librarian
         private readonly IUserLogic _user;
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
-        public ReportsController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract)
+        private readonly ReportLogic _report;
+        public ReportsController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report)
         {
             _book = book;
             _genre = genre;
             _user = user;
             _libraryCard = libraryCard;
             _contract = contract;
+            _report = report;
         }
         public IActionResult Reports()
         {
@@ -214,6 +217,19 @@ namespace PISCoursework.Controllers.Librarian
             ViewBag.Readers = list;
             return View("Views/Librarian/SumByMonths.cshtml");
 
+        }
+        public ActionResult PrintLibraryCard(int id)
+        {
+            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                Id = id
+            });
+            LibraryCardViewModel model = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveTravelToursToWordFile("C://Users//Альбина//Downloads//" + id+".docx",model);
+            return RedirectToAction("Readers","Readers");
         }
     }
 }
