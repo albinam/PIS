@@ -7,6 +7,7 @@ using PISBusinessLogic.ViewModels;
 using PISCoursework.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -218,18 +219,6 @@ namespace PISCoursework.Controllers.Librarian
             return View("Views/Librarian/SumByMonths.cshtml");
 
         }
-        public ActionResult PrintLibraryCard(int id)
-        {
-            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
-            {
-                Id = id
-            });
-            LibraryCardViewModel model = _libraryCard.Read(new LibraryCardBindingModel
-            {
-                Id = id
-            }).FirstOrDefault();
-            _report.SaveTravelToursToWordFile("C://Users//Альбина//Downloads//" + id+".docx",model);
-            return RedirectToAction("Readers","Readers");
-        }
+      
     }
 }

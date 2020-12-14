@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PISBusinessLogic;
 using PISBusinessLogic.BindingModels;
+using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -18,13 +20,15 @@ namespace PISCoursework.Controllers.Librarian
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
         private Validation validation;
-        public BooksController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract)
+        private readonly ReportLogic _report;
+        public BooksController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report)
         {
             _book = book;
             _genre = genre;
             _user = user;
             _libraryCard = libraryCard;
             _contract = contract;
+            _report = report;
             validation = new Validation();
         }
         public IActionResult AddBook()
@@ -244,6 +248,21 @@ namespace PISCoursework.Controllers.Librarian
             }
             return View("Views/Librarian/Books.cshtml");
         }
+        public ActionResult Available (int id)
+        {
+            BookViewModel model = _book.Read(new BookBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveBookToWordFile("C://Users//Альбина//Downloads//справка" + id + ".docx", model);
+            // Путь к файлу
+            string file_path = Path.Combine("C://Users//Альбина//Downloads//справка" + id + ".docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = id + ".docx";
+            return PhysicalFile(file_path, file_type, file_name);
 
+        }
     }
 }

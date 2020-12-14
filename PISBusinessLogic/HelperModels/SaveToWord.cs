@@ -26,48 +26,100 @@ namespace PISBusinessLogic.HelperModels
                         JustificationValues = JustificationValues.Center
                     }
                 }));
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                if (info.book == null)
                 {
-                    Texts = new List<string> { "ФИО читателя: "+info.libraryCard.ReaderFIO },
-                    TextProperties = new WordParagraphProperties
-                    {
-                        Bold = false,
-                        Size = "24",
-                        JustificationValues =JustificationValues.Center
-                    }
-                }));
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                    int year = Convert.ToInt32(info.libraryCard.Year) + 1;
+                    Table table = new Table();
+                    TableProperties tblProp = new TableProperties(
+                        new TableBorders(
+                            new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 }
+                        )
+                    );
+                    table.AppendChild<TableProperties>(tblProp);
+                    TableRow row1 = new TableRow();
+                    TableCell header1 = new TableCell(new Paragraph(new Run(new Text("ФИО читателя: " + info.libraryCard.ReaderFIO))));
+                    TableCell header2 = new TableCell(new Paragraph(new Run(new Text("Записи"))));
+                    row1.Append(header1);
+                    row1.Append(header2);
+                    table.Append(row1);
+                    TableRow row2 = new TableRow();
+                    TableCell header3 = new TableCell(new Paragraph(new Run(new Text("Дата рождения: " + info.libraryCard.DateOfBirth.ToShortDateString()))));
+                    TableCell header4 = new TableCell(new Paragraph(new Run(new Text(""))));
+                    row2.Append(header3);
+                    row2.Append(header4);
+                    table.Append(row2);
+                    TableRow row3 = new TableRow();
+                    TableCell header5 = new TableCell(new Paragraph(new Run(new Text("Место работы: " + info.libraryCard.PlaceOfWork))));
+                    TableCell header6 = new TableCell(new Paragraph(new Run(new Text(""))));
+                    row3.Append(header5);
+                    row3.Append(header6);
+                    table.Append(row3);
+                    TableRow row4 = new TableRow();
+                    TableCell header7 = new TableCell(new Paragraph(new Run(new Text("Действителен до:" + year))));
+                    TableCell header8 = new TableCell(new Paragraph(new Run(new Text(""))));
+                    row4.Append(header7);
+                    row4.Append(header8);
+                    table.Append(row4);
+                    docBody.Append(table);
+                }
+                if (info.libraryCard == null)
                 {
-                    Texts = new List<string> { "Место работы: " + info.libraryCard.PlaceOfWork },
-                    TextProperties = new WordParagraphProperties
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Bold = false,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
-                    }
-                }));
-                docBody.AppendChild(CreateParagraph(new WordParagraph
-                {
-                    Texts = new List<string> { "Дата рождения: " + info.libraryCard.DateOfBirth.ToShortDateString() },
-                    TextProperties = new WordParagraphProperties
+                        Texts = new List<string> { "Название: "+info.book.Name },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Bold = false,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
-                    }
-                }));
-                int year = Convert.ToInt32(info.libraryCard.Year) + 1;
-                docBody.AppendChild(CreateParagraph(new WordParagraph
-                {
-                  
-                    Texts = new List<string> { "Действителен до:" + year},
-                    TextProperties = new WordParagraphProperties
+                        Texts = new List<string> {"Автор: "+ info.book.Author },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Bold = false,
-                        Size = "24",
-                        JustificationValues =JustificationValues.Center
-                    }
-                }));
+                        Texts = new List<string> {"Издательство: "+ info.book.PublishingHouse },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Год: " +info.book.Year },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Дата формирования справки: " + DateTime.Now.ToShortDateString()},
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));               
+                }
                 wordDocument.MainDocumentPart.Document.Save();
             }
         }

@@ -2,11 +2,13 @@
 using PISBusinessLogic;
 using PISBusinessLogic.BindingModels;
 using PISBusinessLogic.Enums;
+using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISCoursework.Models;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace PISCoursework.Controllers
@@ -19,16 +21,18 @@ namespace PISCoursework.Controllers
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
         private Validation validation;
-        public ReadersController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract)
+        private readonly ReportLogic _report;
+        public ReadersController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report)
         {
             _book = book;
             _genre = genre;
             _user = user;
             _libraryCard = libraryCard;
             _contract = contract;
+            _report = report;
             validation = new Validation();
         }
-        
+
         public IActionResult Readers()
         {
             ViewBag.Users = _user.Read(null);
@@ -97,7 +101,7 @@ namespace PISCoursework.Controllers
                 {
                     _libraryCard.CreateOrUpdate(new LibraryCardBindingModel
                     {
-                        Id= exist.Id,
+                        Id = exist.Id,
                         DateOfBirth = exist.DateOfBirth,
                         Year = DateTime.Now.Year.ToString(),
                         PlaceOfWork = exist.PlaceOfWork,
@@ -123,7 +127,7 @@ namespace PISCoursework.Controllers
             {
                 ModelState.AddModelError("", validation.addLibraryCard(model));
                 return View("Views/Librarian/AddLibraryCard.cshtml");
-            }          
+            }
             _libraryCard.CreateOrUpdate(new LibraryCardBindingModel
             {
                 DateOfBirth = model.DateOfBirth,
@@ -134,7 +138,7 @@ namespace PISCoursework.Controllers
 
             return RedirectToAction("Readers");
         }
-       
+
         [HttpGet]
         public ActionResult AddContractBooks(string Email, int id, BookBindingModel model)
         {
@@ -373,8 +377,8 @@ namespace PISCoursework.Controllers
                 return 0;
             }
         }
-       
-    
+
+
         [HttpGet]
         public ActionResult ReadersWithOverdue(DateTime date)
         {
@@ -412,6 +416,25 @@ namespace PISCoursework.Controllers
                 return View("Views/Librarian/ReadersWithOverdue.cshtml");
             }
             return View("Views/Librarian/ReadersWithOverdue.cshtml");
+        }
+        public ActionResult PrintLibraryCard(int id)
+        {
+            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                Id = id
+            });
+            LibraryCardViewModel model = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveLibraryCardToWordFile("C://Users//Альбина//Downloads//билет" + id + ".docx", model);
+            // Путь к файлу
+            string file_path = Path.Combine("C://Users//Альбина//Downloads//билет" + id + ".docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = id + ".docx";
+            return PhysicalFile(file_path, file_type, file_name);
         }
         public ActionResult BookSearch(BookBindingModel model)
         {

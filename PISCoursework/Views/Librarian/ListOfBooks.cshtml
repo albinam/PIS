@@ -73,6 +73,9 @@
                     <td>@book.Year</td>
                     <td>@genre.Price</td>
                     <td>@book.Status</td>
+                    <td>
+                        @Html.ActionLink("справка о наличии книг в формате .docx", "Available", "Books", new { id = @book.Id }, new { @class = "btn btn-info btn-sm" })
+                    </td>
                 </tr>
             }
         }
