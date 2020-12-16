@@ -1,4 +1,4 @@
-﻿@model PISCoursework.Models.LoginModel
+﻿@model PISBusinessLogic.BindingModels.UserBindingModel
 
 @{
     ViewData["Title"] = "Авторизация";
@@ -12,7 +12,7 @@
     @Html.ValidationSummary(true, "", new { @style = "color: red" })
     <p>
         Логин:<br>
-        @Html.EditorFor(x => x.Login)<br>
+        @Html.EditorFor(x => x.Email)<br>
         Пароль:<br>
         @Html.EditorFor(x => x.Password)
     </p>
