@@ -10,7 +10,7 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201203103233_1")]
+    [Migration("20201206172043_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -162,10 +162,10 @@ namespace PISDatabaseImplement.Migrations
                 name: "ContractBooks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: true)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(nullable: true),
-                    ContractId = table.Column<int>(nullable: true)
+                    BookId = table.Column<int>(nullable: false),
+                    ContractId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

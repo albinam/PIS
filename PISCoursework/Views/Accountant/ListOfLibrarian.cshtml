@@ -1,0 +1,39 @@
+﻿@model PISBusinessLogic.BindingModels.UserBindingModel
+@{
+    ViewData["Title"] = "Поиск библиотекаря";
+}
+
+<div class="text-center text-info">
+    <h1>Поиск библиотекаря</h1>
+</div>
+<hr />
+<form asp-controller="Accountant" asp-action="ListOfLibrarian" method="get">
+    <div class="col-sm-8">
+        Найти библиотекаря<br />
+        По фамилии:
+        @Html.TextBoxFor(x => x.FIO)
+        <br />
+        По личному коду:
+        @Html.TextBoxFor(x => x.Id)
+        <input type="submit" value="найти" class="btn btn-info btn-sm" />
+    </div>
+</form>
+<table class="table">
+    <tr>
+        <td>Личный код</td>
+        <td>ФИО</td>
+        <td>Оклад</td>
+        <td>Комиссионные</td>
+    </tr>
+
+    @foreach (var user in ViewBag.Users)
+    {
+<tr>
+    <td>@user.Id</td>
+    <td>@user.FIO</td>
+    <td>@user.Comission</td>
+    <td>@user.ComissionPercent</td>
+</tr>
+    }
+</table>
+
