@@ -5,7 +5,7 @@
 <div class="text-center text-info">
     <h1>Договоры</h1>
 </div>
-<form asp-controller="Librarian" asp-action="ListOfContracts" method="get">
+<form asp-controller="Readers" asp-action="ListOfContracts" method="get">
     <div class="col-sm-8">
         <div class="form-group row">
             <strong>Найти договоры</strong> <br />
@@ -28,7 +28,7 @@
         </div>
     </div>
 </form>
-<hr/>
+<hr />
 
 @foreach (var contract in ViewBag.Contracts)
 {
@@ -41,11 +41,13 @@
             {
                 @if (@contract.LibraryCardId == @card.Id)
                 {
+                    <hr/>
                     <p>Номер: @contract.Id</p>
                     <p>ФИО читателя: @reader.FIO</p>
                     <p>Дата: @contract.Date</p>
                     <p>Дата возврата книг: @contract.DateReturn</p>
                     <p>Стоимость: @contract.Sum</p>
+                    <p>Штраф: @contract.Fine</p>
                     <table class="table">
                         <tr>
                             <td>Название</td>
@@ -53,7 +55,6 @@
                             <td>Жанр</td>
                             <td>Издательство</td>
                             <td>Год издания</td>
-                            <td>Цена проката</td>
                         </tr>
                         @foreach (var genre in ViewBag.Genres)
                         {
@@ -68,7 +69,6 @@
                                         <td>@genre.Name</td>
                                         <td>@book.PublishingHouse</td>
                                         <td>@book.Year</td>
-                                        <td>@genre.Price</td>
                                     </tr>
                                 }
                             }

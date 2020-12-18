@@ -7,7 +7,7 @@
     <h1>Книги</h1>
 </div>
 <hr />
-<form asp-controller="Librarian" asp-action="AddContractBooks" method="get">
+<form asp-controller="Readers" asp-action="AddContractBooks" method="get">
 
     <strong>Найти книги в наличии</strong>
     <div class="form-group row">
@@ -59,7 +59,6 @@
             <td>Жанр</td>
             <td>Издательство</td>
             <td>Год издания</td>
-            <td>Цена проката</td>
         </tr>
         @foreach (var genre in ViewBag.Genres)
         {
@@ -74,7 +73,6 @@
                         <td>@genre.Name</td>
                         <td>@book.PublishingHouse</td>
                         <td>@book.Year</td>
-                        <td>@genre.Price</td>
                     </tr>
                 }
             }
@@ -84,7 +82,7 @@
 
 <div class="form-group row">
     <div class="col-sm-4">
-        @Html.ActionLink("заключить договор", "ListOfContracts")
+        <a class="btn btn-info btn-sm" href="/Readers/ListOfContracts">заключить договор</a>
     </div>
 </div>
 }

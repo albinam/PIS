@@ -24,32 +24,45 @@ namespace PISCoursework.Controllers
             return View();
         }
         [HttpPost]
-        public ActionResult Login(LoginModel user)
+        public ActionResult Login(UserBindingModel user)
         {
-            var userView = _user.Read(new UserBindingModel
-            {
-                Email = user.Login,
-                Password = user.Password
-            }).FirstOrDefault();
-            if (userView == null)
+            if(user.Password==null)
             {
                 ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
-                return View(user);
-            }
-            if (userView.Role == Roles.Библиотекарь)
-            {
-                Program.Librarian = userView;
-            }
-            if (userView.Role == Roles.Читатель)
-            {
-                Program.Reader = userView;
-            }
-            if (userView.Role == Roles.Бухгалтер)
-            {
-                Program.Accountant = userView;
+                return View();
             }
 
-            return RedirectToAction("Index", "Home");
+            if (user.Email == null)
+            {
+                ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
+                return View();
+            }
+            else
+            {
+                var userView = _user.Read(new UserBindingModel
+                {
+                    Email = user.Email,
+                    Password = user.Password
+                }).FirstOrDefault();
+                if (userView == null)
+                {
+                    ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
+                    return View(user);
+                }
+                if (userView.Role == Roles.Библиотекарь)
+                {
+                    Program.Librarian = userView;
+                }
+                if (userView.Role == Roles.Читатель)
+                {
+                    Program.Reader = userView;
+                }
+                if (userView.Role == Roles.Бухгалтер)
+                {
+                    Program.Accountant = userView;
+                }
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
