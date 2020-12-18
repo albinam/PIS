@@ -33,9 +33,17 @@ namespace PISCoursework.Controllers
         }
         public ActionResult LibrarianSearch(UserBindingModel model)
         {
+            var user = _user.Read(null);
+            List<UserViewModel> users = new List<UserViewModel>();
+            foreach (var us in user)
+            {
+                if (us.Role == Roles.Библиотекарь)
+                    users.Add(us);
+            }
+            ViewBag.Users = users;
 
             //по ФИО
-            if (model.FIO != null && model.Id == 0)
+            if (model.FIO != null && model.Id == null)
             {
                 var Users = _user.Read(new UserBindingModel
                 {
@@ -51,32 +59,50 @@ namespace PISCoursework.Controllers
                     }
                 }
                 ViewBag.Users = librarians;
-                return View(model);
+                return View("Views/Accountant/ListOfLibrarian.cshtml");
             }
-            /*//по личному коду
-            if (model.FIO == null && model.Id != 0)
+            //по личному коду
+            if (model.FIO == null && model.Id != null)
             {
-                ViewBag.Users = _user.Read(new UserBindingModel
+                var Users = _user.Read(new UserBindingModel
                 {
                     FIO = model.FIO,
                     Id = model.Id
                 });
-                return View(model);
+                List<UserViewModel> librarians = new List<UserViewModel>();
+                foreach (var User in Users)
+                {
+                    if (User.Role == Roles.Библиотекарь)
+                    {
+                        librarians.Add(User);
+                    }
+                }
+                ViewBag.Users = librarians;
+                return View("Views/Accountant/ListOfLibrarian.cshtml");
             }
             //по ФИО и личному коду
-            if (model.FIO != null && model.Id != 0)
+            if (model.FIO != null && model.Id != null)
             {
-                ViewBag.Users = _user.Read(new UserBindingModel
+                var Users = _user.Read(new UserBindingModel
                 {
                     FIO = model.FIO,
                     Id = model.Id
                 });
-                return View(model);
-            }*/
-            if (model.FIO == null && model.Id == 0)
+                List<UserViewModel> librarians = new List<UserViewModel>();
+                foreach (var User in Users)
+                {
+                    if (User.Role == Roles.Библиотекарь)
+                    {
+                        librarians.Add(User);
+                    }
+                }
+                ViewBag.Users = librarians;
+                return View("Views/Accountant/ListOfLibrarian.cshtml");
+            }
+            if (model.FIO == null && model.Id == null)
             {
                 ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
-                return View();
+                return View("Views/Accountant/ListOfLibrarian.cshtml");
             }
 
             return View(model);
