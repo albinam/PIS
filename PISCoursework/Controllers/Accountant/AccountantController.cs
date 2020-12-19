@@ -19,6 +19,24 @@ namespace PISCoursework.Controllers
             _user = user;
             _contract = contract;
         }
+        public ActionResult SalaryLibrarian(int id)
+        {
+            UserViewModel users = new UserViewModel();
+            var contract = _contract.Read(null);
+            int count = 0;
+            foreach(var cont in contract)
+            {
+                if(cont.LibrarianId == id)
+                {
+                    count++;
+                }
+            }
+            if(count == 0)
+            {
+                
+            }
+            return ViewBag.users;
+        }
         public ActionResult ListOfLibrarian(UserBindingModel model)
         {
               var user = _user.Read(null);
@@ -104,9 +122,7 @@ namespace PISCoursework.Controllers
                 ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
                 return View("Views/Accountant/ListOfLibrarian.cshtml");
             }
-
             return View(model);
-
         }
     }
 }
