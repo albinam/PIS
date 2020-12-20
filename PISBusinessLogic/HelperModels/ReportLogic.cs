@@ -1,4 +1,6 @@
-﻿using PISBusinessLogic.ViewModels;
+﻿using PISBusinessLogic.Enums;
+using PISBusinessLogic.Interfaces;
+using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -7,6 +9,11 @@ namespace PISBusinessLogic.HelperModels
 {
     public class ReportLogic
     {
+        private readonly IUserLogic _user;
+        public ReportLogic(IUserLogic user)
+        {
+            this._user = user;
+        }
         public void SaveLibraryCardToWordFile(string fileName, LibraryCardViewModel model)
         {
             string title = "Читательский билет №" + model.Id;
@@ -29,6 +36,29 @@ namespace PISBusinessLogic.HelperModels
                 book = model,
                 libraryCard = null
 
+            });
+        }
+        public List<UserViewModel> GetUsers()
+        {
+            var list = new List<UserViewModel>();
+            var users = _user.Read(null);
+            foreach (var us in users)
+            {
+                if (us.Role == Roles.Библиотекарь)
+                {
+                    list.Add(us);
+                }
+            }
+            return list;
+        }
+        public void SaveListToWordFile(string fileName)
+        {
+            string title = "Список библиотекарей ";
+            SaveToWord.CreateDoc(new WordInfoList
+            {
+                FileName = fileName,
+                Title = title,
+                UserFIO = GetUsers()
             });
         }
     }

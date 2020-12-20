@@ -28,15 +28,19 @@
 
     @foreach (var user in ViewBag.Users)
     {
-<tr>
-    <td>@user.Id</td>
-    <td>@user.FIO</td>
-    <td>@user.Comission</td>
-    <td>@user.ComissionPercent</td>
-    <td>
-        @Html.ActionLink("Начислить зарплату", "SalaryLibrarian", "Users", new { id = @user.Id }, new { @class = "btn btn-info btn-sm" })
-    </td>
-</tr>
+        <tr>
+            <td>@user.Id</td>
+            <td>@user.FIO</td>
+            <td>@user.Comission</td>
+            <td>@user.ComissionPercent</td>
+            <td>
+                @Html.ActionLink("Начислить зарплату", "SalaryLibrarian", "Users", new { id = @user.Id }, new { @class = "btn btn-info btn-sm" })
+            </td>
+        </tr>
     }
+
 </table>
 
+<form asp-controller="Accountant" asp-action="List" method="get">
+    <input type="submit" value="Список библтотекарей.docx" class="btn btn-info btn-sm" id="save-docx" />
+</form>

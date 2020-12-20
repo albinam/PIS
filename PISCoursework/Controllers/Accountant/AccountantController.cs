@@ -7,6 +7,8 @@ using PISBusinessLogic.BindingModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.Enums;
 using PISBusinessLogic.ViewModels;
+using PISBusinessLogic.HelperModels;
+using System.IO;
 
 namespace PISCoursework.Controllers
 {
@@ -14,10 +16,12 @@ namespace PISCoursework.Controllers
     {
         private readonly IContractLogic _contract;
         private readonly IUserLogic _user;
-        public AccountantController(IUserLogic user, IContractLogic contract)
+        private readonly ReportLogic _report;
+        public AccountantController(IUserLogic user, IContractLogic contract, ReportLogic report)
         {
             _user = user;
             _contract = contract;
+            _report = report;
         }
         public ActionResult SalaryLibrarian(int id)
         {
@@ -123,6 +127,18 @@ namespace PISCoursework.Controllers
                 return View("Views/Accountant/ListOfLibrarian.cshtml");
             }
             return View(model);
+        }
+        public ActionResult List()
+        {
+            _report.SaveListToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
+            // Путь к файлу
+            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = "Список библиотекарей.docx";
+            return PhysicalFile(file_path, file_type, file_name);
+
         }
     }
 }
