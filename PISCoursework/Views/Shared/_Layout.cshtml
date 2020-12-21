@@ -21,6 +21,9 @@
                         @if (Program.Librarian == null && Program.Reader == null && Program.Accountant == null)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Registration">Регистрация</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Вход</a>
                             </li>
                         }
@@ -39,6 +42,15 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Reports">Отчеты</a>
                             </li>
+
+                        }
+                        @if (Program.Reader != null)
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="ListOfBooks">Список книг</a>
+                            </li>
+
 
                         }
                         @if (Program.Accountant != null)

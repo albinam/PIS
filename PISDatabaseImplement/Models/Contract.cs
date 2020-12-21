@@ -1,4 +1,5 @@
 ﻿
+using PISBusinessLogic.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -15,6 +16,7 @@ namespace PISDatabaseimplements.Models
         public DateTime DateReturn { get; set; }
         public double Sum { get; set; }
         public double Fine { get; set; }
+        public ContractStatus ContractStatus { get; set; }
         public int LibraryCardId { get; set; }
         public int LibrarianId { get; set; }
         [ForeignKey("ContractId")]

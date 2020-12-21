@@ -19,9 +19,10 @@ namespace PISCoursework.Controllers.Librarian
         private readonly IUserLogic _user;
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
+        private readonly IBookingLogic _booking;
         private Validation validation;
         private readonly ReportLogic _report;
-        public BooksController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report)
+        public BooksController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report, IBookingLogic booking)
         {
             _book = book;
             _genre = genre;
@@ -29,8 +30,10 @@ namespace PISCoursework.Controllers.Librarian
             _libraryCard = libraryCard;
             _contract = contract;
             _report = report;
+            _booking = booking;
             validation = new Validation();
         }
+
         public IActionResult AddBook()
         {
             ViewBag.Genres = _genre.Read(null);
@@ -104,110 +107,161 @@ namespace PISCoursework.Controllers.Librarian
         {
             ViewBag.Genres = _genre.Read(null);
             var freebooks = _book.Read(null);
+            var bookings = _booking.Read(null);
             List<BookViewModel> freeBooks = new List<BookViewModel>();
+            foreach (var booking in bookings)
+            {
+                var b = _book.Read(new BookBindingModel
+                {
+                    Id = booking.BookId
+                }).FirstOrDefault();
+                if (booking.DateTo > DateTime.Now)
+                {
+                    if (b.Status == Status.Забронирована)
+                    {
+                        freeBooks.Add(b);
+                    }
+                }
+                else
+                {
+                    _book.CreateOrUpdate(new BookBindingModel
+                    {
+                        Id = b.Id,
+                        Name = b.Name,
+                        PublishingHouse = b.PublishingHouse,
+                        Author = b.Author,
+                        Year = b.Year,
+                        GenreId = b.GenreId,
+                        Status = Status.Свободна
+                    });
+                }
+            }
             foreach (var book in freebooks)
             {
                 if (book.Status == Status.Свободна)
                     freeBooks.Add(book);
             }
+    
             ViewBag.Books = freeBooks;
+            List<BookViewModel> removebooks = new List<BookViewModel>();
             //по названию
             if (model.Name != null && model.GenreId == 0 && model.Author == null)
             {
-                ViewBag.Books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    Name = model.Name,
-                    Status = Status.Свободна
-                });
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                    if (el.Name != model.Name)
+                    {
+                        removebooks.Add(el);
+                    }
+                }
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             //по жанру
             if (model.GenreId != 0 && model.Name == null && model.Author == null)
             {
-                ViewBag.Books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    GenreId = model.GenreId,
-                    Status = Status.Свободна
-                });
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                    if (el.GenreId != model.GenreId)
+                    {
+                        removebooks.Add(el);
+                    }
+                }
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             //по автору
             if (model.GenreId == 0 && model.Name == null && model.Author != null)
             {
-                ViewBag.Books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    Author = model.Author,
-                    Status = Status.Свободна
-                });
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                    if (el.Author != model.Author)
+                    {
+                        removebooks.Add(el);
+                    }
+                }
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             //по жанру и названию
             if (model.GenreId != 0 && model.Name != null && model.Author == null)
             {
-                var books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    Name = model.Name,
-                    Status = Status.Свободна
-                });
-                List<BookViewModel> Books = new List<BookViewModel>();
-                foreach (var book in books)
-                {
-                    if (book.GenreId == model.GenreId)
-                        Books.Add(book);
+                    if (el.GenreId != model.GenreId || el.Name != model.Name)
+                    {
+                        removebooks.Add(el);
+                    }
                 }
-                ViewBag.Books = Books;
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             // по всем трем
             if (model.GenreId != 0 && model.Name != null && model.Author != null)
             {
-                var books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    Name = model.Name,
-                    Status = Status.Свободна
-                });
-                List<BookViewModel> Books = new List<BookViewModel>();
-                foreach (var book in books)
-                {
-                    if (book.GenreId == model.GenreId && book.Author == model.Author)
-                        Books.Add(book);
+                    if (el.GenreId != model.GenreId || el.Name != model.Name || el.Author != model.Author)
+                    {
+                        removebooks.Add(el);
+                    }
                 }
-                ViewBag.Books = Books;
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             //по жанру и автору
             if (model.GenreId != 0 && model.Name == null && model.Author != null)
             {
-                var books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    Author = model.Author,
-                    Status = Status.Свободна
-                });
-                List<BookViewModel> Books = new List<BookViewModel>();
-                foreach (var book in books)
-                {
-                    if (book.GenreId == model.GenreId)
-                        Books.Add(book);
+                    if (el.GenreId != model.GenreId || el.Author != model.Author)
+                    {
+                        removebooks.Add(el);
+                    }
                 }
-                ViewBag.Books = Books;
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             //по автору и названию
             if (model.GenreId == 0 && model.Name != null && model.Author != null)
             {
-                var books = _book.Read(new BookBindingModel
+                foreach (var el in freeBooks)
                 {
-                    Name = model.Name,
-                    Status = Status.Свободна
-                });
-                List<BookViewModel> Books = new List<BookViewModel>();
-                foreach (var book in books)
-                {
-                    if (book.Author == model.Author)
-                        Books.Add(book);
+                    if (el.Name != model.Name || el.Author != model.Author)
+                    {
+                        removebooks.Add(el);
+                    }
                 }
-                ViewBag.Books = Books;
-                return View("Views/Librarian/ListOfBooks.cshtml");
+                foreach (var book in removebooks)
+                {
+                    freeBooks.Remove(book);
+                }
+                ViewBag.Books = freeBooks;
+                return View("Views/Librarian/AddContractBooks.cshtml");
             }
             if (validation.bookSearch(model))
             {
@@ -216,6 +270,7 @@ namespace PISCoursework.Controllers.Librarian
             }
             return View("Views/Librarian/ListOfBooks.cshtml");
         }
+
         public ActionResult Books(int type)
         {
             ViewBag.Type = type;
@@ -244,6 +299,13 @@ namespace PISCoursework.Controllers.Librarian
                         books.Add(book);
                 }
                 ViewBag.Books = books;
+                return View("Views/Librarian/Books.cshtml");
+            }
+            if (type == 3)
+            {
+                ViewBag.Genres = _genre.Read(null);
+                var contracts = _contract.Read(null);
+                foreach(var c in contracts) { }
                 return View("Views/Librarian/Books.cshtml");
             }
             return View("Views/Librarian/Books.cshtml");

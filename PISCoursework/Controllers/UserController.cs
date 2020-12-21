@@ -2,6 +2,7 @@
 using PISBusinessLogic.BindingModels;
 using PISBusinessLogic.Enums;
 using PISBusinessLogic.Interfaces;
+using PISBusinessLogic.ViewModels;
 using PISCoursework.Models;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace PISCoursework.Controllers
         }
         public IActionResult Login()
         {
+            return View();
+        }
+        public IActionResult Registration()
+        {
+           //ViewBag.User = Program.Reader;
             return View();
         }
         [HttpPost]
@@ -63,6 +69,48 @@ namespace PISCoursework.Controllers
                 }
                 return RedirectToAction("Index", "Home");
             }
+        }
+        [HttpPost]
+        public ViewResult Registration(RegistrationModel user)
+        {
+            if (String.IsNullOrEmpty(user.Email))
+            {
+                ModelState.AddModelError("", "Введите электронную почту");
+                return View(user);
+            }
+            var userView = _user.Read(new UserBindingModel
+            {
+                Email = user.Email
+            }).FirstOrDefault();
+            if (userView != null)
+            {
+                ModelState.AddModelError("", "Данный Email уже занят");
+                return View(user);
+            }
+            if (!Regex.IsMatch(user.Email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
+            {
+                ModelState.AddModelError("", "Email введен некорректно");
+                return View(user);
+            }
+            if (String.IsNullOrEmpty(user.FIO))
+            {
+                ModelState.AddModelError("", "Введите ФИО");
+                return View(user);
+            }
+            if (String.IsNullOrEmpty(user.Password))
+            {
+                ModelState.AddModelError("", "Введите пароль");
+                return View(user);
+            }
+            _user.CreateOrUpdate(new UserBindingModel
+            {
+                FIO = user.FIO,
+                Password = user.Password,
+                Email = user.Email,
+                Role = Roles.Читатель
+            });
+            ModelState.AddModelError("", "Вы успешно зарегистрированы");
+            return View("Registration", user);
         }
     }
 }
