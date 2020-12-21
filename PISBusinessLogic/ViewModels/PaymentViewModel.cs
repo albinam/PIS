@@ -10,6 +10,6 @@ namespace PISBusinessLogic.ViewModels
         public int Id { get; set; }
         public double Sum { get; set; }
         public DateTime Date {get;set;}
-
+        public int UserId { get; set; }
     }
 }

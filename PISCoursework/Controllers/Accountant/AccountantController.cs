@@ -17,29 +17,79 @@ namespace PISCoursework.Controllers
         private readonly IContractLogic _contract;
         private readonly IUserLogic _user;
         private readonly ReportLogic _report;
+        private Validation validation;
         public AccountantController(IUserLogic user, IContractLogic contract, ReportLogic report)
         {
             _user = user;
             _contract = contract;
             _report = report;
+            validation = new Validation();
         }
-        public ActionResult SalaryLibrarian(int id)
+        public ActionResult ChangeCommission(int Id, string ComissionPercent)
         {
-            UserViewModel users = new UserViewModel();
-            var contract = _contract.Read(null);
-            int count = 0;
-            foreach(var cont in contract)
+
+            if (validation.сhangeCommission(Id,ComissionPercent))
             {
-                if(cont.LibrarianId == id)
+                ViewBag.Users = _user.Read(null);
+                var user = _user.Read(new UserBindingModel
                 {
-                    count++;
-                }
+                    Id = Id
+                }).FirstOrDefault();
+                ComissionPercent = ComissionPercent.Replace(".", ",");
+                double percent = Convert.ToDouble(ComissionPercent);
+                double salary = Convert.ToDouble(user.Salary);
+                _user.CreateOrUpdate(new UserBindingModel
+                {
+                    Id = Id,
+                    FIO = user.FIO,
+                    Salary = user.Salary,
+                    Comission = (Math.Round(salary * (percent / 100), 2)).ToString(),
+                    ComissionPercent = ComissionPercent,
+                });
+                ModelState.AddModelError("", "Процент успешно изменен");
+                return View("Views/Accountant/ChangeCommission.cshtml");
             }
-            if(count == 0)
+            else
             {
-                
+                ViewBag.Users = _user.Read(null);
+               ModelState.AddModelError("", "Выберите библиотекаря или введите процент");
+                return View("Views/Accountant/ChangeCommission.cshtml");
             }
-            return ViewBag.users;
+        }
+        public ActionResult ChangeCommissionAll(string ComissionPercentAll)
+        {
+            if (validation.сhangeCommissionAll(ComissionPercentAll))
+            {
+                var user = _user.Read(null);
+                ViewBag.Users = _user.Read(null);
+                List<UserViewModel> users = new List<UserViewModel>();
+                foreach (var us in user)
+                {
+                    if (us.Role == Roles.Библиотекарь)
+                    {
+                        ComissionPercentAll = ComissionPercentAll.Replace(".", ",");
+                        double percent = Convert.ToDouble(ComissionPercentAll);
+                        double salary = Convert.ToDouble(us.Salary);
+                        double com = Math.Round(salary *(percent / 100),2);
+                        _user.CreateOrUpdate(new UserBindingModel
+                        {
+                            Id = us.Id,
+                            FIO = us.FIO,
+                            Salary = us.Salary,
+                            Comission = (com).ToString(),
+                            ComissionPercent = ComissionPercentAll,
+                        });
+                    }
+                }
+                ModelState.AddModelError("", "Процент успешно изменен");
+                return View("Views/Accountant/ChangeCommission.cshtml");
+            }
+            else
+            {
+                ViewBag.Users = _user.Read(null);
+                ModelState.AddModelError("", "Введите процент");
+                return View("Views/Accountant/ChangeCommission.cshtml");
+            }
         }
         public ActionResult ListOfLibrarian(UserBindingModel model)
         {

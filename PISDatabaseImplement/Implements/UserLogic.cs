@@ -34,6 +34,9 @@ namespace PISDatabaseImplement.Implements
                 element.Role = model.Role;
                 element.FIO = model.FIO;
                 element.Password = model.Password;
+                element.ComissionPercent = model.ComissionPercent;
+                element.Comission = model.Comission;
+                element.Salary = model.Salary;
                 context.SaveChanges();
             }
         }
@@ -61,7 +64,7 @@ namespace PISDatabaseImplement.Implements
                 return context.Users
                  .Where(rec => model == null
                    || (rec.Id == model.Id) ||( model.FIO== rec.FIO)
-                 || (rec.Email == model.Email)
+                || (rec.Email == model.Email)
                         && (model.Password == null || rec.Password == model.Password))
                .Select(rec => new UserViewModel
                {
@@ -70,6 +73,9 @@ namespace PISDatabaseImplement.Implements
                    Email = rec.Email,
                    Role=rec.Role,
                    Password = rec.Password,
+                   Comission = rec.Comission,
+                   ComissionPercent = rec.ComissionPercent,
+                   Salary = rec.Salary
                })
                 .ToList();
             }

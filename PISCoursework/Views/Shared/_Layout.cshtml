@@ -21,6 +21,9 @@
                         @if (Program.Librarian == null && Program.Reader == null && Program.Accountant == null)
                         {
                             <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Registration">Регистрация</a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Login">Вход</a>
                             </li>
                         }
@@ -41,16 +44,19 @@
                             </li>
 
                         }
+                        @if (Program.Reader != null)
+                        {
+
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="ListOfBooks">Список книг</a>
+                            </li>
+
+
+                        }
                         @if (Program.Accountant != null)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Accountant" asp-action="ListOfLibrarian">Поиск</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accountant" asp-action="ListOfLibrarian">Бибилиотекарь</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Report">Отчеты</a>

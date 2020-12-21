@@ -79,5 +79,27 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
+        public bool сhangeCommission(int Id, string ComissionPercent)
+        {
+            if (Id != 0 && ComissionPercent != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool сhangeCommissionAll( string ComissionPercentAll)
+        {
+            if (ComissionPercentAll != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }
