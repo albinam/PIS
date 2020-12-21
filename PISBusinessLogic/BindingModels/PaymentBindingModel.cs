@@ -10,11 +10,12 @@ namespace PISBusinessLogic.BindingModels
     public class PaymentBindingModel
     {
         [DataMember]
-        public int Id { get; set; }
+        public int? Id { get; set; }
         [DataMember]
         public double Sum { get; set; }
         [DataMember]
         public DateTime Date {get;set;}
-
+        [DataMember]
+        public int UserId { get; set; }
     }
 }
