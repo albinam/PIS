@@ -47,11 +47,13 @@ namespace PISDatabaseImplement.Implements
             {
                 return context.Bookings
                  .Where(rec => model == null
-                   || rec.Id == model.Id || (rec.Id == model.Id))
+                   || rec.Id == model.Id || (rec.BookId == model.BookId) || (rec.LibraryCardId == model.LibraryCardId))
                .Select(rec => new BookingViewModel
                {
                    Id = rec.Id,
                    DateFrom = rec.DateFrom,
+                   BookId=rec.BookId,
+                   LibraryCardId=rec.LibraryCardId,
                    DateTo = rec.DateTo
                })
                 .ToList();

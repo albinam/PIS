@@ -185,7 +185,6 @@ namespace PISCoursework.Controllers.Librarian
                     }
                     if (c.Date.Month == 7)
                     {
-
                         count7 += c.ContractBooks.Count;
                     }
                     if (c.Date.Month == 8)

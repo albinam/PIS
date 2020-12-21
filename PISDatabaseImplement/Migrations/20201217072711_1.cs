@@ -108,8 +108,8 @@ namespace PISDatabaseImplement.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DateFrom = table.Column<DateTime>(nullable: false),
                     DateTo = table.Column<DateTime>(nullable: false),
-                    BookId = table.Column<int>(nullable: true),
-                    LibraryCardId = table.Column<int>(nullable: true)
+                    BookId = table.Column<int>(nullable: false),
+                    LibraryCardId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -119,13 +119,13 @@ namespace PISDatabaseImplement.Migrations
                         column: x => x.BookId,
                         principalTable: "Books",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Bookings_LibraryCards_LibraryCardId",
                         column: x => x.LibraryCardId,
                         principalTable: "LibraryCards",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -138,6 +138,7 @@ namespace PISDatabaseImplement.Migrations
                     DateReturn = table.Column<DateTime>(nullable: false),
                     Sum = table.Column<double>(nullable: false),
                     Fine = table.Column<double>(nullable: false),
+                    ContractStatus = table.Column<int>(nullable: false),
                     LibraryCardId = table.Column<int>(nullable: false),
                     LibrarianId = table.Column<int>(nullable: false)
                 },
@@ -162,10 +163,10 @@ namespace PISDatabaseImplement.Migrations
                 name: "ContractBooks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(nullable: true)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    BookId = table.Column<int>(nullable: true),
-                    ContractId = table.Column<int>(nullable: true)
+                    BookId = table.Column<int>(nullable: false),
+                    ContractId = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

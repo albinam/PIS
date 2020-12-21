@@ -8,6 +8,7 @@
 <hr />
 @Html.ActionLink("Список выданных и свободных книг", "Books", new { type = 1 }, new { @class = "btn btn-info" })
 @Html.ActionLink("Список желаемых книг", "Books", new { type = 2 }, new { @class = "btn btn-info" })
+@Html.ActionLink("Топ 10 самых востребованных", "Books", new { type = 3 }, new { @class = "btn btn-info" })
 <hr />
 @if (ViewBag.Type != 0)
 {

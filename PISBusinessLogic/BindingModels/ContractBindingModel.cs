@@ -1,4 +1,5 @@
 ﻿
+using PISBusinessLogic.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace PISBusinessLogic.BindingModels
         public DateTime Date { get;set;}
         [DataMember]
         public DateTime DateReturn { get; set; }
+        [DataMember]
+        public ContractStatus ContractStatus { get; set; }
         [DataMember]
         public double Fine { get; set; }
         [DataMember]

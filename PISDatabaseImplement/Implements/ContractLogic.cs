@@ -35,7 +35,24 @@ namespace PISDatabaseImplement.Implements
                             element.Sum = model.Sum;
                             element.LibrarianId = model.LibrarianId;
                             element.DateReturn = model.DateReturn;
+                            element.ContractStatus = model.ContractStatus;
                             element.Fine = model.Fine;
+                            var ContractBooks = context.ContractBooks.Where(rec
+                          => rec.ContractId == model.Id.Value).ToList();
+                            // удалили те, которых нет в модели
+                            List<ContractBook> list = new List<ContractBook>();
+                            foreach (var cb in model.ContractBooks)
+                            {
+                                foreach (var cb2 in ContractBooks)
+                                {
+                                    if (cb.BookId == cb2.BookId)
+                                    {
+                                        list.Add(cb2);
+                                    }
+                                }
+                            }
+                            context.ContractBooks.RemoveRange(list);                        
+                            context.SaveChanges();                           
                             var groupBooks = model.ContractBooks
                               .GroupBy(rec => rec.BookId)
                               .Select(rec => new
@@ -63,6 +80,7 @@ namespace PISDatabaseImplement.Implements
                             element.LibrarianId = model.LibrarianId;
                             element.DateReturn = model.DateReturn;
                             element.Fine = model.Fine;
+                            element.ContractStatus = model.ContractStatus;
                             context.Contracts.Add(element);
                             context.SaveChanges();
                             var groupBooks = model.ContractBooks
@@ -123,6 +141,7 @@ namespace PISDatabaseImplement.Implements
                     LibrarianId = rec.LibrarianId,
                     LibrarianFIO = rec.Librarian.FIO,
                     DateReturn = rec.DateReturn,
+                    ContractStatus=rec.ContractStatus,
                     Fine = rec.Fine,
                     Sum = rec.Sum,
                     Date = rec.Date,
