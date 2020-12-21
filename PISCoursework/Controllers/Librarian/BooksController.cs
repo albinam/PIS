@@ -78,7 +78,7 @@ namespace PISCoursework.Controllers.Librarian
         }
         public ActionResult BookPrice(int GenreId, string Percent)
         {
-            if (validation.bookPrice(GenreId,Percent))
+            if (validation.bookPrice(GenreId, Percent))
             {
                 ViewBag.Genres = _genre.Read(null);
                 var genre = _genre.Read(new GenreBindingModel
@@ -114,15 +114,18 @@ namespace PISCoursework.Controllers.Librarian
                 var b = _book.Read(new BookBindingModel
                 {
                     Id = booking.BookId
-                }).FirstOrDefault();
+                }).LastOrDefault();
                 if (booking.DateTo > DateTime.Now)
                 {
                     if (b.Status == Status.Забронирована)
                     {
-                        freeBooks.Add(b);
+                        if (!freeBooks.Contains(b))
+                        {
+                            freeBooks.Add(b);
+                        }
                     }
                 }
-                else
+                else if (booking.DateTo < DateTime.Now)
                 {
                     _book.CreateOrUpdate(new BookBindingModel
                     {
@@ -134,6 +137,10 @@ namespace PISCoursework.Controllers.Librarian
                         GenreId = b.GenreId,
                         Status = Status.Свободна
                     });
+                    _booking.Delete(new BookingBindingModel
+                    {
+                        Id = booking.Id
+                    });
                 }
             }
             foreach (var book in freebooks)
@@ -141,7 +148,7 @@ namespace PISCoursework.Controllers.Librarian
                 if (book.Status == Status.Свободна)
                     freeBooks.Add(book);
             }
-    
+
             ViewBag.Books = freeBooks;
             List<BookViewModel> removebooks = new List<BookViewModel>();
             //по названию
@@ -293,10 +300,16 @@ namespace PISCoursework.Controllers.Librarian
                 ViewBag.Genres = _genre.Read(null);
                 List<BookViewModel> books = new List<BookViewModel>();
                 var Books = _book.Read(null);
+                var Bookings = _booking.Read(null);
                 foreach (var book in Books)
                 {
-                    if (book.Status == Status.Забронирована)
-                        books.Add(book);
+                    foreach (var booking in Bookings)
+                    {
+                        if (book.Id == booking.BookId)
+                        {
+                            books.Add(book);
+                        }
+                    }
                 }
                 ViewBag.Books = books;
                 return View("Views/Librarian/Books.cshtml");
@@ -304,13 +317,47 @@ namespace PISCoursework.Controllers.Librarian
             if (type == 3)
             {
                 ViewBag.Genres = _genre.Read(null);
-                var contracts = _contract.Read(null);
-                foreach(var c in contracts) { }
+                ViewBag.Books = GetFavoriteCategories();
                 return View("Views/Librarian/Books.cshtml");
             }
             return View("Views/Librarian/Books.cshtml");
         }
-        public ActionResult Available (int id)
+        private List<BookViewModel> GetFavoriteCategories()
+        {
+            Dictionary<int, int> productCategories = new Dictionary<int, int>();
+            foreach (var contract in _contract.Read(null))
+            {
+                foreach (var cb in contract.ContractBooks)
+                {
+                    var book = _book.Read(new BookBindingModel
+                    {
+                        Id = cb.BookId
+                    }).FirstOrDefault();
+                    if (productCategories.ContainsKey(book.Id))
+                    {
+                        productCategories[book.Id] += 1;
+                    }
+                    else
+                    {
+                        productCategories[book.Id] = 1;
+                    }
+                }
+            }
+            var categories = productCategories.ToList();
+            categories.Sort((p1, p2) => p2.Value.CompareTo(p1.Value));
+            var result = new List<BookViewModel>();
+            foreach (var cat in categories)
+            {
+                var book = _book.Read(new BookBindingModel
+                {
+                    Id = cat.Key
+                }).FirstOrDefault();
+                result.Add(book);
+            }
+            return result;
+        }
+
+        public ActionResult Available(int id)
         {
             BookViewModel model = _book.Read(new BookBindingModel
             {

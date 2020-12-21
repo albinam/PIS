@@ -10,7 +10,7 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201206172043_1")]
+    [Migration("20201221091959_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace PISDatabaseImplement.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("BookId")
+                    b.Property<int>("BookId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateFrom")
@@ -69,7 +69,7 @@ namespace PISDatabaseImplement.Migrations
                     b.Property<DateTime>("DateTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LibraryCardId")
+                    b.Property<int>("LibraryCardId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -87,6 +87,9 @@ namespace PISDatabaseImplement.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("ContractStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
@@ -245,11 +248,15 @@ namespace PISDatabaseImplement.Migrations
                 {
                     b.HasOne("PISDatabaseimplements.Models.Book", "Book")
                         .WithMany()
-                        .HasForeignKey("BookId");
+                        .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PISDatabaseimplements.Models.LibraryCard", "LibraryCard")
                         .WithMany()
-                        .HasForeignKey("LibraryCardId");
+                        .HasForeignKey("LibraryCardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PISDatabaseimplements.Models.Contract", b =>
