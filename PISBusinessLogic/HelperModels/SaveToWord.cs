@@ -123,6 +123,52 @@ namespace PISBusinessLogic.HelperModels
                 wordDocument.MainDocumentPart.Document.Save();
             }
         }
+        public static void CreateDoc(WordInfoList info)
+        {
+            using (WordprocessingDocument wordDocument1 = WordprocessingDocument.Create(info.FileName, WordprocessingDocumentType.Document))
+            {
+                MainDocumentPart mainPart = wordDocument1.AddMainDocumentPart();
+                mainPart.Document = new Document();
+                Body docBody = mainPart.Document.AppendChild(new Body());
+                docBody.AppendChild(CreateParagraph(new WordParagraph
+                {
+                    Texts = new List<string> { info.Title },
+                    TextProperties = new WordParagraphProperties
+                    {
+                        Bold = true,
+                        Size = "24",
+                        JustificationValues = JustificationValues.Center
+                    }
+                }));
+                int i = 0;
+                foreach(var us in info.UserFIO)
+                {
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Библиотекарь: " + us.FIO},
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    i++;
+                }
+                docBody.AppendChild(CreateParagraph(new WordParagraph
+                {
+                    Texts = new List<string> { "Дата формирования: " + DateTime.Now.ToShortDateString() },
+                    TextProperties = new WordParagraphProperties
+                    {
+                        Bold = false,
+                        Size = "24",
+                        JustificationValues = JustificationValues.Left
+                    }
+                }));
+
+                wordDocument1.MainDocumentPart.Document.Save();
+            }
+        }
         private static SectionProperties CreateSectionProperties()
         {
             SectionProperties properties = new SectionProperties();
