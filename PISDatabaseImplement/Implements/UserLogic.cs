@@ -63,8 +63,8 @@ namespace PISDatabaseImplement.Implements
             {
                 return context.Users
                  .Where(rec => model == null
-                   || (rec.Id == model.Id) ||( model.FIO== rec.FIO)
-                || (rec.Email == model.Email)
+                   || (rec.Id == model.Id) ||(model.FIO == rec.FIO)
+                   || (rec.Email == model.Email)
                         && (model.Password == null || rec.Password == model.Password))
                .Select(rec => new UserViewModel
                {

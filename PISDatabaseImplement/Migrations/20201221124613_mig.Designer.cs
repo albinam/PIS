@@ -10,8 +10,8 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201217072711_1")]
-    partial class _1
+    [Migration("20201221124613_mig")]
+    partial class mig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -196,6 +196,9 @@ namespace PISDatabaseImplement.Migrations
 
                     b.Property<double>("Sum")
                         .HasColumnType("float");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
