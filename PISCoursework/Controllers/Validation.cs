@@ -124,5 +124,13 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
+        public string periodCheck (DateTime date)
+        {
+            if (date.Date< DateTime.Now.Date)
+            {
+                return "Дата возврата не может быть меньше или равна нынешней даты";
+            }
+            return "";
+        }
     }
 }

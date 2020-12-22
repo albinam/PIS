@@ -31,6 +31,7 @@ namespace PISDatabaseImplement.Implements
                     context.Bookings.Add(element);
                 }
                 element.DateFrom = model.DateFrom;
+                element.DateTo = model.DateTo;
                 element.BookId = model.BookId;
                 element.LibraryCardId = model.LibraryCardId;
                 context.SaveChanges();
@@ -39,6 +40,20 @@ namespace PISDatabaseImplement.Implements
 
         public void Delete(BookingBindingModel model)
         {
+            using (var context = new DatabaseContext())
+            {
+                Booking element = context.Bookings.FirstOrDefault(rec => rec.Id == model.Id);
+
+                if (element != null)
+                {
+                    context.Bookings.Remove(element);
+                    context.SaveChanges();
+                }
+                else
+                {
+                    throw new Exception("Элемент не найден");
+                }
+            }
 
         }
         public List<BookingViewModel> Read(BookingBindingModel model)

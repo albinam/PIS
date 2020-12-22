@@ -1,18 +1,12 @@
 ﻿@model PISBusinessLogic.BindingModels.BookBindingModel
 @{
-    ViewData["Title"] = "Книги";
+    ViewData["Title"] = "Список книг";
 }
 
 <div class="text-center text-info">
-    <h1>Книги</h1>
+    <h1>Список книг</h1>
 </div>
-<hr/>
-<strong> <a class="btn btn-info btn-sm" href="/Books/AddBook">добавить книгу</a></strong>
- <strong> <a class="btn btn-info btn-sm" href="/Books/Books">выборки по книгам</a></strong>
-<strong> <a class="btn btn-info btn-sm" href="/Books/BookPrice">коррекция стоимости проката</a></strong>
-<br/>
-<hr />
-<form asp-controller="Books" asp-action="ListOfBooks" method="get">
+<form asp-controller="BooksReader" asp-action="ListOfBooksReader" method="get">
     <div class="form-group row">
         <label class="col-sm-2 col-form-label">По названию:</label>
         <div class="col-sm-4">
@@ -72,9 +66,6 @@
                     <td>@book.Year</td>
                     <td>@genre.Price</td>
                     <td>@book.Status</td>
-                    <td>
-                        @Html.ActionLink("справка о наличии книг в формате .docx", "Available", "Books", new { id = @book.Id }, new { @class = "btn btn-info btn-sm" })
-                    </td>
                 </tr>
             }
         }
