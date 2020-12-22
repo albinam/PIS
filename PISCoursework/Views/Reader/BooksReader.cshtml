@@ -1,0 +1,40 @@
+﻿
+@{
+    ViewData["Title"] = "Список книг";
+}
+<div class="text-center text-info">
+    <h1>Список книг</h1>
+</div>
+@if (ViewBag.Type != 0)
+{
+    <table class="table">
+        <tr>
+            <td>Название</td>
+            <td>Автор</td>
+            <td>Жанр</td>
+            <td>Издательство</td>
+            <td>Год издания</td>
+            <td>Цена проката</td>
+            <td>Статус</td>
+        </tr>
+        @foreach (var genre in ViewBag.Genres)
+        {
+            @foreach (var book in ViewBag.Books)
+            {
+                @if (genre.Id == book.GenreId)
+                {
+
+                    <tr>
+                        <td>@book.Name</td>
+                        <td>@book.Author</td>
+                        <td>@genre.Name</td>
+                        <td>@book.PublishingHouse</td>
+                        <td>@book.Year</td>
+                        <td>@genre.Price</td>
+                        <td>@book.Status</td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+}
