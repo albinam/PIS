@@ -42,6 +42,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Reports" asp-action="Reports">Отчеты</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Выйти</a>
+                            </li>
 
                         }
                         @if (Program.Reader != null)
@@ -53,6 +56,9 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="BooksReader" asp-action="ListOfContractsReader">Договоры</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Выйти</a>
+                            </li>
 
                         }
                         @if (Program.Accountant != null)
@@ -62,6 +68,9 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Report" asp-action="Report">Отчеты</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Logout">Выйти</a>
                             </li>
                         }
 

@@ -6,16 +6,11 @@ using System.Web;
 
 namespace PISBusinessLogic.BindingModels
 {
-    [DataContract]
     public class ContractBookBindingModel
     {
-        [DataMember]
         public int Id { get; set; }
-        [DataMember]
         public int BookId { get; set; }
-        [DataMember]
         public int ContractId { get; set; }
-        [DataMember]
         public double Fine { get; set; }
         public string Name { get; set; }
         public string Author { get; set; }

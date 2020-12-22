@@ -374,7 +374,7 @@ namespace PISCoursework.Controllers
             ViewBag.Genres = _genre.Read(null);
             var Contracts = _contract.Read(null);
             var Users = _user.Read(null);
-            double fine = 1;
+            double fine = 5;
 
             foreach (var contract in Contracts)
             {
@@ -392,7 +392,7 @@ namespace PISCoursework.Controllers
                         LibraryCardId = contract.LibraryCardId,
                         Sum = contract.Sum,
                         ContractBooks = list,
-                        Fine = fine * date
+                        Fine= ((fine * date)/100)*contract.Sum
                     });
                 }
             }

@@ -5,6 +5,7 @@ using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISCoursework.Models;
+using PISDatabaseImplement.Implements;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,8 +21,9 @@ namespace PISCoursework.Controllers.Librarian
         private readonly IUserLogic _user;
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
+        private readonly ArchieveLogic _archieve;
         private readonly ReportLogic _report;
-        public ReportsController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report)
+        public ReportsController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report, ArchieveLogic archieve)
         {
             _book = book;
             _genre = genre;
@@ -29,6 +31,7 @@ namespace PISCoursework.Controllers.Librarian
             _libraryCard = libraryCard;
             _contract = contract;
             _report = report;
+            _archieve = archieve;
         }
         public IActionResult Reports()
         {
@@ -215,6 +218,21 @@ namespace PISCoursework.Controllers.Librarian
                 ViewBag.Readers = list;
             }
             return View("Views/Librarian/SumByMonths.cshtml");
-        }  
+        }
+        public IActionResult BackUpToJsonAsync()
+        {
+            string fileName = "D:\\data\\бэкап\\бэкап";
+            if (Directory.Exists(fileName))
+            {
+                _archieve.CreateArchive(fileName);
+                return View("Views/Librarian/Reports.cshtml");
+            }
+            else
+            {
+                DirectoryInfo di = Directory.CreateDirectory(fileName);
+                _archieve.CreateArchive(fileName);
+                return View("Views/Librarian/Reports.cshtml");
+            }
+        }
     }
 }

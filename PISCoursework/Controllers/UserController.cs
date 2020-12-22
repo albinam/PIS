@@ -26,13 +26,13 @@ namespace PISCoursework.Controllers
         }
         public IActionResult Registration()
         {
-           //ViewBag.User = Program.Reader;
+            //ViewBag.User = Program.Reader;
             return View();
         }
         [HttpPost]
         public ActionResult Login(UserBindingModel user)
         {
-            if(user.Password==null)
+            if (user.Password == null)
             {
                 ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
                 return View();
@@ -111,6 +111,22 @@ namespace PISCoursework.Controllers
             });
             ModelState.AddModelError("", "Вы успешно зарегистрированы");
             return View("Registration", user);
+        }
+        public IActionResult Logout()
+        {
+            if (Program.Librarian != null)
+            {
+                Program.Librarian = null;
+            }
+            if (Program.Accountant != null)
+            {
+                Program.Accountant = null;
+            }
+            if (Program.Reader != null)
+            {
+                Program.Reader = null;
+            }
+            return RedirectToAction("Index", "Home");
         }
     }
 }
