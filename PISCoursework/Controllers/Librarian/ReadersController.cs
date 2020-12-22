@@ -142,7 +142,7 @@ namespace PISCoursework.Controllers
         }
 
         [HttpGet]
-        public ActionResult AddContractBooks(string Email, int id, BookBindingModel model)
+        public ActionResult AddContractBooks(string Email, int id, BookBindingModel model, DateTime date)
         {
             int libraryCard = 0;
             if (Email != null)
@@ -205,14 +205,14 @@ namespace PISCoursework.Controllers
             }
             if ((model.Author != null || model.GenreId != 0 || model.Name != null) && (id != 0 && id != -1))
             {
-                var contract = _contract.Read(null).LastOrDefault();
+                var contract = _contract.Read(null).OrderBy(x => x.Id).Last();
                 var listOfBooks = _contract.Read(new ContractBindingModel
                 {
                     Id = contract.Id
                 }).FirstOrDefault();
                 if (listOfBooks.ContractBooks.Count != 0)
                 {
-                    ViewBag.ContractBooks = listOfBooks.ContractBooks;
+                    ViewBag.ContractBooks = listOfBooks;
                 }
                 return BookSearch(model, libraryCard);
             }
@@ -255,24 +255,66 @@ namespace PISCoursework.Controllers
                     Year = book.Year,
                     Status = Status.Выдана
                 });
+                var contract = _contract.Read(null).OrderBy(x => x.Id).Last();
+               
                 contractBooks.Add(new ContractBookBindingModel
                 {
                     BookId = id,
                 });
-
-                var contract = _contract.Read(null).LastOrDefault();
+                if (contract.ContractBooks.Count != 0)
+                {
+                    foreach (var cb in ConvertModels(contract.ContractBooks))
+                    {
+                        if (cb.BookId != id)
+                        {
+                            contractBooks.Add(cb);
+                        }
+                    }
+                }
+              
+                TimeSpan period = contract.DateReturn.AddMinutes(10)-DateTime.Now;
                 _contract.CreateOrUpdate(new ContractBindingModel
                 {
                     Id = contract.Id,
                     Date = contract.Date,
                     DateReturn = contract.DateReturn,
-                    Sum = contract.Sum + getSum(contractBooks),
+                    Sum = getSum(contractBooks, period.Days),
                     Fine = 0,
                     LibraryCardId = contract.LibraryCardId,
                     ContractStatus = ContractStatus.Активен,
                     LibrarianId = Program.Librarian.Id,
                     ContractBooks = contractBooks
                 });
+                if(date!=new DateTime())
+                {
+                    if (validation.periodCheck(date) != "")
+                    {
+                        ModelState.AddModelError("", (validation.periodCheck(date)));
+                        return View("Views/Librarian/AddContractBooks.cshtml");
+                    }
+                    period = date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute+10) - DateTime.Now;            
+                    _contract.CreateOrUpdate(new ContractBindingModel
+                    {
+                        Id = contract.Id,
+                        Date = contract.Date,
+                        DateReturn = date,
+                        Sum =getSum(contractBooks,period.Days),
+                        Fine = 0,
+                        LibraryCardId = contract.LibraryCardId,
+                        ContractStatus = ContractStatus.Активен,
+                        LibrarianId = Program.Librarian.Id,
+                        ContractBooks = contractBooks
+                    });
+                    var listOfBooks1 = _contract.Read(new ContractBindingModel
+                    {
+                        Id = contract.Id
+                    }).FirstOrDefault();
+                    if (listOfBooks1.ContractBooks.Count != 0)
+                    {
+                        ViewBag.ContractBooks = listOfBooks1;
+                    }              
+                    return View("Views/Librarian/AddContractBooks.cshtml");
+                }
                 var listOfBooks = _contract.Read(new ContractBindingModel
                 {
                     Id = contract.Id
@@ -404,6 +446,34 @@ namespace PISCoursework.Controllers
                     }
                     return View("Views/Librarian/ListOfContracts.cshtml");
                 }
+                if (id != 0 && FIO != null)
+                {
+                    var readers = _user.Read(new UserBindingModel
+                    {
+                        FIO = FIO
+                    });
+                    foreach (var reader in readers)
+                    {
+                        var card = _libraryCard.Read(new LibraryCardBindingModel
+                        {
+                            UserId = reader.Id
+                        }).FirstOrDefault();
+                        var c = _contract.Read(new ContractBindingModel
+                        {
+                            LibraryCardId = card.Id
+                        });
+                        List<ContractViewModel> list = new List<ContractViewModel>();
+                        foreach(var contract in c)
+                        {
+                            if (contract.Id == id)
+                            {
+                                list.Add(contract);
+                            }
+                        }
+                        ViewBag.Contracts = list;
+                    }
+                    return View("Views/Librarian/ListOfContracts.cshtml");
+                }
                 ModelState.AddModelError("", "Введите хотя бы один параметр поиска");
                 return View("Views/Librarian/ListOfContracts.cshtml");
             }
@@ -424,7 +494,7 @@ namespace PISCoursework.Controllers
             }
             return list2;
         }
-        public double getSum(List<ContractBookBindingModel> contractBooks)
+        public double getSum(List<ContractBookBindingModel> contractBooks, int period)
         {
             double sum = 0;
             if (contractBooks != null)
@@ -439,7 +509,7 @@ namespace PISCoursework.Controllers
                     {
                         Id = b.GenreId
                     }).FirstOrDefault();
-                    sum += g.Price;
+                    sum += g.Price*period;
                 }
                 return sum;
             }
