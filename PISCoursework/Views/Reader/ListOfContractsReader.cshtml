@@ -8,10 +8,7 @@
 <p>ФИО читателя: @ViewBag.Users.FIO</p>
 @foreach (var contract in ViewBag.Contracts)
 {
-
-    <hr />
     <p>Номер: @contract.Id</p>
-
     <p>Дата: @contract.Date</p>
     <p>Дата возврата книг: @contract.DateReturn</p>
     <p>Стоимость: @contract.Sum</p>
