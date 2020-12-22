@@ -101,6 +101,29 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
+        public bool addSalar(PaymentBindingModel model, int Id )
+        {
+            if (Id != 0 && model.Date != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool salaryAll(DateTime date)
+        {
+            var dat1 = new DateTime();
+            if (date == dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public string periodCheck (DateTime date)
         {
             if (date.Date< DateTime.Now.Date)

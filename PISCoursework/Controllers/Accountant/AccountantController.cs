@@ -25,10 +25,11 @@ namespace PISCoursework.Controllers
             _report = report;
             validation = new Validation();
         }
+
         public ActionResult ChangeCommission(int Id, string ComissionPercent)
         {
 
-            if (validation.сhangeCommission(Id,ComissionPercent))
+            if (validation.сhangeCommission(Id, ComissionPercent))
             {
                 ViewBag.Users = _user.Read(null);
                 var user = _user.Read(new UserBindingModel
@@ -42,6 +43,8 @@ namespace PISCoursework.Controllers
                 {
                     Id = Id,
                     FIO = user.FIO,
+                    Password=user.Password,
+                    Email = user.Email,
                     Salary = user.Salary,
                     Comission = (Math.Round(salary * (percent / 100), 2)).ToString(),
                     ComissionPercent = ComissionPercent,
@@ -52,7 +55,7 @@ namespace PISCoursework.Controllers
             else
             {
                 ViewBag.Users = _user.Read(null);
-               ModelState.AddModelError("", "Выберите библиотекаря или введите процент");
+                ModelState.AddModelError("", "Выберите библиотекаря или введите процент");
                 return View("Views/Accountant/ChangeCommission.cshtml");
             }
         }
@@ -70,11 +73,13 @@ namespace PISCoursework.Controllers
                         ComissionPercentAll = ComissionPercentAll.Replace(".", ",");
                         double percent = Convert.ToDouble(ComissionPercentAll);
                         double salary = Convert.ToDouble(us.Salary);
-                        double com = Math.Round(salary *(percent / 100),2);
+                        double com = Math.Round(salary * (percent / 100), 2);
                         _user.CreateOrUpdate(new UserBindingModel
                         {
                             Id = us.Id,
                             FIO = us.FIO,
+                            Password = us.Password,
+                            Email = us.Email,
                             Salary = us.Salary,
                             Comission = (com).ToString(),
                             ComissionPercent = ComissionPercentAll,
@@ -93,14 +98,14 @@ namespace PISCoursework.Controllers
         }
         public ActionResult ListOfLibrarian(UserBindingModel model)
         {
-              var user = _user.Read(null);
-              List<UserViewModel> users = new List<UserViewModel>();
-              foreach (var us in user)
-              {
-                  if (us.Role == Roles.Библиотекарь)
-                      users.Add(us);
-              }
-              ViewBag.Users = users;
+            var user = _user.Read(null);
+            List<UserViewModel> users = new List<UserViewModel>();
+            foreach (var us in user)
+            {
+                if (us.Role == Roles.Библиотекарь)
+                    users.Add(us);
+            }
+            ViewBag.Users = users;
             return LibrarianSearch(model);
         }
         public ActionResult LibrarianSearch(UserBindingModel model)
@@ -123,7 +128,7 @@ namespace PISCoursework.Controllers
                     Id = model.Id
                 });
                 List<UserViewModel> librarians = new List<UserViewModel>();
-                foreach(var User in Users)
+                foreach (var User in Users)
                 {
                     if (User.Role == Roles.Библиотекарь)
                     {
@@ -171,6 +176,7 @@ namespace PISCoursework.Controllers
                 ViewBag.Users = librarians;
                 return View("Views/Accountant/ListOfLibrarian.cshtml");
             }
+
             if (model.FIO == null && model.Id == null)
             {
                 ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
@@ -187,6 +193,21 @@ namespace PISCoursework.Controllers
             string file_type = "application/docx";
             // Имя файла - необязательно
             string file_name = "Список библиотекарей.docx";
+            return PhysicalFile(file_path, file_type, file_name);
+        }
+        public ActionResult ContractLibrarian(int id)
+        {
+            UserViewModel model = _user.Read(new UserBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveContractToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx", model);
+            // Путь к файлу
+            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = "Контракт c " + model.FIO + ".docx";
             return PhysicalFile(file_path, file_type, file_name);
 
         }

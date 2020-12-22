@@ -1,4 +1,5 @@
 ﻿using PISBusinessLogic.BindingModels;
+using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISDatabaseimplements.Models;
 using PISDatabaseImplements;
@@ -9,7 +10,7 @@ using System.Text;
 
 namespace PISDatabaseImplement.Implements
 {
-    public class PaymentLogic
+    public class PaymentLogic: IPaymentLogic
     {
         public void CreateOrUpdate(PaymentBindingModel model)
         {
@@ -58,7 +59,7 @@ namespace PISDatabaseImplement.Implements
             {
                 return context.Payments
                  .Where(rec => model == null
-                   || (rec.Id == model.Id))
+                   || (rec.Id == model.Id) || (rec.UserId == model.UserId))
 
                .Select(rec => new PaymentViewModel
                {

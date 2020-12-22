@@ -33,7 +33,7 @@ namespace PISCoursework
             services.AddTransient<ILibraryCardLogic, LibraryCardLogic>();
             services.AddTransient<IContractLogic, ContractLogic>();
             services.AddTransient<IBookingLogic, BookingLogic>();
-            services.AddTransient<ArchieveLogic,ArchieveLogicImplement>();
+            services.AddTransient<IPaymentLogic, PaymentLogic>();
             services.AddTransient<ReportLogic>();
         }
 
