@@ -1,5 +1,4 @@
 ﻿using PISBusinessLogic.BindingModels;
-using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISDatabaseimplements.Models;
 using PISDatabaseImplements;
@@ -10,16 +9,16 @@ using System.Text;
 
 namespace PISDatabaseImplement.Implements
 {
-    public class BookingLogic : IBookingLogic
+    public class PaymentLogic
     {
-        public void CreateOrUpdate(BookingBindingModel model)
+        public void CreateOrUpdate(PaymentBindingModel model)
         {
             using (var context = new DatabaseContext())
             {
-                Booking element = model.Id.HasValue ? null : new Booking();
+                Payment element = model.Id.HasValue ? null : new Payment();
                 if (model.Id.HasValue)
                 {
-                    element = context.Bookings.FirstOrDefault(rec => rec.Id == model.Id);
+                    element = context.Payments.FirstOrDefault(rec => rec.Id == model.Id);
                     if (element == null)
                     {
                         throw new Exception("Элемент не найден");
@@ -27,26 +26,24 @@ namespace PISDatabaseImplement.Implements
                 }
                 else
                 {
-                    element = new Booking();
-                    context.Bookings.Add(element);
+                    element = new Payment();
+                    context.Payments.Add(element);
                 }
-                element.DateFrom = model.DateFrom;
-                element.DateTo = model.DateTo;
-                element.BookId = model.BookId;
-                element.LibraryCardId = model.LibraryCardId;
+                element.Sum = model.Sum;
+                element.Date = model.Date;
+                element.UserId = model.UserId;
                 context.SaveChanges();
             }
         }
-
-        public void Delete(BookingBindingModel model)
+        public void Delete(PaymentBindingModel model)
         {
             using (var context = new DatabaseContext())
             {
-                Booking element = context.Bookings.FirstOrDefault(rec => rec.Id == model.Id);
+                Payment element = context.Payments.FirstOrDefault(rec => rec.Id == model.Id);
 
                 if (element != null)
                 {
-                    context.Bookings.Remove(element);
+                    context.Payments.Remove(element);
                     context.SaveChanges();
                 }
                 else
@@ -54,22 +51,21 @@ namespace PISDatabaseImplement.Implements
                     throw new Exception("Элемент не найден");
                 }
             }
-
         }
-        public List<BookingViewModel> Read(BookingBindingModel model)
+        public List<PaymentViewModel> Read(PaymentBindingModel model)
         {
             using (var context = new DatabaseContext())
             {
-                return context.Bookings
+                return context.Payments
                  .Where(rec => model == null
-                   || rec.Id == model.Id || (rec.BookId == model.BookId) || (rec.LibraryCardId == model.LibraryCardId))
-               .Select(rec => new BookingViewModel
+                   || (rec.Id == model.Id))
+
+               .Select(rec => new PaymentViewModel
                {
                    Id = rec.Id,
-                   DateFrom = rec.DateFrom,
-                   BookId=rec.BookId,
-                   LibraryCardId=rec.LibraryCardId,
-                   DateTo = rec.DateTo
+                   Date = rec.Date,
+                   Sum = rec.Sum,
+                   UserId = rec.UserId
                })
                 .ToList();
             }

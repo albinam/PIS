@@ -34,6 +34,9 @@ namespace PISDatabaseImplement.Implements
                 element.Role = model.Role;
                 element.FIO = model.FIO;
                 element.Password = model.Password;
+                element.ComissionPercent = model.ComissionPercent;
+                element.Comission = model.Comission;
+                element.Salary = model.Salary;
                 context.SaveChanges();
             }
         }
@@ -70,6 +73,9 @@ namespace PISDatabaseImplement.Implements
                    Email = rec.Email,
                    Role=rec.Role,
                    Password = rec.Password,
+                   Comission = rec.Comission,
+                   ComissionPercent = rec.ComissionPercent,
+                   Salary = rec.Salary
                })
                 .ToList();
             }

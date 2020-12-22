@@ -171,7 +171,7 @@ namespace PISCoursework.Controllers
                 var b = _book.Read(new BookBindingModel
                 {
                     Id = booking.BookId
-                }).FirstOrDefault();
+                }).LastOrDefault();
                 if (booking.DateTo > DateTime.Now)
                 {
                     if (b.Status == Status.Забронирована)
@@ -193,13 +193,11 @@ namespace PISCoursework.Controllers
                     });
                 }
             }
-
             foreach (var book in freebooks)
             {
                 if (book.Status == Status.Свободна)
                     freeBooks.Add(book);
             }
-
             ViewBag.Books = freeBooks;
             if ((model.Author != null || model.GenreId != 0 || model.Name != null) && (id == 0 || id == -1))
             {
@@ -218,8 +216,6 @@ namespace PISCoursework.Controllers
                 }
                 return BookSearch(model, libraryCard);
             }
-
-
             var contractBooks = new List<ContractBookBindingModel>();
             if (id != 0 && id != -1)
             {
@@ -227,6 +223,28 @@ namespace PISCoursework.Controllers
                 {
                     Id = id
                 }).FirstOrDefault();
+                var booking2 = _booking.Read(new BookingBindingModel
+                {
+                    LibraryCardId = libraryCard
+                });
+                List<BookingViewModel> list = new List<BookingViewModel>();
+                foreach (var b in booking2)
+                {
+                    if (b.BookId == id)
+                    {
+                        if (b.DateTo > DateTime.Now)
+                        {
+                            list.Add(b);
+                        }
+                    }
+                }
+                if (booking2 != null && list.Count!=0)
+                {
+                    _booking.Delete(new BookingBindingModel
+                    {
+                        Id = list.First().Id,                   
+                    });
+                }
                 _book.CreateOrUpdate(new BookBindingModel
                 {
                     Id = id,
@@ -241,6 +259,7 @@ namespace PISCoursework.Controllers
                 {
                     BookId = id,
                 });
+
                 var contract = _contract.Read(null).LastOrDefault();
                 _contract.CreateOrUpdate(new ContractBindingModel
                 {
@@ -358,7 +377,6 @@ namespace PISCoursework.Controllers
             }
             else
             {
-
                 if (id != 0 && FIO == null)
                 {
                     ViewBag.Contracts = _contract.Read(new ContractBindingModel
@@ -430,8 +448,6 @@ namespace PISCoursework.Controllers
                 return 0;
             }
         }
-
-
         [HttpGet]
         public ActionResult ReadersWithOverdue(DateTime date)
         {
@@ -490,7 +506,6 @@ namespace PISCoursework.Controllers
         }
         public ActionResult EndContract(int id)
         {
-
             if (id != 0)
             {
                 var model = _contract.Read(new ContractBindingModel
@@ -546,7 +561,6 @@ namespace PISCoursework.Controllers
                             PublishingHouse = book.PublishingHouse,
                             Status = Status.Забронирована
                         });
-
                     }
                 }
             }
@@ -579,7 +593,7 @@ namespace PISCoursework.Controllers
             ViewBag.Books = freebooks;
             //по названию
             if (model.Name != null && model.GenreId == 0 && model.Author == null)
-            {            
+            {
                 foreach (var el in freebooks)
                 {
                     if (el.Name != model.Name)
