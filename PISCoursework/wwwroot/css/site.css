@@ -59,7 +59,6 @@ html {
 }
 
 body {
-    text-align: center;
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     background: url(back2.jpg) no-repeat;
