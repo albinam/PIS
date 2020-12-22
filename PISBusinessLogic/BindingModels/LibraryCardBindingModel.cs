@@ -20,7 +20,6 @@ namespace PISBusinessLogic.BindingModels
         [DataMember]
         public string PlaceOfWork { get; set; }
         [DataMember]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime DateOfBirth { get; set; }
     }
 }

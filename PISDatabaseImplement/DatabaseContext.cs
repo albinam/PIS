@@ -2,7 +2,7 @@
 using PISDatabaseimplements.Models;
 using System;
 using System.Collections.Generic;
-
+using System.Configuration;
 using System.Linq;
 using System.Web;
 
@@ -17,7 +17,7 @@ namespace PISDatabaseImplements
                 optionsBuilder.UseSqlServer(@"Data Source=.\SQLEXPRESS;Initial Catalog=PISDatabase;Integrated Security=True;MultipleActiveResultSets=True;");
             }
             base.OnConfiguring(optionsBuilder);
-        }
+        }     
         public DbSet<Book> Books { get; set; }
         public DbSet<Contract> Contracts { get; set; }
         public DbSet<ContractBook> ContractBooks { get; set; }
