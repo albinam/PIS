@@ -132,7 +132,7 @@ namespace PISDatabaseImplement.Implements
             using (var context = new DatabaseContext())
             {
                 return context.Contracts.Where(rec => model == null
-                   || rec.Id == model.Id || (rec.LibraryCardId == model.LibraryCardId))
+                   || rec.Id == model.Id || (rec.LibraryCardId == model.LibraryCardId) || (rec.LibrarianId == model.LibrarianId))
                 .Select(rec => new ContractViewModel
                 {
                     Id = rec.Id,

@@ -1,12 +1,47 @@
-﻿@{
+﻿@model PISBusinessLogic.BindingModels.UserBindingModel
+@{
     ViewData["Title"] = "Отчеты";
 }
 
-<div class="text-center text-black-50">
-    <h1>Отчеты</h1>
+<div class="text-center text-info">
+    <h3>Отчеты</h3>
 </div>
 <hr />
-<p> <strong> <a class="btn btn-dark btn-sm" href="/Report/Chart">Диаграмма стоимость заключенных договоров по библиотекарям</a></strong></p>
+<p> <strong> <a class="btn btn-info btn-sm" href="/Report/Chart">Диаграмма стоимость заключенных договоров по библиотекарям</a></strong></p>
+
+<p> <strong> <a class="btn btn-info btn-sm" href="/Report/LeadSalary">Ведомость заработной платы</a></strong></p>
+
+<p> <strong> <a class="btn btn-info btn-sm" href="/Report/DistributionSalary">Распределение зарплаты библиотекарей по месяцам</a></strong></p>
+
+<div class="text-center text-info">
+    <h3>Проверка отчета библиотекаря</h3>
+</div>
 <hr />
-<p> <strong> <a class="btn btn-dark btn-sm" href="/Report/DistributionSalary">Распределение зарплаты библиотекарей по месяцам</a></strong></p>
-<hr />
+@using (Html.BeginForm("CheckLibrarian", "Report"))
+{
+    <p>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Библиотекарь:</label>
+            <div class="col-sm-4">
+                <select class="custom-select custom-select-sm" name="Id" id="Id">
+                    <option value="" selected disabled hidden>Выберите библиотекаря:</option>
+                    @foreach (PISBusinessLogic.ViewModels.UserViewModel user in ViewBag.Users)
+                    {
+                        if (@user.Role == 0)
+                        {
+                            <option value="@user.Id">@user.FIO</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            Количество договоров по отчету:
+            <input id="CountReport" name="CountReport" />
+        </div>
+        <div class="col-sm-8" style="margin-top: 15px">
+            <input type="submit" value="Найти" class="btn btn-info btn-sm" />
+        </div>
+    </p>
+}
+@Html.ValidationSummary(true, "", new { @style = "color: black" })
