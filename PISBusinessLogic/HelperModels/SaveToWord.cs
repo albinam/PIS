@@ -26,7 +26,7 @@ namespace PISBusinessLogic.HelperModels
                         JustificationValues = JustificationValues.Center
                     }
                 }));
-                if (info.book == null)
+                if (info.libraryCard != null)
                 {
                     int year = Convert.ToInt32(info.libraryCard.Year) + 1;
                     Table table = new Table();
@@ -67,7 +67,7 @@ namespace PISBusinessLogic.HelperModels
                     table.Append(row4);
                     docBody.Append(table);
                 }
-                if (info.libraryCard == null)
+                if (info.book != null)
                 {
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
@@ -120,32 +120,26 @@ namespace PISBusinessLogic.HelperModels
                         }
                     }));               
                 }
-                wordDocument.MainDocumentPart.Document.Save();
-            }
-        }
-        public static void CreateDoc(WordInfoList info)
-        {
-            using (WordprocessingDocument wordDocument1 = WordprocessingDocument.Create(info.FileName, WordprocessingDocumentType.Document))
-            {
-                MainDocumentPart mainPart = wordDocument1.AddMainDocumentPart();
-                mainPart.Document = new Document();
-                Body docBody = mainPart.Document.AppendChild(new Body());
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                if (info.UserFIO != null)
                 {
-                    Texts = new List<string> { info.Title },
-                    TextProperties = new WordParagraphProperties
+                    int i = 0;
+                    foreach (var us in info.UserFIO)
                     {
-                        Bold = true,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
+                        docBody.AppendChild(CreateParagraph(new WordParagraph
+                        {
+                            Texts = new List<string> { "Библиотекарь: " + us.FIO },
+                            TextProperties = new WordParagraphProperties
+                            {
+                                Bold = false,
+                                Size = "24",
+                                JustificationValues = JustificationValues.Left
+                            }
+                        }));
+                        i++;
                     }
-                }));
-                int i = 0;
-                foreach(var us in info.UserFIO)
-                {
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Библиотекарь: " + us.FIO},
+                        Texts = new List<string> { "Дата формирования: " + DateTime.Now.ToShortDateString() },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -153,40 +147,9 @@ namespace PISBusinessLogic.HelperModels
                             JustificationValues = JustificationValues.Left
                         }
                     }));
-                    i++;
                 }
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                if (info.user != null)
                 {
-                    Texts = new List<string> { "Дата формирования: " + DateTime.Now.ToShortDateString() },
-                    TextProperties = new WordParagraphProperties
-                    {
-                        Bold = false,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Left
-                    }
-                }));
-
-                wordDocument1.MainDocumentPart.Document.Save();
-            }
-        }
-        public static void CreateDoc(WordInfoContract info)
-        {
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(info.FileName, WordprocessingDocumentType.Document))
-            {
-                MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
-                mainPart.Document = new Document();
-                Body docBody = mainPart.Document.AppendChild(new Body());
-                docBody.AppendChild(CreateParagraph(new WordParagraph
-                {
-                    Texts = new List<string> { info.Title },
-                    TextProperties = new WordParagraphProperties
-                    {
-                        Bold = true,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
-                    }
-                }));
-
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
                         Texts = new List<string> { "ФИО: " + info.user.FIO },
@@ -237,6 +200,104 @@ namespace PISBusinessLogic.HelperModels
                             JustificationValues = JustificationValues.Left
                         }
                     }));
+                }
+                if (info.contract != null)
+                {
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "ФИО: " + info.contract.ReaderFIO },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Дата заключения: " + info.contract.Date},
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Дата возврата: " + info.contract.DateReturn },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    double sum = info.contract.Sum + info.contract.Fine;
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Итоговая стоимость (включая штрафы): "+ sum},
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    docBody.AppendChild(CreateParagraph(new WordParagraph
+                    {
+                        Texts = new List<string> { "Штрафы:"+ info.contract.Fine },
+                        TextProperties = new WordParagraphProperties
+                        {
+                            Bold = false,
+                            Size = "24",
+                            JustificationValues = JustificationValues.Left
+                        }
+                    }));
+                    Table table = new Table();
+                    TableProperties tblProp = new TableProperties(
+                        new TableBorders(
+                            new TopBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new BottomBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new LeftBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new RightBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new InsideHorizontalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 },
+                            new InsideVerticalBorder() { Val = new EnumValue<BorderValues>(BorderValues.Single), Size = 8 }
+                        )
+                    );
+                    table.AppendChild<TableProperties>(tblProp);
+                    TableRow headerRow = new TableRow();
+                    TableCell headerNumberCell = new TableCell(new Paragraph(new Run(new Text("№"))));
+                    TableCell headerNameCell = new TableCell(new Paragraph(new Run(new Text("Название"))));
+                    TableCell headerAuthorCell = new TableCell(new Paragraph(new Run(new Text("Автор"))));
+                    TableCell headerPublishingHouseCell = new TableCell(new Paragraph(new Run(new Text("Издательство"))));
+                    TableCell headerYearCell = new TableCell(new Paragraph(new Run(new Text("Год"))));
+                    headerRow.Append(headerNumberCell);
+                    headerRow.Append(headerNameCell);
+                    headerRow.Append(headerAuthorCell);
+                    headerRow.Append(headerPublishingHouseCell);
+                    headerRow.Append(headerYearCell);
+                    table.Append(headerRow);
+                    int i = 1;
+                    foreach (var book in info.contract.ContractBooks)
+                    {
+                        TableRow bookRow = new TableRow();
+                        TableCell numberCell = new TableCell(new Paragraph(new Run(new Text(i.ToString()))));
+                        TableCell nameCell = new TableCell(new Paragraph(new Run(new Text(book.Name))));
+                        TableCell authorCell = new TableCell(new Paragraph(new Run(new Text(book.Author))));
+                        TableCell phCell = new TableCell(new Paragraph(new Run(new Text(book.PublishingHouse))));
+                        TableCell yearCell = new TableCell(new Paragraph(new Run(new Text(book.Year.ToString()))));
+                        bookRow.Append(numberCell);
+                        bookRow.Append(nameCell);
+                        bookRow.Append(authorCell);
+                        bookRow.Append(phCell);
+                        bookRow.Append(yearCell);
+                        table.Append(bookRow);
+                        i++;
+                    }
+                    docBody.Append(table);
+                }
+                docBody.AppendChild(CreateSectionProperties());
                 wordDocument.MainDocumentPart.Document.Save();
             }
         }

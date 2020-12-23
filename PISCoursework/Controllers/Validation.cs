@@ -1,7 +1,11 @@
 ﻿using PISBusinessLogic.BindingModels;
+using PISBusinessLogic.Enums;
+using PISBusinessLogic.HelperModels;
+using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -90,7 +94,7 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
-        public bool сhangeCommissionAll( string ComissionPercentAll)
+        public bool сhangeCommissionAll(string ComissionPercentAll)
         {
             if (ComissionPercentAll != null)
             {
@@ -101,7 +105,7 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
-        public bool addSalar(PaymentBindingModel model, int Id )
+        public bool addSalar(PaymentBindingModel model, int Id)
         {
             if (Id != 0 && model.Date != null)
             {
@@ -124,6 +128,84 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
+        public string periodCheck(DateTime date)
+        {
+            if (date.Date < DateTime.Now.Date)
+            {
+                return "Дата не может быть меньше или равна нынешней даты";
+            }
+            return "";
+        }
+        public string userCheck(UserBindingModel user, UserViewModel userView)
+        {
+            EncryptionLogic _enc = new EncryptionLogic();
+            if (user != null)
+            {
+                if (user.Password == null)
+                {
+                    return "Введите пароль";
+
+                }
+                if (user.Email == null)
+                {
+                    return "Введите эл.почту";
+
+                }
+            }
+            if (userView != null)
+            {
+                if (userView == null)
+                {
+                    return "Пользователь не найден";
+                }
+                if (userView.Role == Roles.Библиотекарь || userView.Role == Roles.Бухгалтер)
+                {
+                    if (user.Password != userView.Password)
+                    {
+                        return "Вы ввели неверный пароль";
+                    }
+                }
+                else
+                {
+                    if (user.Password != _enc.Decrypt(userView.Password, userView.Email))
+                    {
+                        return "Вы ввели неверный пароль";
+                    }
+                }
+            }
+            return "";
+        }
+        public string registrationCheck(UserBindingModel user)
+        {
+            if (String.IsNullOrEmpty(user.Email))
+            {
+                return "Введите электронную почту";
+            }
+            if (!Regex.IsMatch(user.Email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
+            {
+                return "Email введен некорректно";
+            }
+            if (String.IsNullOrEmpty(user.FIO))
+            {
+                return "Введите ФИО";
+            }
+            if (String.IsNullOrEmpty(user.Password))
+            {
+                return "Введите пароль";
+            }
+            return "";
+        }
+        public string bookingValidation(BookingBindingModel model)
+        {
+            if (model.DateFrom == new DateTime())
+            {           
+                return "Введите дату начала бронирования";
+            }
+            if (model.DateTo == new DateTime())
+            {           
+                return "Введите дату окончания бронирования";
+            }
+            if (model.DateTo < model.DateFrom)
         public bool leadSalary(DateTime month)
         {
             var dat1 = new DateTime();
@@ -151,7 +233,7 @@ namespace PISCoursework.Controllers
         {
             if (date.Date< DateTime.Now.Date)
             {
-                return "Дата возврата не может быть меньше или равна нынешней даты";
+                return "Дата окончания бронирования не может быть меньше даты начала бронирования";
             }
             return "";
         }

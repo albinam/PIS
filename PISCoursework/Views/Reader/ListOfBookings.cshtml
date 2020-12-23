@@ -1,12 +1,11 @@
 ﻿
 @{
-    ViewData["Title"] = "Список книг";
+    ViewData["Title"] = "Забронированные книги";
 }
-<div class="text-center text-info">
-    <h1>Список книг</h1>
+<div class="text-center text-black-50">
+    <h1>Забронированные книги</h1>
 </div>
-@if (ViewBag.Type != 0)
-{
+<hr />
     <table class="table">
         <tr>
             <td>Название</td>
@@ -14,8 +13,7 @@
             <td>Жанр</td>
             <td>Издательство</td>
             <td>Год издания</td>
-            <td>Цена проката</td>
-            <td>Статус</td>
+            <td>Цена проката, руб./день</td>
         </tr>
         @foreach (var genre in ViewBag.Genres)
         {
@@ -31,10 +29,8 @@
                         <td>@book.PublishingHouse</td>
                         <td>@book.Year</td>
                         <td>@genre.Price</td>
-                        <td>@book.Status</td>
                     </tr>
                 }
             }
         }
     </table>
-}
