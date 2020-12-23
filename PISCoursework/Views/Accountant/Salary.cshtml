@@ -5,7 +5,7 @@
 }
 @using (Html.BeginForm("AddSalary", "Salary"))
 {
-    <div class="text-center text-info">
+    <div class="text-center text-black-50">
         <h3>Добавление зарплаты</h3>
     </div>
     <hr />
@@ -33,13 +33,13 @@
         <br />
     </p>
     <div class="col-sm-8">
-        <input type="submit" value="Начислить" class="btn btn-info btn-sm" />
+        <input type="submit" value="Начислить" class="btn btn-dark btn-sm" />
     </div>
 }
 <br />
 @Html.ValidationSummary(true, "", new { @style = "color: black" })
 <form asp-controller="Salary" asp-action="SalaryAll">
-    <div class="text-center text-info">
+    <div class="text-center text-black-50">
         <h3>Расчет суммарной стоимости зарплаты за год</h3>
     </div>
     <hr />
@@ -49,7 +49,7 @@
     </div>
     <br />
     <div class="col-sm-4">
-        <input type="submit" value="Вычислить" class="btn btn-info btn-sm" />
+        <input type="submit" value="Вычислить" class="btn btn-dark btn-sm" />
     </div>
     <br />
     <div class="col-sm-4">

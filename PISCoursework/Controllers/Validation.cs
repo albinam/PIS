@@ -193,6 +193,10 @@ namespace PISCoursework.Controllers
             {
                 return "Введите пароль";
             }
+            if (!Regex.IsMatch(user.Password, @".{8,15}"))
+            {
+                return "Пароль должен содержать не менее 8 и не более 15 символов";
+            }
             return "";
         }
         public string bookingValidation(BookingBindingModel model)
