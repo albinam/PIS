@@ -1,4 +1,4 @@
-﻿@model PISCoursework.Models.RegistrationModel
+﻿@model PISBusinessLogic.BindingModels.UserBindingModel
 @{
     ViewData["Title"] = "Регистрация";
 }
@@ -16,6 +16,6 @@
         @Html.TextBoxFor(x => x.FIO)
     </p>
     <button class="btn btn-info btn-sm" type="submit">Зарегистрироваться</button>
-    @Html.ValidationSummary(true, "", new { @style = "color: green" })
+    @Html.ValidationSummary(true, "", new { @style = "color: black" })
 }
 

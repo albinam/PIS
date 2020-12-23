@@ -21,9 +21,10 @@ namespace PISCoursework.Controllers.Librarian
         private readonly IUserLogic _user;
         private readonly ILibraryCardLogic _libraryCard;
         private readonly IContractLogic _contract;
-        private readonly ArchieveLogic _archieve;
+        private readonly ArchieveLogiс _archieve;
         private readonly ReportLogic _report;
-        public ReportsController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report, ArchieveLogic archieve)
+        private readonly Validation validation;
+        public ReportsController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report, ArchieveLogiс archieve)
         {
             _book = book;
             _genre = genre;
@@ -32,6 +33,7 @@ namespace PISCoursework.Controllers.Librarian
             _contract = contract;
             _report = report;
             _archieve = archieve;
+            validation = new Validation();
         }
         public IActionResult Reports()
         {
@@ -118,6 +120,11 @@ namespace PISCoursework.Controllers.Librarian
         }
         public ActionResult SumByMonths(DateTime date)
         {
+            if (validation.periodCheck(date) != "")
+            {
+                ModelState.AddModelError("", (validation.periodCheck(date)));
+                return View("Views/Librarian/SumByMonths.cshtml");
+            }
             if (date.Year != 0001)
             {
                 var contracts = _contract.Read(null);
@@ -221,18 +228,65 @@ namespace PISCoursework.Controllers.Librarian
         }
         public IActionResult BackUpToJsonAsync()
         {
-            string fileName = "D:\\data\\бэкап\\бэкап";
+            string fileName = "D:\\data\\архив\\архив";
             if (Directory.Exists(fileName))
             {
                 _archieve.CreateArchive(fileName);
-                return View("Views/Librarian/Reports.cshtml");
+                // Путь к файлу
+                string file_path = Path.Combine("D:\\data\\архив\\архив.zip");
+                // Тип файла - content-type
+                string file_type = "application/zip";
+                // Имя файла - необязательно
+                string file_name = "архив.zip";
+                return PhysicalFile(file_path, file_type, file_name);
             }
             else
             {
                 DirectoryInfo di = Directory.CreateDirectory(fileName);
                 _archieve.CreateArchive(fileName);
-                return View("Views/Librarian/Reports.cshtml");
+                // Путь к файлу
+                string file_path = Path.Combine("D:\\data\\архив\\архив.zip");
+                // Тип файла - content-type
+                string file_type = "application/zip";
+                // Имя файла - необязательно
+                string file_name = "архив.zip";
+                return PhysicalFile(file_path, file_type, file_name);
             }
+        }
+        public ActionResult PrintLibraryCard(int id)
+        {
+            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                Id = id
+            });
+            LibraryCardViewModel model = _libraryCard.Read(new LibraryCardBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveLibraryCardToWordFile("D://data//отчеты//билет" + id + ".docx", model);
+            // Путь к файлу
+            string file_path = Path.Combine("D://data//отчеты//билет" + id + ".docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = id + ".docx";
+            return PhysicalFile(file_path, file_type, file_name);
+        }
+        public ActionResult Available(int id)
+        {
+            BookViewModel model = _book.Read(new BookBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveBookToWordFile("D://data//отчеты//справка" + id + ".docx", model);
+            // Путь к файлу
+            string file_path = Path.Combine("D://data//отчеты//справка" + id + ".docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = id + ".docx";
+            return PhysicalFile(file_path, file_type, file_name);
+
         }
     }
 }

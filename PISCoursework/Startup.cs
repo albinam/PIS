@@ -34,8 +34,9 @@ namespace PISCoursework
             services.AddTransient<IContractLogic, ContractLogic>();
             services.AddTransient<IBookingLogic, BookingLogic>();
             services.AddTransient<IPaymentLogic, PaymentLogic>();
-            services.AddTransient<ArchieveLogic, ArchieveLogicImplement>();
+            services.AddTransient<ArchieveLogiñ>();
             services.AddTransient<ReportLogic>();
+            services.AddTransient<EncryptionLogic>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

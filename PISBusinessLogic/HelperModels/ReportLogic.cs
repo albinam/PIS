@@ -41,7 +41,7 @@ namespace PISBusinessLogic.HelperModels
         public void SaveContractToWordFile(string fileName, UserViewModel model)
         {
             string title = "Контракт с  " + model.FIO;
-            SaveToWord.CreateDoc(new WordInfoContract
+            SaveToWord.CreateDoc(new WordInfo
             {
                 FileName = fileName,
                 Title = title,
@@ -65,7 +65,7 @@ namespace PISBusinessLogic.HelperModels
         public void SaveListToWordFile(string fileName)
         {
             string title = "Список библиотекарей ";
-            SaveToWord.CreateDoc(new WordInfoList
+            SaveToWord.CreateDoc(new WordInfo
             {
                 FileName = fileName,
                 Title = title,
