@@ -38,6 +38,16 @@ namespace PISBusinessLogic.HelperModels
 
             });
         }
+        public void SaveContractReaderToWordFile(string fileName,ContractViewModel model)
+        {
+            string title = "Договор №  " + model.Id;
+            SaveToWord.CreateDoc(new WordInfo
+            {
+                FileName = fileName,
+                Title = title,
+                contract = model
+            });
+        }
         public void SaveContractToWordFile(string fileName, UserViewModel model)
         {
             string title = "Контракт с  " + model.FIO;

@@ -31,7 +31,6 @@ namespace PISCoursework.Controllers
         }
         public IActionResult Registration()
         {
-            //ViewBag.User = Program.Reader;
             return View();
         }
         [HttpPost]
@@ -48,9 +47,9 @@ namespace PISCoursework.Controllers
                 {
                     Email = user.Email,
                 }).FirstOrDefault();
-                if (validation.userCheck(null,userView) != "")
+                if (validation.userCheck(user,userView) != "")
                 {
-                    ModelState.AddModelError("", validation.userCheck(null, userView));
+                    ModelState.AddModelError("", validation.userCheck(user, userView));
                     return View();
                 }
                 if (userView.Role == Roles.Библиотекарь)

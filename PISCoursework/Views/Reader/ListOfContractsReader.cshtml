@@ -2,7 +2,7 @@
     ViewData["Title"] = "Договоры";
 }
 
-<div class="text-center text-info">
+<div class="text-center text-black-50">
     <h1>Договоры</h1>
 </div>
 <p>ФИО читателя: @ViewBag.Users.FIO</p>
@@ -40,4 +40,8 @@
             }
         }
     </table>
+    <hr />
+    <strong> <a class="btn btn-info btn-sm" href="/Contract/ChangeDate/@contract.Id">изменить дату возврата</a></strong>
+    <hr />
+    <strong> <a class="btn btn-info btn-sm" href="/Contract/PrintContract/@contract.Id">сохранить в формате docx</a></strong>
 }

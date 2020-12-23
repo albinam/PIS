@@ -1,4 +1,5 @@
 ﻿using PISBusinessLogic.BindingModels;
+using PISBusinessLogic.Enums;
 using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.ViewModels;
 using System;
@@ -157,9 +158,19 @@ namespace PISCoursework.Controllers
                 {
                     return "Пользователь не найден";
                 }
-                if (user.Password != _enc.Decrypt(userView.Password, userView.Email))
+                if (userView.Role == Roles.Библиотекарь || userView.Role == Roles.Бухгалтер)
                 {
-                    return "Вы ввели неверный пароль";
+                    if (user.Password != userView.Password)
+                    {
+                        return "Вы ввели неверный пароль";
+                    }
+                }
+                else
+                {
+                    if (user.Password != _enc.Decrypt(userView.Password, userView.Email))
+                    {
+                        return "Вы ввели неверный пароль";
+                    }
                 }
             }
             return "";
@@ -181,6 +192,22 @@ namespace PISCoursework.Controllers
             if (String.IsNullOrEmpty(user.Password))
             {
                 return "Введите пароль";
+            }
+            return "";
+        }
+        public string bookingValidation(BookingBindingModel model)
+        {
+            if (model.DateFrom == new DateTime())
+            {           
+                return "Введите дату начала бронирования";
+            }
+            if (model.DateTo == new DateTime())
+            {           
+                return "Введите дату окончания бронирования";
+            }
+            if (model.DateTo < model.DateFrom)
+            {
+                return "Дата окончания бронирования не может быть меньше даты начала бронирования";
             }
             return "";
         }

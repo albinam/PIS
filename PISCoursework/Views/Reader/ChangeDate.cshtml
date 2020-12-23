@@ -1,0 +1,59 @@
+﻿@model PISBusinessLogic.BindingModels.BookBindingModel
+@{
+    ViewData["Title"] = "Изменение даты возврата";
+}
+@Html.ValidationSummary()
+<div class="text-center text-black-50">
+    <h1>Изменение даты возврата</h1>
+</div>
+@if (ViewBag.ContractBooks != null)
+{
+    <p>Номер: @ViewBag.ContractBooks.Id</p>
+    <p>Дата: @ViewBag.ContractBooks.Date.ToShortDateString()</p>
+    <p>Дата возврата книг: @ViewBag.ContractBooks.DateReturn.ToShortDateString()</p>
+    <p>Стоимость: @ViewBag.ContractBooks.Sum</p>
+    <table class="table">
+        <tr>
+            <td>Название</td>
+            <td>Автор</td>
+            <td>Жанр</td>
+            <td>Издательство</td>
+            <td>Год издания</td>
+        </tr>
+        @foreach (var genre in ViewBag.Genres)
+        {
+            @foreach (var book in ViewBag.ContractBooks.ContractBooks)
+            {
+                @if (genre.Id == book.GenreId)
+                {
+
+                    <tr>
+                        <td>@book.Name</td>
+                        <td>@book.Author</td>
+                        <td>@genre.Name</td>
+                        <td>@book.PublishingHouse</td>
+                        <td>@book.Year</td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+    <hr/>
+<form asp-controller="Contract" asp-action="ChangeDate" method="get">
+    <p>Измените дату возврата</p>
+    <div class="col-sm-8">
+        Дата возврата:<br>
+        <input type="date" name="date" />
+    </div>
+    <br />
+    <input type="hidden" value="@ViewBag.ContractBooks.Id" name="id" />
+    <div class="form-group row">
+        <div class="col-sm-8">
+            <input type="submit" value="изменить дату возврата" class="btn btn-dark btn-sm" />
+        </div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @style = "color: black" })
+</form>
+}
+
+

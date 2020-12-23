@@ -13,6 +13,7 @@ namespace PISBusinessLogic.HelperModels
         public BookViewModel book { get; set; }
         public List<UserViewModel> UserFIO { get; set; }
         public UserViewModel user { get; set; }
+        public ContractViewModel contract { get; set; }
 
     }
 }
