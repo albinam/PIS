@@ -206,6 +206,11 @@ namespace PISCoursework.Controllers
                 return "Введите дату окончания бронирования";
             }
             if (model.DateTo < model.DateFrom)
+            {
+                return "Дата окончания бронирования не может быть меньше даты начала бронирования";
+            }
+            return "";
+        }
         public bool leadSalary(DateTime month)
         {
             var dat1 = new DateTime();
@@ -228,14 +233,6 @@ namespace PISCoursework.Controllers
             {
                 return false;
             }
-        }
-        public string periodCheck (DateTime date)
-        {
-            if (date.Date< DateTime.Now.Date)
-            {
-                return "Дата окончания бронирования не может быть меньше даты начала бронирования";
-            }
-            return "";
         }
     }
 }
