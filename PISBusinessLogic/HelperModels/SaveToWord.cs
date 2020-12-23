@@ -26,7 +26,7 @@ namespace PISBusinessLogic.HelperModels
                         JustificationValues = JustificationValues.Center
                     }
                 }));
-                if (info.book == null)
+                if (info.libraryCard != null)
                 {
                     int year = Convert.ToInt32(info.libraryCard.Year) + 1;
                     Table table = new Table();
@@ -67,7 +67,7 @@ namespace PISBusinessLogic.HelperModels
                     table.Append(row4);
                     docBody.Append(table);
                 }
-                if (info.libraryCard == null)
+                if (info.book != null)
                 {
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
@@ -120,32 +120,26 @@ namespace PISBusinessLogic.HelperModels
                         }
                     }));               
                 }
-                wordDocument.MainDocumentPart.Document.Save();
-            }
-        }
-        public static void CreateDoc(WordInfoList info)
-        {
-            using (WordprocessingDocument wordDocument1 = WordprocessingDocument.Create(info.FileName, WordprocessingDocumentType.Document))
-            {
-                MainDocumentPart mainPart = wordDocument1.AddMainDocumentPart();
-                mainPart.Document = new Document();
-                Body docBody = mainPart.Document.AppendChild(new Body());
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                if (info.UserFIO != null)
                 {
-                    Texts = new List<string> { info.Title },
-                    TextProperties = new WordParagraphProperties
+                    int i = 0;
+                    foreach (var us in info.UserFIO)
                     {
-                        Bold = true,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
+                        docBody.AppendChild(CreateParagraph(new WordParagraph
+                        {
+                            Texts = new List<string> { "Библиотекарь: " + us.FIO },
+                            TextProperties = new WordParagraphProperties
+                            {
+                                Bold = false,
+                                Size = "24",
+                                JustificationValues = JustificationValues.Left
+                            }
+                        }));
+                        i++;
                     }
-                }));
-                int i = 0;
-                foreach(var us in info.UserFIO)
-                {
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Библиотекарь: " + us.FIO},
+                        Texts = new List<string> { "Дата формирования: " + DateTime.Now.ToShortDateString() },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -153,40 +147,9 @@ namespace PISBusinessLogic.HelperModels
                             JustificationValues = JustificationValues.Left
                         }
                     }));
-                    i++;
                 }
-                docBody.AppendChild(CreateParagraph(new WordParagraph
+                if (info.user != null)
                 {
-                    Texts = new List<string> { "Дата формирования: " + DateTime.Now.ToShortDateString() },
-                    TextProperties = new WordParagraphProperties
-                    {
-                        Bold = false,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Left
-                    }
-                }));
-
-                wordDocument1.MainDocumentPart.Document.Save();
-            }
-        }
-        public static void CreateDoc(WordInfoContract info)
-        {
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(info.FileName, WordprocessingDocumentType.Document))
-            {
-                MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
-                mainPart.Document = new Document();
-                Body docBody = mainPart.Document.AppendChild(new Body());
-                docBody.AppendChild(CreateParagraph(new WordParagraph
-                {
-                    Texts = new List<string> { info.Title },
-                    TextProperties = new WordParagraphProperties
-                    {
-                        Bold = true,
-                        Size = "24",
-                        JustificationValues = JustificationValues.Center
-                    }
-                }));
-
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
                         Texts = new List<string> { "ФИО: " + info.user.FIO },
@@ -237,6 +200,7 @@ namespace PISBusinessLogic.HelperModels
                             JustificationValues = JustificationValues.Left
                         }
                     }));
+                }
                 wordDocument.MainDocumentPart.Document.Save();
             }
         }

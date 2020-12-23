@@ -35,12 +35,6 @@ namespace PISCoursework.Controllers
             validation = new Validation();
         }
 
-        public IActionResult Readers()
-        {
-            ViewBag.Users = _user.Read(null);
-            ViewBag.Create = -1;
-            return View("Views/Librarian/Readers.cshtml");
-        }
         [HttpGet]
         public ActionResult Readers(UserBindingModel model)
         {
@@ -48,28 +42,99 @@ namespace PISCoursework.Controllers
             {
                 var Users = _user.Read(null);
                 List<UserViewModel> users = new List<UserViewModel>();
+                List<LibraryCardViewModel> list = new List<LibraryCardViewModel>();
                 foreach (var user in Users)
                 {
                     if (user.Role == Roles.Читатель)
                         users.Add(user);
+                    var card = _libraryCard.Read(new LibraryCardBindingModel
+                    {
+                        UserId = user.Id
+                    }).FirstOrDefault();
+                    if (card != null)
+                    {
+                        list.Add(card);
+                    }
+
                 }
-                ViewBag.Users = users;
+                List<UserViewModel> userWithCard = new List<UserViewModel>();
+                List<UserViewModel> userWithCardOverdue = new List<UserViewModel>();
+                foreach (var c in list)
+                {
+                    foreach (var u in users)
+                    {
+                        if (u.Id == c.UserId && c.Year == DateTime.Now.Year.ToString())
+                        {
+                            userWithCard.Add(u);
+                        }
+                        if(u.Id == c.UserId && c.Year != DateTime.Now.Year.ToString())
+                        {
+                            userWithCardOverdue.Add(u);
+                        }
+                    }
+                }
+                foreach (var uc in userWithCard)
+                {
+                    users.Remove(uc);
+                }
+                foreach (var uc in userWithCardOverdue)
+                {
+                    users.Remove(uc);
+                }
+                ViewBag.Users = userWithCard;
+                ViewBag.UsersWithoutCard = users;
+                ViewBag.UsersWithCardOverdue = userWithCardOverdue;
                 ViewBag.Create = -1;
                 return View("Views/Librarian/Readers.cshtml");
             }
-            var Users2 = _user.Read(new UserBindingModel
+            else
             {
-                FIO = model.FIO
-            });
-            List<UserViewModel> users2 = new List<UserViewModel>();
-            foreach (var user in Users2)
-            {
-                if (user.Role == Roles.Читатель)
-                    users2.Add(user);
+                var Users2 = _user.Read(new UserBindingModel
+                {
+                    FIO = model.FIO
+                });
+                List<UserViewModel> users2 = new List<UserViewModel>();
+                List<LibraryCardViewModel> list2 = new List<LibraryCardViewModel>();
+                List<UserViewModel> userWithCard2 = new List<UserViewModel>();
+                List<UserViewModel> userWithCardOverdue2 = new List<UserViewModel>();
+                foreach (var user in Users2)
+                {
+                    if (user.Role == Roles.Читатель)
+                        users2.Add(user);
+                    var card = _libraryCard.Read(new LibraryCardBindingModel
+                    {
+                        UserId = user.Id
+                    }).FirstOrDefault();
+                    list2.Add(card);
+                }
+                foreach (var c in list2)
+                {
+                    foreach (var u in users2)
+                    {
+                        if (u.Id == c.UserId && c.Year == DateTime.Now.Year.ToString())
+                        {
+                            userWithCard2.Add(u);
+                        }
+                        if (u.Id == c.UserId && c.Year != DateTime.Now.Year.ToString())
+                        {
+                            userWithCardOverdue2.Add(u);
+                        }
+                    }
+                }
+                foreach (var uc in userWithCard2)
+                {
+                    users2.Remove(uc);
+                }
+                foreach (var uc in userWithCardOverdue2)
+                {
+                    users2.Remove(uc);
+                }
+                ViewBag.Users = userWithCard2;
+                ViewBag.UsersWithoutCard = users2;
+                ViewBag.UsersWithCardOverdue2 = userWithCardOverdue2;
+                ViewBag.Create = -1;              
+                return View("Views/Librarian/Readers.cshtml");
             }
-            ViewBag.Create = -1;
-            ViewBag.Users = users2;
-            return View("Views/Librarian/Readers.cshtml");
         }
         [HttpGet]
         public ActionResult AddLibraryCard(int id, bool prolong)
@@ -138,7 +203,7 @@ namespace PISCoursework.Controllers
                 UserId = model.UserId
             });
 
-            return RedirectToAction("Readers");
+            return RedirectToAction("Readers", "Readers");
         }
 
         [HttpGet]
@@ -154,6 +219,7 @@ namespace PISCoursework.Controllers
                 var libraryCard1 = _libraryCard.Read(new LibraryCardBindingModel
                 {
                     UserId = user.Id
+
                 }).FirstOrDefault();
                 libraryCard = libraryCard1.Id;
             }
@@ -238,11 +304,11 @@ namespace PISCoursework.Controllers
                         }
                     }
                 }
-                if (booking2 != null && list.Count!=0)
+                if (booking2 != null && list.Count != 0)
                 {
                     _booking.Delete(new BookingBindingModel
                     {
-                        Id = list.First().Id,                   
+                        Id = list.First().Id,
                     });
                 }
                 _book.CreateOrUpdate(new BookBindingModel
@@ -256,7 +322,7 @@ namespace PISCoursework.Controllers
                     Status = Status.Выдана
                 });
                 var contract = _contract.Read(null).OrderBy(x => x.Id).Last();
-               
+
                 contractBooks.Add(new ContractBookBindingModel
                 {
                     BookId = id,
@@ -271,8 +337,8 @@ namespace PISCoursework.Controllers
                         }
                     }
                 }
-              
-                TimeSpan period = contract.DateReturn.AddMinutes(10)-DateTime.Now;
+
+                TimeSpan period = contract.DateReturn.AddMinutes(10) - DateTime.Now;
                 _contract.CreateOrUpdate(new ContractBindingModel
                 {
                     Id = contract.Id,
@@ -285,20 +351,20 @@ namespace PISCoursework.Controllers
                     LibrarianId = Program.Librarian.Id,
                     ContractBooks = contractBooks
                 });
-                if(date!=new DateTime())
+                if (date != new DateTime())
                 {
                     if (validation.periodCheck(date) != "")
                     {
                         ModelState.AddModelError("", (validation.periodCheck(date)));
                         return View("Views/Librarian/AddContractBooks.cshtml");
                     }
-                    period = date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute+10) - DateTime.Now;            
+                    period = date.AddHours(DateTime.Now.Hour).AddMinutes(DateTime.Now.Minute + 10) - DateTime.Now;
                     _contract.CreateOrUpdate(new ContractBindingModel
                     {
                         Id = contract.Id,
                         Date = contract.Date,
                         DateReturn = date,
-                        Sum =getSum(contractBooks,period.Days),
+                        Sum = getSum(contractBooks, period.Days),
                         Fine = 0,
                         LibraryCardId = contract.LibraryCardId,
                         ContractStatus = ContractStatus.Активен,
@@ -312,7 +378,7 @@ namespace PISCoursework.Controllers
                     if (listOfBooks1.ContractBooks.Count != 0)
                     {
                         ViewBag.ContractBooks = listOfBooks1;
-                    }              
+                    }
                     return View("Views/Librarian/AddContractBooks.cshtml");
                 }
                 var listOfBooks = _contract.Read(new ContractBindingModel
@@ -392,7 +458,7 @@ namespace PISCoursework.Controllers
                         LibraryCardId = contract.LibraryCardId,
                         Sum = contract.Sum,
                         ContractBooks = list,
-                        Fine= ((fine * date)/100)*contract.Sum
+                        Fine = ((fine * date) / 100) * contract.Sum
                     });
                 }
             }
@@ -463,7 +529,7 @@ namespace PISCoursework.Controllers
                             LibraryCardId = card.Id
                         });
                         List<ContractViewModel> list = new List<ContractViewModel>();
-                        foreach(var contract in c)
+                        foreach (var contract in c)
                         {
                             if (contract.Id == id)
                             {
@@ -509,7 +575,7 @@ namespace PISCoursework.Controllers
                     {
                         Id = b.GenreId
                     }).FirstOrDefault();
-                    sum += g.Price*period;
+                    sum += g.Price * period;
                 }
                 return sum;
             }
@@ -554,25 +620,6 @@ namespace PISCoursework.Controllers
                 return View("Views/Librarian/ReadersWithOverdue.cshtml");
             }
             return View("Views/Librarian/ReadersWithOverdue.cshtml");
-        }
-        public ActionResult PrintLibraryCard(int id)
-        {
-            ViewBag.Exists = _libraryCard.Read(new LibraryCardBindingModel
-            {
-                Id = id
-            });
-            LibraryCardViewModel model = _libraryCard.Read(new LibraryCardBindingModel
-            {
-                Id = id
-            }).FirstOrDefault();
-            _report.SaveLibraryCardToWordFile("C://Users//Альбина//Downloads//билет" + id + ".docx", model);
-            // Путь к файлу
-            string file_path = Path.Combine("C://Users//Альбина//Downloads//билет" + id + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = id + ".docx";
-            return PhysicalFile(file_path, file_type, file_name);
         }
         public ActionResult EndContract(int id)
         {

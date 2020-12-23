@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PISBusinessLogic.BindingModels;
 using PISBusinessLogic.Enums;
+using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISCoursework.Models;
@@ -15,10 +16,14 @@ namespace PISCoursework.Controllers
     public class UserController : Controller
     {
         private readonly IUserLogic _user;
+        private readonly EncryptionLogic _enc;
+        private readonly Validation validation;
 
-        public UserController(IUserLogic user)
+        public UserController(IUserLogic user, EncryptionLogic enc)
         {
             _user = user;
+            _enc = enc;
+            validation = new Validation();
         }
         public IActionResult Login()
         {
@@ -32,15 +37,9 @@ namespace PISCoursework.Controllers
         [HttpPost]
         public ActionResult Login(UserBindingModel user)
         {
-            if (user.Password == null)
+            if (validation.userCheck(user, null) != "")
             {
-                ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
-                return View();
-            }
-
-            if (user.Email == null)
-            {
-                ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
+                ModelState.AddModelError("", validation.userCheck(user, null));
                 return View();
             }
             else
@@ -48,12 +47,11 @@ namespace PISCoursework.Controllers
                 var userView = _user.Read(new UserBindingModel
                 {
                     Email = user.Email,
-                    Password = user.Password
                 }).FirstOrDefault();
-                if (userView == null)
+                if (validation.userCheck(null,userView) != "")
                 {
-                    ModelState.AddModelError("", "Вы ввели неверный пароль, либо пользователь не найден");
-                    return View(user);
+                    ModelState.AddModelError("", validation.userCheck(null, userView));
+                    return View();
                 }
                 if (userView.Role == Roles.Библиотекарь)
                 {
@@ -71,12 +69,12 @@ namespace PISCoursework.Controllers
             }
         }
         [HttpPost]
-        public ViewResult Registration(RegistrationModel user)
+        public ViewResult Registration(UserBindingModel user)
         {
-            if (String.IsNullOrEmpty(user.Email))
+            if (validation.registrationCheck(user) != "")
             {
-                ModelState.AddModelError("", "Введите электронную почту");
-                return View(user);
+                ModelState.AddModelError("", validation.registrationCheck(user));
+                return View();
             }
             var userView = _user.Read(new UserBindingModel
             {
@@ -87,25 +85,10 @@ namespace PISCoursework.Controllers
                 ModelState.AddModelError("", "Данный Email уже занят");
                 return View(user);
             }
-            if (!Regex.IsMatch(user.Email, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$"))
-            {
-                ModelState.AddModelError("", "Email введен некорректно");
-                return View(user);
-            }
-            if (String.IsNullOrEmpty(user.FIO))
-            {
-                ModelState.AddModelError("", "Введите ФИО");
-                return View(user);
-            }
-            if (String.IsNullOrEmpty(user.Password))
-            {
-                ModelState.AddModelError("", "Введите пароль");
-                return View(user);
-            }
             _user.CreateOrUpdate(new UserBindingModel
             {
                 FIO = user.FIO,
-                Password = user.Password,
+                Password = _enc.Encrypt(user.Password, user.Email),
                 Email = user.Email,
                 Role = Roles.Читатель
             });

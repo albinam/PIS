@@ -162,15 +162,17 @@ namespace PISCoursework.Controllers
             {
                 var Users = _user.Read(new UserBindingModel
                 {
-                    FIO = model.FIO,
-                    Id = model.Id
+                    FIO = model.FIO
                 });
                 List<UserViewModel> librarians = new List<UserViewModel>();
                 foreach (var User in Users)
                 {
                     if (User.Role == Roles.Библиотекарь)
                     {
-                        librarians.Add(User);
+                        if (User.Id == model.Id)
+                        {
+                            librarians.Add(User);
+                        }
                     }
                 }
                 ViewBag.Users = librarians;

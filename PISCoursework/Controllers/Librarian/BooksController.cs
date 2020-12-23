@@ -355,23 +355,6 @@ namespace PISCoursework.Controllers.Librarian
                 result.Add(book);
             }
             return result;
-        }
-
-        public ActionResult Available(int id)
-        {
-            BookViewModel model = _book.Read(new BookBindingModel
-            {
-                Id = id
-            }).FirstOrDefault();
-            _report.SaveBookToWordFile("C://Users//Альбина//Downloads//справка" + id + ".docx", model);
-            // Путь к файлу
-            string file_path = Path.Combine("C://Users//Альбина//Downloads//справка" + id + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = id + ".docx";
-            return PhysicalFile(file_path, file_type, file_name);
-
-        }
+        }   
     }
 }
