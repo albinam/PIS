@@ -124,6 +124,29 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
+        public bool leadSalary(DateTime month)
+        {
+            var dat1 = new DateTime();
+            if (month == dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool checkLibrarian(int CountReport, int Id)
+        {
+            if (Id != 0 && CountReport != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         public string periodCheck (DateTime date)
         {
             if (date.Date< DateTime.Now.Date)
