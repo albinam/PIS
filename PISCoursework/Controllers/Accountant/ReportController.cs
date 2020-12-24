@@ -9,6 +9,8 @@ using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using PISBusinessLogic.Enums;
 using PISBusinessLogic.BindingModels;
+using System.IO;
+using PISDatabaseImplement.Implements;
 
 namespace PISCoursework.Controllers.Accountant
 {
@@ -19,13 +21,16 @@ namespace PISCoursework.Controllers.Accountant
         private readonly IPaymentLogic _payment;
         private readonly ReportLogic _report;
         private Validation validation;
-        public ReportController(IUserLogic user, IContractLogic contract, ReportLogic report, IPaymentLogic payment)
+        private readonly ArchiveLogic _archive;
+        string exportDirectory = Directory.GetCurrentDirectory() + "\\wwwroot\\Export";
+        public ReportController(IUserLogic user, IContractLogic contract, ReportLogic report, IPaymentLogic payment, ArchiveLogic archive)
         {
             _user = user;
             _contract = contract;
             _report = report;
             _payment = payment;
             validation = new Validation();
+            _archive = archive;
         }
         public IActionResult Report()
         {
@@ -211,7 +216,28 @@ namespace PISCoursework.Controllers.Accountant
             }
             
             ViewBag.Users = _user.Read(null);
-            return View("Views/Accountant/Report.cshtml");
+            return View("Views/Accountant/CheckLibrarian.cshtml");
+        }
+        public IActionResult BackUpToJsonAsync()
+        {
+            // Путь к файлу
+            string file_path = _archive.ArchiveOutdated(2);
+            // Тип файла - content-type
+            string file_type = "application/zip";
+            // Имя файла - необязательно
+            string file_name = "архив" + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.ToString() + ".zip";
+            var payments = _payment.Read(null);
+            foreach (var el in payments)
+            {
+                if (Convert.ToInt32(el.Date.Year) < (DateTime.Now.Year))
+                {
+                    _payment.Delete(new PaymentBindingModel
+                    {
+                        Id = el.Id
+                    });
+                }
+            }
+            return PhysicalFile(file_path, file_type, file_name);
         }
     }
 }

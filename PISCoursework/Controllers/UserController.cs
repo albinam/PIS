@@ -47,7 +47,7 @@ namespace PISCoursework.Controllers
                 {
                     Email = user.Email,
                 }).FirstOrDefault();
-                if (validation.userCheck(user,userView) != "")
+                if (validation.userCheck(user, userView) != "")
                 {
                     ModelState.AddModelError("", validation.userCheck(user, userView));
                     return View();
@@ -73,7 +73,7 @@ namespace PISCoursework.Controllers
             }
         }
         [HttpPost]
-        public ViewResult Registration(UserBindingModel user)
+        public ActionResult Registration(UserBindingModel user)
         {
             if (validation.registrationCheck(user) != "")
             {
@@ -96,8 +96,7 @@ namespace PISCoursework.Controllers
                 Email = user.Email,
                 Role = Roles.Читатель
             });
-            ModelState.AddModelError("", "Вы успешно зарегистрированы");
-            return View("Registration", user);
+            return RedirectToAction("Login", "User");
         }
         public IActionResult Logout()
         {
