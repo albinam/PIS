@@ -139,6 +139,7 @@ namespace PISCoursework.Controllers
         public string userCheck(UserBindingModel user, UserViewModel userView)
         {
             EncryptionLogic _enc = new EncryptionLogic();
+           
             if (user != null)
             {
                 if (user.Password == null)
@@ -154,10 +155,6 @@ namespace PISCoursework.Controllers
             }
             if (userView != null)
             {
-                if (userView == null)
-                {
-                    return "Пользователь не найден";
-                }
                 if (userView.Role == Roles.Библиотекарь || userView.Role == Roles.Бухгалтер)
                 {
                     if (user.Password != userView.Password)

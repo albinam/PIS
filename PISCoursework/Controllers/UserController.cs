@@ -52,6 +52,11 @@ namespace PISCoursework.Controllers
                     ModelState.AddModelError("", validation.userCheck(user, userView));
                     return View();
                 }
+                if (userView == null)
+                {
+                    ModelState.AddModelError("", "Почта или пароль не верны, попробуйте еще раз");
+                    return View();
+                }
                 if (userView.Role == Roles.Библиотекарь)
                 {
                     Program.Librarian = userView;
