@@ -234,5 +234,29 @@ namespace PISCoursework.Controllers
                 return false;
             }
         }
+        public bool listContract(int Id, DateTime month)
+        {
+            var dat1 = new DateTime();
+            if (Id != 0 && month != dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool distributionSalary(DateTime date)
+        {
+            var dat1 = new DateTime();
+            if (date == dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

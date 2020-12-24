@@ -59,14 +59,15 @@ namespace PISDatabaseImplement.Implements
             {
                 return context.Payments
                  .Where(rec => model == null
-                   || (rec.Id == model.Id) || (rec.UserId == model.UserId))
+                   || (rec.Id == model.Id) || (rec.UserId == model.UserId) || (rec.Date.Month == model.Date.Month))
 
                .Select(rec => new PaymentViewModel
                {
                    Id = rec.Id,
                    Date = rec.Date,
                    Sum = rec.Sum,
-                   UserId = rec.UserId
+                   UserId = rec.UserId,
+                   LibrarianFIO = rec.Librarian.FIO
                })
                 .ToList();
             }

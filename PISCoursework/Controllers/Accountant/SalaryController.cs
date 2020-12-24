@@ -37,7 +37,7 @@ namespace PISCoursework.Controllers.Accountant
                 int year1 = (model.Date).Year;
                 if (year < year1 && p.UserId == Id) 
                 {
-                    if (month1 < month && p.UserId == Id)
+                    if (month1 > month && p.UserId == Id)
                     {
                         return AddSalaries(model, Id);
                     }
@@ -64,7 +64,7 @@ namespace PISCoursework.Controllers.Accountant
                 else
                 {
                     ViewBag.Users = _user.Read(null);
-                    ModelState.AddModelError("", "Ошибка");
+                    ModelState.AddModelError("", "Выберете библиотекаря или дату");
                     return View("Views/Accountant/Salary.cshtml");
                 }
                

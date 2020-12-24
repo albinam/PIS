@@ -82,5 +82,16 @@ namespace PISBusinessLogic.HelperModels
                 UserFIO = GetUsers()
             });
         }
+        public void SaveLeadToWordFile(string fileName, List<PaymentViewModel> model)
+        {
+            string title = "Ведомость";
+            SaveToWord.CreateDoc(new WordInfo
+            {
+                FileName = fileName,
+                Title = title,
+                payment = model
+            });
+        }
+
     }
 }

@@ -14,6 +14,5 @@ namespace PISBusinessLogic.HelperModels
         public List<UserViewModel> UserFIO { get; set; }
         public UserViewModel user { get; set; }
         public ContractViewModel contract { get; set; }
-
     }
 }

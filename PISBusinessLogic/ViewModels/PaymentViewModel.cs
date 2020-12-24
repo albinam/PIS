@@ -11,5 +11,6 @@ namespace PISBusinessLogic.ViewModels
         public double Sum { get; set; }
         public DateTime Date {get;set;}
         public int UserId { get; set; }
+        public string LibrarianFIO { get; set; }
     }
 }

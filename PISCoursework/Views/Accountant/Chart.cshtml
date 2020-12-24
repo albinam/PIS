@@ -59,7 +59,7 @@
         var btnSave = document.getElementById('save-pdf');
         chart.draw(data, options);
         btnSave.addEventListener('click', function () {
-            var doc = new jsPDF();
+            var doc = new jsPDF('l');
             doc.addImage(chart.getImageURI(), 0, 0);
             doc.save('chart.pdf');
         }, false);
