@@ -166,9 +166,11 @@ namespace PISCoursework.Controllers.Accountant
         public ActionResult LeadSalary(DateTime month)
         {
             ViewBag.Users = _user.Read(null);
+
             int month1 = month.Month;
             if (!validation.leadSalary(month))
             {
+                ViewBag.Month = month;
                 var Payment = _payment.Read(null);
                 List<PaymentViewModel> pays = new List<PaymentViewModel>();
 
