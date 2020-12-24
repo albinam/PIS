@@ -40,7 +40,7 @@
     <div class="form-group row">
         <div class="col-sm-4">
             <input type="hidden" value="@ViewBag.FIO" name="FIO" />
-            <input type="submit" value="найти" class="btn btn-dark" />
+            <input type="submit" value="найти" class="btn btn-dark btn-sm" />
             <hr />
         </div>
     </div>
@@ -78,24 +78,25 @@
             }
         }
     </table>
-}
-<form asp-controller="Readers" asp-action="AddContractBooks" method="get">
-    <p>Книги выдаются на 2 недели, либо измените дату возврата вручную</p>
-    <div class="col-sm-8">
-        Дата возврата:<br>
-        <input type="date" name="date" />
-    </div>
-    <br />
-    <div class="form-group row">
+    <form asp-controller="Readers" asp-action="AddContractBooks" method="get">
+        <p>Книги выдаются на 2 недели, либо измените дату возврата вручную</p>
         <div class="col-sm-8">
-            <input type="submit" value="изменить дату возврата" class="btn btn-dark" />
+            Дата возврата:<br>
+            <input type="date" name="date" />
         </div>
-    </div>
-    @Html.ValidationSummary(true, "", new { @style = "color: black" })
-</form>
-<hr/>
+        <br />
+        <div class="form-group row">
+            <div class="col-sm-8">
+                <input type="submit" value="изменить дату возврата" class="btn btn-dark btn-sm" />
+            </div>
+        </div>
+        @Html.ValidationSummary(true, "", new { @style = "color: black" })
+    </form>
+}
+<hr />
 <br />
 <a class="btn btn-dark btn-sm" href="/Readers/listOfContracts">заключить</a>
+<br />
 <br />
 <table class="table">
     <tr>
