@@ -154,10 +154,6 @@ namespace PISCoursework.Controllers
             }
             if (userView != null)
             {
-                if (userView == null)
-                {
-                    return "Пользователь не найден";
-                }
                 if (userView.Role == Roles.Библиотекарь || userView.Role == Roles.Бухгалтер)
                 {
                     if (user.Password != userView.Password)
@@ -173,6 +169,7 @@ namespace PISCoursework.Controllers
                     }
                 }
             }
+           
             return "";
         }
         public string registrationCheck(UserBindingModel user)
