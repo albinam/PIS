@@ -3,7 +3,7 @@
     ViewData["Title"] = "Библиотекарь";
 }
 
-<div class="text-center text-info">
+<div class="text-center text-black-50">
     <h1>Библиотекарь</h1>
 </div>
 <hr />
@@ -15,7 +15,7 @@
         <br />
         По личному коду:
         @Html.TextBoxFor(x => x.Id)
-        <input type="submit" value="Найти" class="btn btn-info btn-sm" />
+        <input type="submit" value="Найти" class="btn btn-dark btn-sm" />
     </div>
 </form>
 <table class="table">
@@ -45,12 +45,12 @@
 </table>
 <table class="table">
     <div class="col-sm-8">
-        <p> <strong> <a class="btn btn-info btn-sm" href="/Accountant/ChangeCommission">Изменить процент комиссионных</a></strong></p>
+        <p> <strong> <a class="btn btn-dark btn-sm" href="/Accountant/ChangeCommission">Изменить процент комиссионных</a></strong></p>
     </div>
 </table>
 
 <form asp-controller="Accountant" asp-action="List" method="get">
     <div class="col-sm-8">
-        <input type="submit" value="Список библиотекарей.docx" class="btn btn-info btn-sm" id="save-docx" />
+        <input type="submit" value="Список библиотекарей.docx" class="btn btn-dark btn-sm" id="save-docx" />
     </div>
 </form>

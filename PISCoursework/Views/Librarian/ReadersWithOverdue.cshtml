@@ -1,7 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Читатели просрочившие срок сдачи книг";
 }
-<div class="text-center text-info">
+<div class="text-center text-black-50">
     <h1>Читатели просрочившие срок сдачи книг</h1>
 </div>
 <form asp-controller="Readers" asp-action="ReadersWithOverdue" method="get">
@@ -12,7 +12,7 @@
     <br />
     @Html.ValidationSummary(true, "", new { @style = "color: black" })
     <div class="col-sm-8">
-        <input type="submit" value="просмотреть" class="btn btn-info btn-sm" />
+        <input type="submit" value="просмотреть" class="btn btn-dark btn-sm" />
     </div>
 </form>
 @if (ViewBag.Contracts.Count != 0)

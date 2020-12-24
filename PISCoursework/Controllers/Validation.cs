@@ -139,6 +139,7 @@ namespace PISCoursework.Controllers
         public string userCheck(UserBindingModel user, UserViewModel userView)
         {
             EncryptionLogic _enc = new EncryptionLogic();
+           
             if (user != null)
             {
                 if (user.Password == null)
@@ -154,10 +155,6 @@ namespace PISCoursework.Controllers
             }
             if (userView != null)
             {
-                if (userView == null)
-                {
-                    return "Пользователь не найден";
-                }
                 if (userView.Role == Roles.Библиотекарь || userView.Role == Roles.Бухгалтер)
                 {
                     if (user.Password != userView.Password)
@@ -193,6 +190,10 @@ namespace PISCoursework.Controllers
             {
                 return "Введите пароль";
             }
+            if (!Regex.IsMatch(user.Password, @".{8,15}"))
+            {
+                return "Пароль должен содержать не менее 8 и не более 15 символов";
+            }
             return "";
         }
         public string bookingValidation(BookingBindingModel model)
@@ -210,6 +211,29 @@ namespace PISCoursework.Controllers
                 return "Дата окончания бронирования не может быть меньше даты начала бронирования";
             }
             return "";
+        }
+        public bool leadSalary(DateTime month)
+        {
+            var dat1 = new DateTime();
+            if (month == dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool checkLibrarian(int CountReport, int Id)
+        {
+            if (Id != 0 && CountReport != 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

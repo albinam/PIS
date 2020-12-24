@@ -3,23 +3,23 @@
     ViewData["Title"] = "Читатели";
 }
 
-<div class="text-center text-info">
+<div class="text-center text-black-50">
     <h1>Читатели</h1>
 </div>
 <hr />
-<p> <strong> <a class="btn btn-info btn-sm" href="/Readers/ReadersWithOverdue">Читатели просрочившие срок сдачи книг</a></strong></p>
+<p> <strong> <a class="btn btn-dark btn-sm" href="/Readers/ReadersWithOverdue">Читатели просрочившие срок сдачи книг</a></strong></p>
 <hr />
 <form asp-controller="Readers" asp-action="Readers" method="get">
     <div class="col-sm-8">
         Найти по ФИО:
         @Html.TextBoxFor(x => x.FIO)
-        <input type="submit" value="найти" class="btn btn-info btn-sm" />
+        <input type="submit" value="найти" class="btn btn-dark btn-sm" />
     </div>
 </form>
 @if (ViewBag.Users != null)
 {
     <br />
-    <div class="text-center text-info">
+    <div class="text-center text-black-50">
         <h1>Читатели с действующим читательским билетом</h1>
     </div>
     <hr />
@@ -40,7 +40,7 @@
                 <td>@user.FIO</td>
                 <td>@user.Email</td>
                 <td>
-                    <a class="btn btn-info btn-sm" href="/Readers/AddLibraryCard/@user.Id">просмотреть читательский билет</a>
+                    <a class="btn btn-dark btn-sm" href="/Readers/AddLibraryCard/@user.Id">просмотреть читательский билет</a>
                 </td>
                 <td>
                     @Html.ActionLink("продлить билет", "AddLibraryCard", new { id = @user.Id, prolong = true }, new { @class = "btn btn-info btn-sm" })
@@ -56,7 +56,7 @@
 @if (ViewBag.UsersWithoutCard != null)
 {
     <br />
-    <div class="text-center text-info">
+    <div class="text-center text-black-50">
         <h1>Читатели без читательского билета</h1>
     </div>
     <hr />
@@ -75,7 +75,7 @@
                 <td>@user2.FIO</td>
                 <td>@user2.Email</td>
                 <td>
-                    <a class="btn btn-info btn-sm" href="/Readers/AddLibraryCard/@user2.Id">создать билет</a>
+                    <a class="btn btn-dark btn-sm" href="/Readers/AddLibraryCard/@user2.Id">создать билет</a>
                 </td>
             </tr>
         }
@@ -84,7 +84,7 @@
 @if (ViewBag.UsersWithCardOverdue != null)
 {
     <br />
-    <div class="text-center text-info">
+    <div class="text-center text-black-50">
         <h1>Читатели с недействующим читательским билетом</h1>
     </div>
     <hr />
@@ -103,10 +103,10 @@
                 <td>@user2.FIO</td>
                 <td>@user2.Email</td>
                 <td>
-                    <a class="btn btn-info btn-sm" href="/Readers/AddLibraryCard/@user2.Id">просмотреть читательский билет</a>
+                    <a class="btn btn-dark btn-sm" href="/Readers/AddLibraryCard/@user2.Id">просмотреть читательский билет</a>
                 </td>
                 <td>
-                    @Html.ActionLink("продлить билет", "AddLibraryCard", new { id = @user2.Id, prolong = true }, new { @class = "btn btn-info btn-sm" })
+                    @Html.ActionLink("продлить билет", "AddLibraryCard", new { id = @user2.Id, prolong = true }, new { @class = "btn btn-dark btn-sm" })
                 </td>
             </tr>
         }

@@ -18,15 +18,18 @@ namespace PISCoursework.Controllers.Accountant
         private readonly IContractLogic _contract;
         private readonly IPaymentLogic _payment;
         private readonly ReportLogic _report;
+        private Validation validation;
         public ReportController(IUserLogic user, IContractLogic contract, ReportLogic report, IPaymentLogic payment)
         {
             _user = user;
             _contract = contract;
             _report = report;
             _payment = payment;
+            validation = new Validation();
         }
         public IActionResult Report()
         {
+            ViewBag.Users = _user.Read(null);
             return View("Views/Accountant/Report.cshtml");
         }
         public IActionResult Chart()
@@ -155,7 +158,60 @@ namespace PISCoursework.Controllers.Accountant
             }
             return View("Views/Accountant/DistributionSalary.cshtml");
         }
+        public ActionResult LeadSalary(DateTime month)
+        {
+            ViewBag.Users = _user.Read(null);
+            int month1 = month.Month;
+            if (!validation.leadSalary(month))
+            {
+                var Payment = _payment.Read(null);
+                List<PaymentViewModel> pays = new List<PaymentViewModel>();
 
-
+                foreach (var pay in Payment)
+                {
+                    if (pay.Date.Month == month1)
+                    {
+                        pays.Add(pay);
+                    }
+                }
+                ViewBag.Payment = pays;
+                return View("Views/Accountant/LeadSalary.cshtml");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Выберите месяц");
+                return View("Views/Accountant/LeadSalary.cshtml");
+            }
+        }
+        public ActionResult CheckLibrarian(int CountReport, int Id)
+        {
+            if (validation.checkLibrarian(CountReport, Id))
+            {
+                var cont = _contract.Read(new ContractBindingModel
+                {
+                    LibrarianId = Id
+                });
+                int count = 0;
+                foreach (var p in cont)
+                {
+                    count++;
+                }
+                if (count == CountReport)
+                {
+                    ModelState.AddModelError("", "Верно!");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Не верно!");
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "Выберете библиотекаря или введите количество ");
+            }
+            
+            ViewBag.Users = _user.Read(null);
+            return View("Views/Accountant/Report.cshtml");
+        }
     }
 }
