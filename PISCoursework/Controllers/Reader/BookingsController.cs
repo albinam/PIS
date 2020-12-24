@@ -42,9 +42,19 @@ namespace PISCoursework.Controllers.Reader
             }).FirstOrDefault();
             foreach (var booking in Bookings)
             {
-                if (booking.LibraryCardId == card.Id)
+                if (booking.DateTo >= DateTime.Now)
                 {
-                    bookings.Add(booking);
+                    if (booking.LibraryCardId == card.Id)
+                    {
+                        bookings.Add(booking);
+                    }
+                }
+                else
+                {
+                    _booking.Delete(new BookingBindingModel
+                    {
+                        Id = booking.Id
+                    });
                 }
             }
             foreach (var book in Books)
@@ -69,7 +79,7 @@ namespace PISCoursework.Controllers.Reader
         [HttpPost]
         public ActionResult AddBooking( BookingBindingModel model)
         {
-          
+            ViewBag.BookId = model.Id;
             if (validation.bookingValidation(model)!="")
             {
                 ViewBag.Booking = _booking.Read(null);
