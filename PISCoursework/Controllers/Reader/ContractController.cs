@@ -22,6 +22,7 @@ namespace PISCoursework.Controllers.Reader
         private readonly IBookingLogic _booking;
         private Validation validation;
         private readonly ReportLogic _report;
+        string exportDirectory = Directory.GetCurrentDirectory() + "\\wwwroot\\Export";
         public ContractController(IBookLogic book, IGenreLogic genre, IUserLogic user, ILibraryCardLogic libraryCard, IContractLogic contract, ReportLogic report, IBookingLogic booking)
         {
             _book = book;
@@ -87,7 +88,7 @@ namespace PISCoursework.Controllers.Reader
             }).FirstOrDefault();
             foreach (var cont in Contracts)
             {
-                if (cont.LibraryCardId == card.UserId)
+                if (cont.LibraryCardId == card.Id)
                 {
                     contracs.Add(cont);
                 }
@@ -144,9 +145,9 @@ namespace PISCoursework.Controllers.Reader
             {
                 Id = id
             }).FirstOrDefault();
-            _report.SaveContractReaderToWordFile("D://data//отчеты//договор" + id + ".docx", model);
+            _report.SaveContractReaderToWordFile(exportDirectory+ "договор" + id + ".docx", model);
             // Путь к файлу
-            string file_path = Path.Combine("D://data//отчеты//договор" + id + ".docx");
+            string file_path = Path.Combine(exportDirectory + "договор" + id + ".docx");
             // Тип файла - content-type
             string file_type = "application/docx";
             // Имя файла - необязательно

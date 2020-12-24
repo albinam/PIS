@@ -10,6 +10,7 @@ using PISBusinessLogic.ViewModels;
 using PISBusinessLogic.Enums;
 using PISBusinessLogic.BindingModels;
 using System.IO;
+using PISDatabaseImplement.Implements;
 
 namespace PISCoursework.Controllers.Accountant
 {
@@ -20,13 +21,16 @@ namespace PISCoursework.Controllers.Accountant
         private readonly IPaymentLogic _payment;
         private readonly ReportLogic _report;
         private Validation validation;
-        public ReportController(IUserLogic user, IContractLogic contract, ReportLogic report, IPaymentLogic payment)
+        private readonly ArchiveLogic _archive;
+        string exportDirectory = Directory.GetCurrentDirectory() + "\\wwwroot\\Export";
+        public ReportController(IUserLogic user, IContractLogic contract, ReportLogic report, IPaymentLogic payment, ArchiveLogic archive)
         {
             _user = user;
             _contract = contract;
             _report = report;
             _payment = payment;
             validation = new Validation();
+            _archive = archive;
         }
         public IActionResult Report()
         {
@@ -61,119 +65,112 @@ namespace PISCoursework.Controllers.Accountant
         }
         public ActionResult DistributionSalary(DateTime date)
         {
-            if (!validation.distributionSalary(date))
+            if (date.Year != 0001)
             {
-                if (date.Year != 0001)
+                var payments = _payment.Read(null);
+                payments.OrderBy(x => x.Sum);
+                payments.Add(new PaymentViewModel());
+                List<Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)>> dict = new List<Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)>>();
+                var librarians = _user.Read(null);
+                List<UserViewModel> list = new List<UserViewModel>();
+                foreach (var librarian in librarians)
                 {
-                    var payments = _payment.Read(null);
-                    payments.OrderBy(x => x.Sum);
-                    payments.Add(new PaymentViewModel());
-                    List<Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)>> dict = new List<Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)>>();
-                    var librarians = _user.Read(null);
-                    List<UserViewModel> list = new List<UserViewModel>();
-                    foreach (var librarian in librarians)
-                    {
 
-                        if (librarian.Role == Roles.Библиотекарь)
-                        {
-                            list.Add(librarian);
-                        }
-                    }
-                    foreach (var librarian in list)
+                    if (librarian.Role == Roles.Библиотекарь)
                     {
-                        Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)> count = new Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)>();
-                        double sum1 = 0;
-                        double sum2 = 0;
-                        double sum3 = 0;
-                        double sum4 = 0;
-                        double sum5 = 0;
-                        double sum6 = 0;
-                        double sum7 = 0;
-                        double sum8 = 0;
-                        double sum9 = 0;
-                        double sum10 = 0;
-                        double sum11 = 0;
-                        double sum12 = 0;
-                        var payment = _payment.Read(new PaymentBindingModel
+                        list.Add(librarian);
+                    }
+                }
+                foreach (var librarian in list)
+                {
+                    Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)> count = new Dictionary<double, (double, double, double, double, double, double, Tuple<double, double, double, double, double, double>)>();
+                    double sum1 = 0;
+                    double sum2 = 0;
+                    double sum3 = 0;
+                    double sum4 = 0;
+                    double sum5 = 0;
+                    double sum6 = 0;
+                    double sum7 = 0;
+                    double sum8 = 0;
+                    double sum9 = 0;
+                    double sum10 = 0;
+                    double sum11 = 0;
+                    double sum12 = 0;
+                    var payment = _payment.Read(new PaymentBindingModel
+                    {
+                        UserId = librarian.Id
+                    });
+                    foreach (var c in payment)
+                    {
+                        if (c.Date.Year == date.Year)
                         {
-                            UserId = librarian.Id
-                        });
-                        foreach (var c in payment)
-                        {
-                            if (c.Date.Year == date.Year)
+                            if (c.Date.Month == 1)
                             {
-                                if (c.Date.Month == 1)
-                                {
-                                    sum1 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 2)
-                                {
-                                    sum2 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 3)
-                                {
-                                    sum3 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 4)
-                                {
-                                    sum4 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 5)
-                                {
-                                    sum5 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 6)
-                                {
-                                    sum6 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 7)
-                                {
-                                    sum7 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 8)
-                                {
-                                    sum8 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 9)
-                                {
-                                    sum9 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 10)
-                                {
-                                    sum10 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 11)
-                                {
-                                    sum11 += Convert.ToDouble(c.Sum);
-                                }
-                                if (c.Date.Month == 12)
-                                {
-                                    sum12 += Convert.ToDouble(c.Sum);
-                                }
+                                sum1 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 2)
+                            {
+                                sum2 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 3)
+                            {
+                                sum3 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 4)
+                            {
+                                sum4 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 5)
+                            {
+                                sum5 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 6)
+                            {
+                                sum6 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 7)
+                            {
+                                sum7 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 8)
+                            {
+                                sum8 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 9)
+                            {
+                                sum9 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 10)
+                            {
+                                sum10 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 11)
+                            {
+                                sum11 += Convert.ToDouble(c.Sum);
+                            }
+                            if (c.Date.Month == 12)
+                            {
+                                sum12 += Convert.ToDouble(c.Sum);
                             }
                         }
-                        Tuple<double, double, double, double, double, double> tuple = Tuple.Create(sum7, sum8, sum9, sum10, sum11, sum12);
-                        count.Add(librarian.Id, (sum1, sum2, sum3, sum4, sum5, sum6, tuple));
-                        dict.Add(count);
                     }
-                    ViewBag.Sum = dict;
-                    ViewBag.Librarians = list;
+                    Tuple<double, double, double, double, double, double> tuple = Tuple.Create(sum7, sum8, sum9, sum10, sum11, sum12);
+                    count.Add(librarian.Id, (sum1, sum2, sum3, sum4, sum5, sum6, tuple));
+                    dict.Add(count);
                 }
-                return View("Views/Accountant/DistributionSalary.cshtml");
+                ViewBag.Sum = dict;
+                ViewBag.Librarians = list;
             }
-            else
-            {
-                ModelState.AddModelError("", "Выберите дату");
-                return View("Views/Accountant/DistributionSalary.cshtml");
-            }
-            
+            return View("Views/Accountant/DistributionSalary.cshtml");
         }
         public ActionResult LeadSalary(DateTime month)
         {
             ViewBag.Users = _user.Read(null);
+
             int month1 = month.Month;
             if (!validation.leadSalary(month))
             {
+                ViewBag.Month = month;
                 var Payment = _payment.Read(null);
                 List<PaymentViewModel> pays = new List<PaymentViewModel>();
 
@@ -185,16 +182,13 @@ namespace PISCoursework.Controllers.Accountant
                     }
                 }
                 ViewBag.Payment = pays;
-
                 return View("Views/Accountant/LeadSalary.cshtml");
-
             }
             else
             {
                 ModelState.AddModelError("", "Выберите месяц");
                 return View("Views/Accountant/LeadSalary.cshtml");
             }
-           
         }
         public ActionResult CheckLibrarian(int CountReport, int Id)
         {
@@ -222,48 +216,30 @@ namespace PISCoursework.Controllers.Accountant
             {
                 ModelState.AddModelError("", "Выберете библиотекаря или введите количество ");
             }
-
+            
             ViewBag.Users = _user.Read(null);
-            return View("Views/Accountant/Report.cshtml");
+            return View("Views/Accountant/CheckLibrarian.cshtml");
         }
-        public ActionResult SaveLead(List<PaymentViewModel> list)
+        public IActionResult BackUpToJsonAsync()
         {
-
-            _report.SaveLeadToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Ведомость.docx", list);
             // Путь к файлу
-            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Ведомость.docx");
+            string file_path = _archive.ArchiveOutdated(2);
             // Тип файла - content-type
-            string file_type = "application/docx";
+            string file_type = "application/zip";
             // Имя файла - необязательно
-            string file_name = "Ведомость.docx";
-            return PhysicalFile(file_path, file_type, file_name);
-        }
-        public ActionResult List()
-        {
-            _report.SaveListToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
-            // Путь к файлу
-            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = "Список библиотекарей.docx";
-            return PhysicalFile(file_path, file_type, file_name);
-        }
-        public ActionResult ContractLibrarian(int id)
-        {
-            UserViewModel model = _user.Read(new UserBindingModel
+            string file_name = "архив" + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.ToString() + ".zip";
+            var payments = _payment.Read(null);
+            foreach (var el in payments)
             {
-                Id = id
-            }).FirstOrDefault();
-            _report.SaveContractToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx", model);
-            // Путь к файлу
-            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = "Контракт c " + model.FIO + ".docx";
+                if (Convert.ToInt32(el.Date.Year) < (DateTime.Now.Year))
+                {
+                    _payment.Delete(new PaymentBindingModel
+                    {
+                        Id = el.Id
+                    });
+                }
+            }
             return PhysicalFile(file_path, file_type, file_name);
-
         }
     }
 }

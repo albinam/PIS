@@ -41,7 +41,7 @@ namespace PISDatabaseImplement.Implements
         {
             using (var context = new DatabaseContext())
             {
-                LibraryCard element = context.LibraryCards.FirstOrDefault(rec => rec.Id == model.Id);
+                LibraryCard element = context.LibraryCards.FirstOrDefault(rec => model == null || rec.Id == model.Id);
 
                 if (element != null)
                 {
@@ -59,7 +59,7 @@ namespace PISDatabaseImplement.Implements
             using (var context = new DatabaseContext())
             {
                 return context.LibraryCards
-                 .Where(rec => rec.Id == model.Id || (rec.UserId == model.UserId && model.UserId.HasValue))
+                 .Where(rec => model == null || rec.Id == model.Id || (rec.UserId == model.UserId && model.UserId.HasValue))
                .Select(rec => new LibraryCardViewModel
                {
                    Id = rec.Id,

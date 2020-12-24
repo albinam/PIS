@@ -131,7 +131,7 @@ namespace PISCoursework.Controllers
                 }
                 ViewBag.Users = userWithCard2;
                 ViewBag.UsersWithoutCard = users2;
-                ViewBag.UsersWithCardOverdue2 = userWithCardOverdue2;
+                ViewBag.UsersWithCardOverdue = userWithCardOverdue2;
                 ViewBag.Create = -1;              
                 return View("Views/Librarian/Readers.cshtml");
             }

@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISDatabaseImplement.Implements;
+using PISDatabaseImplements;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,7 +27,7 @@ namespace PISCoursework
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {           
             services.AddControllersWithViews();
             services.AddTransient<IUserLogic, UserLogic>();
             services.AddTransient<IBookLogic, BookLogic>();
@@ -34,7 +36,7 @@ namespace PISCoursework
             services.AddTransient<IContractLogic, ContractLogic>();
             services.AddTransient<IBookingLogic, BookingLogic>();
             services.AddTransient<IPaymentLogic, PaymentLogic>();
-            services.AddTransient<ArchieveLogiñ>();
+            services.AddTransient<ArchiveLogic>();
             services.AddTransient<ReportLogic>();
             services.AddTransient<EncryptionLogic>();
         }
