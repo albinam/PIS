@@ -68,6 +68,31 @@ namespace PISCoursework.Controllers.Accountant
                 return View("Views/Accountant/Salary.cshtml");
             }
         }
+        public ActionResult CheckSalary(PaymentBindingModel model, int Id, int Sum)
+        {
+            ViewBag.Users = _user.Read(null);
+            var pay = _payment.Read(new PaymentBindingModel
+            {
+                UserId = Id
+            });
+            foreach (var p in pay)
+            {
+                if (p.Date.Month == model.Date.Month && p.Date.Year == model.Date.Year)
+                {
+                    _payment.CreateOrUpdate(new PaymentBindingModel
+                    {
+                        Id = p.Id,
+                        Date = p.Date,
+                        Sum = p.Sum - Sum,
+                        UserId = p.UserId
+                    });
+                    ModelState.AddModelError("", "Изменено");
+                    return View("Views/Accountant/LeadSalary.cshtml");
+                }
+            }
+            ModelState.AddModelError("", "Нет платежа по такому параметру");
+            return View("Views/Accountant/LeadSalary.cshtml");
+        }
 
         public ActionResult SalaryAll(DateTime date)
         {
