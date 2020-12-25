@@ -220,6 +220,34 @@ namespace PISCoursework.Controllers.Accountant
             ViewBag.Users = _user.Read(null);
             return View("Views/Accountant/CheckLibrarian.cshtml");
         }
+        public ActionResult List()
+        {
+            _report.SaveListToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
+            // Путь к файлу
+            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = "Список библиотекарей.docx";
+            return PhysicalFile(file_path, file_type, file_name);
+
+        }
+        public ActionResult ContractLibrarian(int id)
+        {
+            UserViewModel model = _user.Read(new UserBindingModel
+            {
+                Id = id
+            }).FirstOrDefault();
+            _report.SaveContractToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx", model);
+            // Путь к файлу
+            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx");
+            // Тип файла - content-type
+            string file_type = "application/docx";
+            // Имя файла - необязательно
+            string file_name = "Контракт c " + model.FIO + ".docx";
+            return PhysicalFile(file_path, file_type, file_name);
+
+        }
         public IActionResult BackUpToJsonAsync()
         {
             // Путь к файлу

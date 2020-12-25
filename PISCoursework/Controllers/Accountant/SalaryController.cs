@@ -29,50 +29,18 @@ namespace PISCoursework.Controllers.Accountant
             {
                 return AddSalaries(model, Id);
             }
-            foreach( var p in pay)
+            foreach (var p in pay)
             {
-                int month = (p.Date).Month;
-                int year = (p.Date).Year;
-                int month1 = (model.Date).Month;
-                int year1 = (model.Date).Year;
-                if (year < year1 && p.UserId == Id) 
-                {
-                    if (month1 > month && p.UserId == Id)
-                    {
-                        return AddSalaries(model, Id);
-                    }
-                    else
-                    {
-                        ViewBag.Users = _user.Read(null);
-                        ModelState.AddModelError("", "В этом месяце уже начислена зарплата");
-                        return View("Views/Accountant/Salary.cshtml");
-                    }
-                }
-                if(year >= year1 && p.UserId == Id)
-                {
-                    if (month1 > month && p.UserId == Id)
-                    {
-                        return AddSalaries(model,Id);
-                    }
-                    else
-                    {
-                        ViewBag.Users = _user.Read(null);
-                        ModelState.AddModelError("", "В этом месяце уже начислена зарплата");
-                        return View("Views/Accountant/Salary.cshtml");
-                    }
-                }
-                else
+                if (p.Date.Month == model.Date.Month && p.Date.Year == model.Date.Year)
                 {
                     ViewBag.Users = _user.Read(null);
-                    ModelState.AddModelError("", "Выберете библиотекаря или дату");
+                    ModelState.AddModelError("", "В этом месяце уже начислена зарплата");
                     return View("Views/Accountant/Salary.cshtml");
                 }
-               
             }
-            ViewBag.Users = _user.Read(null);
-            ModelState.AddModelError("", "Ошибочка");
-            return View("Views/Accountant/Salary.cshtml");
+            return AddSalaries(model, Id);
         }
+
         public ActionResult AddSalaries(PaymentBindingModel model, int Id)
         {
             if (validation.addSalar(model, Id))
