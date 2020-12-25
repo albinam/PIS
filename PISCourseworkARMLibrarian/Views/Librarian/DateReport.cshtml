@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Суммарная стоимости выданных книг по дням месяца";
+}
+    <div class="text-center text-black-50">
+        <h1>Суммарная стоимости выданных книг по дням месяца</h1>
+    </div>
+    <hr />
+    @using (Html.BeginForm("DateReport", "Reports", FormMethod.Post))
+    {
+        <p>
+            <div class="col-sm-8">
+                Дата:<br>
+                <input type="month" name="month" />
+            </div>
+            @Html.ValidationSummary(true, "", new { @style = "color: black" })
+            <br />
+            <div class="col-sm-8">
+                <input type="submit" value="сформировать" class="btn btn-dark btn-sm" />
+            </div>
+        </p>
+    }
+    @if (ViewBag.Dates != null)
+    {
+        <table class="table">
+            <tr>
+                <td>Дата</td>
+                <td>Суммарная стоимость</td>
+            </tr>
+            @for (int i = 0; i < ViewBag.Dates.Count; i++)
+            {
+
+                <tr>
+                    <td>@ViewBag.Dates[i].ToShortDateString()</td>
+                    <td>@ViewBag.Sum[i]</td>
+                </tr>
+            }
+        </table>
+    }
+

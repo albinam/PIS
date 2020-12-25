@@ -1,11 +1,12 @@
 ﻿using PISBusinessLogic.Enums;
+using PISBusinessLogic.HelperModels;
 using PISBusinessLogic.Interfaces;
 using PISBusinessLogic.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PISBusinessLogic.HelperModels
+namespace PISBusinessLogic.BusinessLogic
 {
     public class ReportLogic
     {

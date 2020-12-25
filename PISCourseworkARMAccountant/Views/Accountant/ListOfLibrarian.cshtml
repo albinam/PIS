@@ -1,0 +1,56 @@
+﻿@model PISBusinessLogic.BindingModels.UserBindingModel
+@{
+    ViewData["Title"] = "Библиотекарь";
+}
+
+<div class="text-center text-black-50">
+    <h1>Библиотекарь</h1>
+</div>
+<hr />
+<form asp-controller="Accountant" asp-action="ListOfLibrarian" method="get">
+    <div class="col-sm-8">
+        Найти библиотекаря<br />
+        По фамилии:
+        @Html.TextBoxFor(x => x.FIO)
+        <br />
+        По личному коду:
+        @Html.TextBoxFor(x => x.Id)
+        <input type="submit" value="Найти" class="btn btn-dark btn-sm" />
+    </div>
+</form>
+<table class="table">
+    <tr>
+        <td>Личный код</td>
+        <td>ФИО</td>
+        <td>Оклад,руб.</td>
+        <td>Процент,%</td>
+        <td>Комиссионные,руб.</td>
+    </tr>
+
+
+    @foreach (var user in ViewBag.Users)
+    {
+<tr>
+    <td>@user.Id</td>
+    <td>@user.FIO</td>
+    <td>@user.Salary</td>
+    <td>@user.ComissionPercent</td>
+    <td>@user.Comission</td>
+    <td>
+        @Html.ActionLink("Контракт с библиотекарем.docx", "ContractLibrarian", "Report", new { id = @user.Id }, new { @class = "btn btn-dark btn-sm" })
+    </td>
+</tr>
+    }
+
+</table>
+<table class="table">
+    <div class="col-sm-8">
+        <p> <strong> <a class="btn btn-dark btn-sm" href="/Accountant/ChangeCommission">Изменить процент комиссионных</a></strong></p>
+    </div>
+</table>
+
+<form asp-controller="Report" asp-action="List" method="get">
+    <div class="col-sm-8">
+        <input type="submit" value="Список библиотекарей.docx" class="btn btn-dark btn-sm" id="save-docx" />
+    </div>
+</form>

@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Договоры";
+}
+
+<div class="text-center text-black-50">
+    <h1>Договоры</h1>
+</div>
+<p>ФИО читателя: @ViewBag.Users.FIO</p>
+@foreach (var contract in ViewBag.Contracts)
+{
+    <p>Номер: @contract.Id</p>
+    <p>Дата: @contract.Date.ToShortDateString()</p>
+    <p>Дата возврата книг: @contract.DateReturn.ToShortDateString()</p>
+    <p>Стоимость: @contract.Sum</p>
+    <p>Штраф: @contract.Fine</p>
+    <p>Статус: @contract.ContractStatus</p>
+    <table class="table">
+        <tr>
+            <td>Название</td>
+            <td>Автор</td>
+            <td>Жанр</td>
+            <td>Издательство</td>
+            <td>Год издания</td>
+        </tr>
+        @foreach (var genre in ViewBag.Genres)
+        {
+            @foreach (var book in @contract.ContractBooks)
+            {
+                @if (genre.Id == book.GenreId)
+                {
+
+                    <tr>
+                        <td>@book.Name</td>
+                        <td>@book.Author</td>
+                        <td>@genre.Name</td>
+                        <td>@book.PublishingHouse</td>
+                        <td>@book.Year</td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+    <hr />
+    <strong> <a class="btn btn-dark btn-sm" href="/Contract/ChangeDate/@contract.Id">изменить дату возврата</a></strong>
+    <hr />
+    <strong> <a class="btn btn-dark btn-sm" href="/Contract/PrintContract/@contract.Id">сохранить в формате docx</a></strong>
+}

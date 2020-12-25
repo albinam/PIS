@@ -15,6 +15,7 @@ namespace PISDatabaseImplement.Implements
     public class ArchiveLogic
     {
         string exportDirectory = Directory.GetCurrentDirectory() + "\\wwwroot\\Export";
+        string exportDirectory2 = Directory.GetCurrentDirectory() + "\\wwwroot\\Export2";
         DatabaseContext context;
         public ArchiveLogic()
         {
@@ -23,8 +24,19 @@ namespace PISDatabaseImplement.Implements
         public string ArchiveOutdated(int role)
         {
             DateTime curTime = DateTime.Now;
-            string folderName = exportDirectory + "\\Archive" + curTime.Day.ToString() + curTime.Month.ToString() + curTime.Year.ToString();
-            string fileName = $"{folderName}.zip";
+
+            string folderName="";
+            string fileName="";
+            if (role == 1)
+            {
+                folderName = exportDirectory + "\\Archive" + curTime.Day.ToString() + curTime.Month.ToString() + curTime.Year.ToString();
+                fileName = $"{folderName}.zip";
+            }
+            if (role == 2)
+            {
+                folderName = exportDirectory2 + "\\Archive" + curTime.Day.ToString() + curTime.Month.ToString() + curTime.Year.ToString();
+                fileName = $"{folderName}.zip";
+            }
 
             Directory.CreateDirectory(folderName);
             try
@@ -57,7 +69,7 @@ namespace PISDatabaseImplement.Implements
                     {
                         jsonFormatter.WriteObject(fs, cards);
                     }
-                          
+
                 }
                 if (role == 2)
                 {

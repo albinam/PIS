@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PISDatabaseImplement", "PIS
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PISBusinessLogic", "PISBusinessLogic\PISBusinessLogic.csproj", "{71C17B10-2E0F-488B-87C9-8614354643B0}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PISCourseworkARMLibrarian", "PISCourseworkARMLibrarian\PISCourseworkARMLibrarian.csproj", "{E9D057AC-8BA9-42C0-B6EA-F55ED5654380}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PISCourseworkARMReader", "PISCourseworkARMReader\PISCourseworkARMReader.csproj", "{92EDF006-D529-4905-B893-1897D21F4D0B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PISCourseworkARMAccountant", "PISCourseworkARMAccountant\PISCourseworkARMAccountant.csproj", "{4FE33F0F-1020-4805-9557-2048F1A78C51}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +33,18 @@ Global
 		{71C17B10-2E0F-488B-87C9-8614354643B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71C17B10-2E0F-488B-87C9-8614354643B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{71C17B10-2E0F-488B-87C9-8614354643B0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9D057AC-8BA9-42C0-B6EA-F55ED5654380}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9D057AC-8BA9-42C0-B6EA-F55ED5654380}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9D057AC-8BA9-42C0-B6EA-F55ED5654380}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9D057AC-8BA9-42C0-B6EA-F55ED5654380}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92EDF006-D529-4905-B893-1897D21F4D0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92EDF006-D529-4905-B893-1897D21F4D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92EDF006-D529-4905-B893-1897D21F4D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92EDF006-D529-4905-B893-1897D21F4D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4FE33F0F-1020-4805-9557-2048F1A78C51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FE33F0F-1020-4805-9557-2048F1A78C51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FE33F0F-1020-4805-9557-2048F1A78C51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FE33F0F-1020-4805-9557-2048F1A78C51}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

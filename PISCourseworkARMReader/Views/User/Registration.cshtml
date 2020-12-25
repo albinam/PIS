@@ -1,0 +1,21 @@
+﻿@model PISBusinessLogic.BindingModels.UserBindingModel
+@{
+    ViewData["Title"] = "Регистрация";
+}
+<div class="text-center text-black-50">
+    <h1>@ViewData["Title"]</h1>
+</div>
+@using (Html.BeginForm())
+{
+    <p>
+        Email: <br>
+        @Html.TextBoxFor(x => x.Email)<br>
+        Пароль:<br>
+        @Html.EditorFor(x => x.Password)<br>
+        ФИО:<br>
+        @Html.TextBoxFor(x => x.FIO)
+    </p>
+    <button class="btn btn-dark btn-sm" type="submit">Зарегистрироваться</button>
+    @Html.ValidationSummary(true, "", new { @style = "color: black" })
+}
+

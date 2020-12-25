@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "Книги";
+}
+<div class="text-center text-black-50">
+    <h1>Книги</h1>
+</div>
+<hr />
+@Html.ActionLink("Список выданных и свободных книг", "Books", new { type = 1 }, new { @class = "btn btn-dark" })
+@Html.ActionLink("Список желаемых книг", "Books", new { type = 2 }, new { @class = "btn btn-dark" })
+@Html.ActionLink("Топ 10 самых востребованных", "Books", new { type = 3 }, new { @class = "btn btn-dark" })
+@if (ViewBag.Type != 0)
+{
+    <table class="table">
+        <tr>
+            <td>Название</td>
+            <td>Автор</td>
+            <td>Жанр</td>
+            <td>Издательство</td>
+            <td>Год издания</td>
+            <td>Цена проката, руб./день</td>
+            @if (ViewBag.Type == 1)
+            {
+                <td>Статус</td>
+            }
+
+        </tr>
+        @foreach (var genre in ViewBag.Genres)
+        {
+            @foreach (var book in ViewBag.Books)
+            {
+                @if (genre.Id == book.GenreId)
+                {
+
+                    <tr>
+                        <td>@book.Name</td>
+                        <td>@book.Author</td>
+                        <td>@genre.Name</td>
+                        <td>@book.PublishingHouse</td>
+                        <td>@book.Year</td>
+                        <td>@genre.Price</td>
+                        @if (ViewBag.Type == 1)
+                        {
+                            <td>@book.Status</td>
+                        }
+                    </tr>
+                }
+            }
+        }
+    </table>
+}

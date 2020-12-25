@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "Изменение цен проката";
+}
+<form asp-controller="Books" asp-action="BookPrice">
+    <div class="text-center text-black-50">
+        <h1>Книги</h1>
+    </div>
+    <hr />
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Жанр:</label>
+        <div class="col-sm-4">
+            <select class="custom-select custom-select-sm" name="GenreId" id="GenreId">
+                <option value="" selected disabled hidden>Выберите жанр</option>
+                @foreach (PISBusinessLogic.ViewModels.GenreViewModel genre in ViewBag.Genres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Коэффициент:</label>
+        <div class="col-sm-4">
+            <input type="number" value="" step="0.01" min="0" max="100" name="Percent" />
+        </div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @style = "color: black" })
+    <div class="form-group row">
+        <input type="submit" value="изменить" class="btn btn-dark btn-sm" />
+    </div>
+</form>

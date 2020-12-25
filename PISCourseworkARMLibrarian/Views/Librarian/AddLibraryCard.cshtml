@@ -1,0 +1,64 @@
+﻿@model PISBusinessLogic.BindingModels.LibraryCardBindingModel
+
+@{
+    ViewData["Title"] = "Читательский билет";
+}
+<div class="text-left text-black-50">
+    <h1>@ViewData["Title"]</h1>
+</div>
+@if (@ViewBag.Exists.Count == 0)
+{
+
+    <p>Читательский билет не найден, заполните следующие поля для создания</p>
+    @using (Html.BeginForm("AddLibraryCard", "Readers", FormMethod.Post))
+    {
+        <p>
+            <div class="col-sm-8">
+                Дата рождения:<br>
+                <input type="date" name="DateOfBirth" />
+            </div>
+            <div class="col-sm-8">
+                Год: <br>
+                @DateTime.Now.Year<br>
+            </div>
+            <div class="col-sm-8">
+                Место работы:<br>
+                @Html.TextBoxFor(x => x.PlaceOfWork)<br>
+            </div>
+            <input type="hidden" value="@ViewBag.UserId" name="UserId" />
+            @Html.ValidationSummary(true, "", new { @style = "color: black" })
+            <br />
+            <div class="col-sm-8">
+                <input type="submit" value="Сохранить" class="btn btn-dark btn-sm" />
+            </div>
+
+        </p>
+
+    }
+}
+else
+{
+    @using (Html.BeginForm("AddLibraryCard", "Readers", FormMethod.Get))
+    {
+
+        foreach (var m in ViewBag.Exists)
+        {
+
+            <p>
+                <br>
+                ФИО читателя: @ViewBag.User.FIO
+                <br>
+                Дата рождения: @m.DateOfBirth.ToShortDateString()
+                <br>
+                Год: @m.Year
+                <br>
+                Место работы: @m.PlaceOfWork
+                <br>
+            </p>
+            <hr />
+            @Html.ActionLink("сохранить в формате .docx","PrintLibraryCard", "Reports", new { id = @m.Id }, new { @class = "btn btn-dark btn-sm" })
+            <hr />
+        }
+
+    }
+}

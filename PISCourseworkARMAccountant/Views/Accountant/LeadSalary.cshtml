@@ -1,0 +1,107 @@
+﻿@model PISBusinessLogic.BindingModels.PaymentBindingModel
+@{
+    ViewData["Title"] = "Ведомость заработной платы";
+}
+
+
+<form asp-controller="Salary" asp-action="CheckSalary">
+    <div class="text-center text-black-50">
+        <h3>Изменение платежа библиотекаря</h3>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Библиотекарь:</label>
+        <div class="col-sm-4">
+            <select class="custom-select custom-select-sm" name="UserId" id="UserId">
+                <option value="" selected disabled hidden>Выберите библиотекаря</option>
+                @foreach (PISBusinessLogic.ViewModels.UserViewModel user in ViewBag.Users)
+                {
+                    if (@user.Role == 0)
+                    {
+                        <option value="@user.Id">@user.FIO</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        Дата:<br>
+        <input type="date" name="date" />
+    </div>
+    <div class="col-sm-8">
+        Сумма:<br>
+        <input type="number" value="" step="0.01" min="0" name="sum" id="sum" /><br>
+    </div>
+    <div class="col-sm-8">
+        <input type="submit" value="Изменить" class="btn btn-dark btn-sm" />
+    </div>
+</form>
+ @Html.ValidationSummary(true, "", new { @style = "color: black" })
+<form asp-controller="Report" asp-action="LeadSalary">
+    <div class="text-center text-black-50">
+        <h3>Ведомость заработной платы</h3>
+    </div>
+    <hr />
+    <div class="col-sm-8">
+        Дата:<br>
+        <input type="month" name="month" />
+    </div>
+    <br />
+    <div class="col-sm-8">
+        <input type="submit" value="Сформировать" class="btn btn-dark btn-sm" />
+    </div>
+</form>
+<br />
+<div class="col-sm-8">
+    <input type="button" id="btnExport" class="btn btn-dark btn-sm" value="Сохранить в pdf" onclick="Export()" />
+</div>
+<div id="tbl">
+    @if (ViewBag.Payment != null)
+    {
+        <div class="text-center text-black-50">
+            <h3>Ведомость заработной платы за @ViewBag.Month.Month месяц @ViewBag.Month.Year год</h3>
+        </div>
+        <table class="table">
+            <tr>
+                <td>Номер платежа</td>
+                <td>ФИО библиотекаря</td>
+                <td>Сумма, руб.</td>
+                <td>Подпись</td>
+            </tr>
+            @foreach (var r in ViewBag.Payment)
+            {
+                foreach (var u in ViewBag.Users)
+                {
+                    if (r.UserId == u.Id)
+                    {
+                        <tr>
+                            <td>@r.Id</td>
+
+                            <td>@u.FIO</td>
+
+                            <td>@r.Sum</td>
+                        </tr>
+                    }
+
+                }
+            }
+        </table>
+    }
+</div>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.22/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>
+<script type="text/javascript">
+    function Export() {
+        html2canvas(document.getElementById('tbl'), {
+            onrendered: function (canvas) {
+                var data = canvas.toDataURL();
+                var docDefinition = {
+                    content: [{
+                        image: data,
+                        width: 500
+                    }]
+                };
+                pdfMake.createPdf(docDefinition).download("Ведомость.pdf");
+            }
+        });
+    }
+</script>

@@ -1,0 +1,133 @@
+﻿@model PISBusinessLogic.BindingModels.BookBindingModel
+@{
+    ViewData["Title"] = "Книги";
+}
+@Html.ValidationSummary()
+<div class="text-center text-black-50">
+    <h1>Книги</h1>
+</div>
+<hr />
+<form asp-controller="Readers" asp-action="AddContractBooks" method="get">
+
+    <strong>Найти книги в наличии</strong>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">По названию:</label>
+        <div class="col-sm-4">
+            @Html.TextBoxFor(x => x.Name)
+            <br />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">По автору:</label>
+        <div class="col-sm-4">
+            @Html.TextBoxFor(x => x.Author)
+            <br />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">По жанру:</label>
+        <div class="col-sm-4">
+            <select class="custom-select" name="GenreId" id="GenreId">
+                <option value="" selected disabled hidden>Выберите жанр</option>
+                @foreach (PISBusinessLogic.ViewModels.GenreViewModel genre in ViewBag.Genres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <br />
+    <div class="form-group row">
+        <div class="col-sm-4">
+            <input type="hidden" value="@ViewBag.Email" name="Email" />
+            <input type="submit" value="найти" class="btn btn-dark btn-sm" />
+            <hr />
+        </div>
+    </div>
+</form>
+<br />
+@if (ViewBag.ContractBooks != null)
+{
+    <p>Номер: @ViewBag.ContractBooks.Id</p>
+    <p>Дата: @ViewBag.ContractBooks.Date.ToShortDateString()</p>
+    <p>Дата возврата книг: @ViewBag.ContractBooks.DateReturn.ToShortDateString()</p>
+    <p>Стоимость: @ViewBag.ContractBooks.Sum</p>
+    <table class="table">
+        <tr>
+            <td>Название</td>
+            <td>Автор</td>
+            <td>Жанр</td>
+            <td>Издательство</td>
+            <td>Год издания</td>
+        </tr>
+        @foreach (var genre in ViewBag.Genres)
+        {
+            @foreach (var book in ViewBag.ContractBooks.ContractBooks)
+            {
+                @if (genre.Id == book.GenreId)
+                {
+
+                    <tr>
+                        <td>@book.Name</td>
+                        <td>@book.Author</td>
+                        <td>@genre.Name</td>
+                        <td>@book.PublishingHouse</td>
+                        <td>@book.Year</td>
+                    </tr>
+                }
+            }
+        }
+    </table>
+    <form asp-controller="Readers" asp-action="AddContractBooks" method="get">
+        <p>Книги выдаются на 2 недели, либо измените дату возврата вручную</p>
+        <div class="col-sm-8">
+            Дата возврата:<br>
+            <input type="date" name="date" />
+        </div>
+        <br />
+        <div class="form-group row">
+            <div class="col-sm-8">
+                <input type="submit" value="изменить дату возврата" class="btn btn-dark btn-sm" />
+            </div>
+        </div>
+        @Html.ValidationSummary(true, "", new { @style = "color: black" })
+    </form>
+}
+<hr />
+<br />
+<a class="btn btn-dark btn-sm" href="/Readers/listOfContracts">заключить</a>
+<br />
+<br />
+<table class="table">
+    <tr>
+        <td>Название</td>
+        <td>Автор</td>
+        <td>Жанр</td>
+        <td>Издательство</td>
+        <td>Год издания</td>
+        <td>Цена проката, руб./день</td>
+        <td>Статус</td>
+        <td>Добавить в договор</td>
+    </tr>
+    @foreach (var genre in ViewBag.Genres)
+    {
+        @foreach (var book in ViewBag.Books)
+        {
+            @if (genre.Id == book.GenreId)
+            {
+
+                <tr>
+                    <td>@book.Name</td>
+                    <td>@book.Author</td>
+                    <td>@genre.Name</td>
+                    <td>@book.PublishingHouse</td>
+                    <td>@book.Year</td>
+                    <td>@genre.Price</td>
+                    <td>@book.Status</td>
+                    <td>  @Html.ActionLink("добавить", "AddContractBooks", new { Email = ViewBag.FIO, id = @book.Id }, new { @class = "btn btn-dark" })</td>
+                </tr>
+            }
+        }
+    }
+</table>
+

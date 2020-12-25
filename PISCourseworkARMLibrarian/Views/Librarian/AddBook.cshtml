@@ -1,0 +1,44 @@
+﻿@model PISBusinessLogic.BindingModels.BookBindingModel
+
+@{
+    ViewData["Title"] = "Добавление новой книги";
+}
+<div class="text-left text-black-50">
+    <h1>@ViewData["Title"]</h1>
+</div>
+@using (Html.BeginForm("AddBook", "Books"))
+{
+    <p>
+        <div class="col-sm-8">
+            Название:<br>
+            @Html.TextBoxFor(x => x.Name)<br>
+        </div>
+        <div class="col-sm-8">
+            Автор: <br>
+            @Html.TextBoxFor(x => x.Author)<br>
+        </div>
+        <div class="col-sm-8">
+            Издательство:<br>
+            @Html.TextBoxFor(x => x.PublishingHouse)<br>
+        </div>
+        <div class="col-sm-8">
+            Год издания:<br>
+            @Html.TextBoxFor(x => x.Year)<br>
+        </div>
+        <div class="col-sm-4">
+            Жанр:<br>
+            <select class="custom-select custom-select-sm" name="GenreId" id="GenreId">
+                @foreach (PISBusinessLogic.ViewModels.GenreViewModel genre in ViewBag.Genres)
+                {
+                    <option value="@genre.Id">@genre.Name</option>
+                }
+            </select>
+        </div>
+    </p>
+    @Html.ValidationSummary(true, "", new { @style = "color: black" })
+    <div class="col-sm-8">
+        <input type="submit" value="Добавить книгу" class="btn btn-dark btn-sm" />
+    </div>
+
+}
+

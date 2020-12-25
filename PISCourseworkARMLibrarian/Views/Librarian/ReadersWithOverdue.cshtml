@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Читатели просрочившие срок сдачи книг";
+}
+<div class="text-center text-black-50">
+    <h1>Читатели просрочившие срок сдачи книг</h1>
+</div>
+<form asp-controller="Readers" asp-action="ReadersWithOverdue" method="get">
+    <div class="col-sm-8">
+        Дата:<br>
+        <input type="date" name="date" />
+    </div>
+    <br />
+    @Html.ValidationSummary(true, "", new { @style = "color: black" })
+    <div class="col-sm-8">
+        <input type="submit" value="просмотреть" class="btn btn-dark btn-sm" />
+    </div>
+</form>
+@if (ViewBag.Contracts.Count != 0)
+{
+    <table class="table">
+        <tr>
+            <td>ФИО</td>
+            <td>Номер договора</td>
+        </tr>
+
+        @foreach (PISBusinessLogic.ViewModels.ContractViewModel contract in ViewBag.Contracts)
+        {
+            @foreach (PISBusinessLogic.ViewModels.UserViewModel user in ViewBag.Readers)
+            {
+                <tr>
+                    <td>@user.FIO</td>
+                    <td>
+                        @contract.Id
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+}

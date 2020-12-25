@@ -1,0 +1,32 @@
+﻿@model PISBusinessLogic.BindingModels.BookingBindingModel
+
+@{
+    ViewData["Title"] = "Бронирование";
+}
+<div class="text-left text-black-50">
+    <h1>@ViewData["Title"]</h1>
+</div>
+
+
+<p>Задайте период бронирования</p>
+@using (Html.BeginForm("AddBooking", "Bookings", FormMethod.Post))
+{
+    <p>
+        <div class="col-sm-8">
+            Дата начала бронирования:<br>
+            <input type="date" name="DateFrom" />
+        </div>
+        <div class="col-sm-8">
+            Дата окончания бронирования:<br>
+            <input type="date" name="DateTo" />
+        </div>
+        <input type="hidden" value="@ViewBag.BookId" name="BookId" />
+        @Html.ValidationSummary(true, "", new { @style = "color: black" })
+        <br />
+        <div class="col-sm-8">
+            <input type="submit" value="Сохранить" class="btn btn-dark btn-sm" />
+        </div>
+
+    </p>
+
+}

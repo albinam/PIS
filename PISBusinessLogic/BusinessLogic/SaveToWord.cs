@@ -1,11 +1,12 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using PISBusinessLogic.HelperModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace PISBusinessLogic.HelperModels
+namespace PISBusinessLogic.BusinessLogic
 {
     public class SaveToWord
     {

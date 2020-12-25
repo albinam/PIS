@@ -4,7 +4,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace PISBusinessLogic.HelperModels
+namespace PISBusinessLogic.BusinessLogic
 {
     public class EncryptionLogic
     {

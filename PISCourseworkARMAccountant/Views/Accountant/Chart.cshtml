@@ -1,0 +1,68 @@
+﻿<title>@ViewData["Title"] Диаграмма</title>
+<div class="text-center text-black-50">
+    <h1>Диаграмма</h1>
+</div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
+
+<div id="chart_div"></div>
+<input type="submit" id="save-pdf" class="btn btn-dark btn-sm" value="сохранить в pdf" />
+<script type="text/javascript">
+
+
+    google.charts.load('current', {
+        packages: ['corechart', 'bar']
+    });
+    google.charts.setOnLoadCallback(LoadData);
+
+    function LoadData() {
+        $.ajax({
+
+            url: './Charts',
+            dataType: "json",
+            type: "GET",
+            error: function(xhr, status, error) {
+                var err = eval("(" + xhr.responseText + ")");
+                toastr.error(err.message);
+            },
+            success: function(data) {
+                PopulationChart(data);
+                return false;
+            }
+        });
+        return false;
+    }
+
+    function PopulationChart(data) {
+        var dataArray = [
+            ['userFIO','sum']
+        ];
+        $.each(data, function(i, item) {
+            dataArray.push([item.userFIO, item.sum]);
+        });
+        var data = google.visualization.arrayToDataTable(dataArray);
+        var options = {
+            title: 'Cтоимость заключенных договоров',
+            chartArea: {
+                width: '50%'
+            },
+            colors: ['#17a2b8'],
+            hAxis: {
+                title: 'Библиотекарь',
+                minValue: 0
+            },
+            vAxis: {
+                title: 'Сумма'
+            }
+        };
+        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+        var btnSave = document.getElementById('save-pdf');
+        chart.draw(data, options);
+        btnSave.addEventListener('click', function () {
+            var doc = new jsPDF('l');
+            doc.addImage(chart.getImageURI(), 0, 0);
+            doc.save('Диаграмма стоимость заключенных договоров.pdf');
+        }, false);
+        return false;
+    }
+</script>  

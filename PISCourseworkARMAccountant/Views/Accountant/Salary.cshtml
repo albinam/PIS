@@ -1,0 +1,59 @@
+﻿@model PISBusinessLogic.BindingModels.PaymentBindingModel
+
+@{
+    ViewData["Title"] = "Добавление зарплаты";
+}
+@using (Html.BeginForm("AddSalary", "Salary"))
+{
+    <div class="text-center text-black-50">
+        <h3>Добавление зарплаты</h3>
+    </div>
+    <hr />
+    <p>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Библиотекарь:</label>
+            <div class="col-sm-4">
+                <select class="custom-select custom-select-sm" name="Id" id="Id">
+                    <option value="" selected disabled hidden>Выберите библиотекаря</option>
+                    @foreach (PISBusinessLogic.ViewModels.UserViewModel user in ViewBag.Users)
+                    {
+                        if (@user.Role == 0)
+                        {
+                            <option value="@user.Id">@user.FIO</option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            Дата:<br>
+            <input type="date" name="date" />
+        </div>
+
+        <br />
+    </p>
+    <div class="col-sm-8">
+        <input type="submit" value="Начислить" class="btn btn-dark btn-sm" />
+    </div>
+}
+<br />
+@Html.ValidationSummary(true, "", new { @style = "color: black" })
+<form asp-controller="Salary" asp-action="SalaryAll">
+    <div class="text-center text-black-50">
+        <h3>Расчет суммарной стоимости зарплаты за год</h3>
+    </div>
+    <hr />
+    <div class="col-sm-4">
+        Введите год:<br>
+        <input name="date" type="date" />
+    </div>
+    <br />
+    <div class="col-sm-4">
+        <input type="submit" value="Вычислить" class="btn btn-dark btn-sm" />
+    </div>
+    <br />
+    <div class="col-sm-4">
+        Сумма:
+        @ViewBag.Sum
+    </div>
+</form>
