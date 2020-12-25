@@ -61,7 +61,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    background: url(back2.jpg) no-repeat center center fixed;
+    background: url(back2.jpg) center center fixed;
     background-size: 100%;
 
 }

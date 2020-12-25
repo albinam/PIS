@@ -91,6 +91,12 @@ namespace PISCoursework.Controllers.Reader
             {
                 UserId = Program.Reader.Id
             }).FirstOrDefault();
+            if (Convert.ToInt32(libraryCard.Year) < DateTime.Now.Year)
+            {
+                ViewBag.Booking = _booking.Read(null);
+                ModelState.AddModelError("","Ваш читательский билет просрочен, обратитесь в библиотеку");
+                return View("Views/Reader/AddBooking.cshtml");
+            }
             _booking.CreateOrUpdate(new BookingBindingModel
             {
                 DateFrom = model.DateFrom,

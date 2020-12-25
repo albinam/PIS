@@ -269,9 +269,9 @@ namespace PISCoursework.Controllers.Librarian
             {
                 Id = id
             }).FirstOrDefault();
-            _report.SaveLibraryCardToWordFile(exportDirectory + id + ".docx", model);
+            _report.SaveLibraryCardToWordFile(exportDirectory+"\\" + id + ".docx", model);
             // Путь к файлу
-            string file_path = Path.Combine(exportDirectory + id + ".docx");
+            string file_path = Path.Combine(exportDirectory + "\\" + id + ".docx");
             // Тип файла - content-type
             string file_type = "application/docx";
             // Имя файла - необязательно
@@ -284,9 +284,9 @@ namespace PISCoursework.Controllers.Librarian
             {
                 Id = id
             }).FirstOrDefault();
-            _report.SaveBookToWordFile(exportDirectory + id + ".docx", model);
+            _report.SaveBookToWordFile(exportDirectory +"\\" + id + ".docx", model);
             // Путь к файлу
-            string file_path = Path.Combine(exportDirectory + id + ".docx");
+            string file_path = Path.Combine(exportDirectory+ "\\" + id + ".docx");
             // Тип файла - content-type
             string file_type = "application/docx";
             // Имя файла - необязательно

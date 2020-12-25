@@ -9,8 +9,8 @@
 @foreach (var contract in ViewBag.Contracts)
 {
     <p>Номер: @contract.Id</p>
-    <p>Дата: @contract.Date</p>
-    <p>Дата возврата книг: @contract.DateReturn</p>
+    <p>Дата: @contract.Date.ToShortDateString()</p>
+    <p>Дата возврата книг: @contract.DateReturn.ToShortDateString()</p>
     <p>Стоимость: @contract.Sum</p>
     <p>Штраф: @contract.Fine</p>
     <p>Статус: @contract.ContractStatus</p>

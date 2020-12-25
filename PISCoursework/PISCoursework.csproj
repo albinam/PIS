@@ -21,4 +21,8 @@
     <ProjectReference Include="..\PISDatabaseImplement\PISDatabaseImplement.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\Export\" />
+  </ItemGroup>
+
 </Project>
