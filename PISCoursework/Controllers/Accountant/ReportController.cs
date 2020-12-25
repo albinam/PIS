@@ -223,13 +223,8 @@ namespace PISCoursework.Controllers.Accountant
         public ActionResult List()
         {
             _report.SaveListToWordFile(exportDirectory + "\\" + "список.docx");
-            // Путь к файлу
-            string file_path = Path.Combine(exportDirectory + "\\" + "список.docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = "Список библиотекарей.docx";
-            return PhysicalFile(file_path, file_type, file_name);
+            var fileName = Path.GetFileName(exportDirectory + "\\" + "список.docx");
+            return File("Export/" + fileName, "application/xml", fileName);
 
         }
         public ActionResult ContractLibrarian(int id)
@@ -239,23 +234,12 @@ namespace PISCoursework.Controllers.Accountant
                 Id = id
             }).FirstOrDefault();
             _report.SaveContractToWordFile(exportDirectory + "\\" + "Контракт c " + model.FIO + ".docx", model);
-            // Путь к файлу
-            string file_path = Path.Combine(exportDirectory + "\\" + "Контракт c " + model.FIO + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = "Контракт c " + model.FIO + ".docx";
-            return PhysicalFile(file_path, file_type, file_name);
+            var fileName = Path.GetFileName(exportDirectory + "\\" + "Контракт c " + model.FIO + ".docx");
+            return File("Export/" + fileName, "application/xml", fileName);
 
         }
         public IActionResult BackUpToJsonAsync()
         {
-            // Путь к файлу
-            string file_path = _archive.ArchiveOutdated(2);
-            // Тип файла - content-type
-            string file_type = "application/zip";
-            // Имя файла - необязательно
-            string file_name = "архив" + DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.ToString() + ".zip";
             var payments = _payment.Read(null);
             foreach (var el in payments)
             {
@@ -267,7 +251,9 @@ namespace PISCoursework.Controllers.Accountant
                     });
                 }
             }
-            return PhysicalFile(file_path, file_type, file_name);
+            var path = _archive.ArchiveOutdated(2);
+            var fileName = Path.GetFileName(path);
+            return File("Export/" + fileName, "text/json", fileName);
         }
     }
 }

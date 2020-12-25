@@ -166,7 +166,7 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по жанру
             if (model.GenreId != 0 && model.Name == null && model.Author == null)
@@ -183,7 +183,7 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по автору
             if (model.GenreId == 0 && model.Name == null && model.Author != null)
@@ -200,7 +200,7 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по жанру и названию
             if (model.GenreId != 0 && model.Name != null && model.Author == null)
@@ -217,7 +217,7 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             // по всем трем
             if (model.GenreId != 0 && model.Name != null && model.Author != null)
@@ -234,7 +234,7 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по жанру и автору
             if (model.GenreId != 0 && model.Name == null && model.Author != null)
@@ -251,7 +251,7 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
+                return View("Views/Librarian/ListOfBooks.cshtml");
             }
             //по автору и названию
             if (model.GenreId == 0 && model.Name != null && model.Author != null)
@@ -268,11 +268,6 @@ namespace PISCoursework.Controllers.Librarian
                     freeBooks.Remove(book);
                 }
                 ViewBag.Books = freeBooks;
-                return View("Views/Librarian/AddContractBooks.cshtml");
-            }
-            if (validation.bookSearch(model))
-            {
-                ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
                 return View("Views/Librarian/ListOfBooks.cshtml");
             }
             return View("Views/Librarian/ListOfBooks.cshtml");

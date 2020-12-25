@@ -205,7 +205,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Дата заключения: " + info.contract.Date },
+                        Texts = new List<string> { "Дата заключения: " + info.contract.Date.ToShortDateString() },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -215,7 +215,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Дата возврата: " + info.contract.DateReturn },
+                        Texts = new List<string> { "Дата возврата: " + info.contract.DateReturn.ToShortDateString() },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,

@@ -67,7 +67,7 @@ namespace PISCoursework.Controllers
                         {
                             userWithCard.Add(u);
                         }
-                        if(u.Id == c.UserId && c.Year != DateTime.Now.Year.ToString())
+                        if (u.Id == c.UserId && c.Year != DateTime.Now.Year.ToString())
                         {
                             userWithCardOverdue.Add(u);
                         }
@@ -132,7 +132,7 @@ namespace PISCoursework.Controllers
                 ViewBag.Users = userWithCard2;
                 ViewBag.UsersWithoutCard = users2;
                 ViewBag.UsersWithCardOverdue = userWithCardOverdue2;
-                ViewBag.Create = -1;              
+                ViewBag.Create = -1;
                 return View("Views/Librarian/Readers.cshtml");
             }
         }
@@ -210,6 +210,7 @@ namespace PISCoursework.Controllers
         public ActionResult AddContractBooks(string Email, int id, BookBindingModel model, DateTime date)
         {
             int libraryCard = 0;
+            ViewBag.Email = Email;
             if (Email != null)
             {
                 var user = _user.Read(new UserBindingModel
@@ -827,11 +828,6 @@ namespace PISCoursework.Controllers
                 ViewBag.Books = freebooks;
                 return View("Views/Librarian/AddContractBooks.cshtml");
             }
-            if (validation.bookSearch(model))
-            {
-                ModelState.AddModelError("", "Выберите хотя бы один параметр поиска");
-                return View("Views/Librarian/AddContractBooks.cshtml");
-            }
             return View("Views/Librarian/AddContractBooks.cshtml");
         }
 
@@ -854,7 +850,7 @@ namespace PISCoursework.Controllers
                 {
                     Id = booking.BookId
                 }).FirstOrDefault();
-                if (booking.DateTo < DateTime.Now)
+                if (booking.DateTo > DateTime.Now)
                 {
                     if (b.Status == Status.Забронирована)
                     {
@@ -872,6 +868,10 @@ namespace PISCoursework.Controllers
                         Year = b.Year,
                         GenreId = b.GenreId,
                         Status = Status.Свободна
+                    });
+                    _booking.Delete(new BookingBindingModel
+                    {
+                        Id = booking.Id
                     });
                 }
             }

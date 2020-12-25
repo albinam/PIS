@@ -229,12 +229,6 @@ namespace PISCoursework.Controllers.Librarian
         }
         public IActionResult BackUpToJsonAsync()
         {
-                // Путь к файлу
-                string file_path = _archive.ArchiveOutdated(1);
-                // Тип файла - content-type
-                string file_type = "application/zip";
-            // Имя файла - необязательно
-            string file_name = "архив"+ DateTime.Now.Day.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.ToString()+".zip";
             var books = _book.Read(null);
             var cards = _libraryCard.Read(null);
             foreach (var el in books)
@@ -257,7 +251,9 @@ namespace PISCoursework.Controllers.Librarian
                     });
                 }
             }
-            return PhysicalFile(file_path, file_type, file_name);      
+            var path = _archive.ArchiveOutdated(1);
+            var fileName = Path.GetFileName(path);
+            return File("Export/" + fileName, "text/json", fileName);
         }
         public ActionResult PrintLibraryCard(int id)
         {
@@ -269,14 +265,9 @@ namespace PISCoursework.Controllers.Librarian
             {
                 Id = id
             }).FirstOrDefault();
-            _report.SaveLibraryCardToWordFile(exportDirectory+"\\" + id + ".docx", model);
-            // Путь к файлу
-            string file_path = Path.Combine(exportDirectory + "\\" + id + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = id + ".docx";
-            return PhysicalFile(file_path, file_type, file_name);
+            _report.SaveLibraryCardToWordFile(exportDirectory+"\\Читательский билет №" + id + ".docx", model);
+            var fileName = Path.GetFileName(exportDirectory + "\\Читательский билет №" + id + ".docx");
+            return File("Export/" + fileName, "application/xml", fileName);
         }
         public ActionResult Available(int id)
         {
@@ -284,14 +275,10 @@ namespace PISCoursework.Controllers.Librarian
             {
                 Id = id
             }).FirstOrDefault();
-            _report.SaveBookToWordFile(exportDirectory +"\\" + id + ".docx", model);
+            _report.SaveBookToWordFile(exportDirectory +"\\Справка о книге №" + id + ".docx", model);
             // Путь к файлу
-            string file_path = Path.Combine(exportDirectory+ "\\" + id + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = id + ".docx";
-            return PhysicalFile(file_path, file_type, file_name);
+            var fileName = Path.GetFileName(exportDirectory + "\\Справка о книге №" + id + ".docx");
+            return File("Export/" + fileName, "application/xml", fileName);
 
         }
     }

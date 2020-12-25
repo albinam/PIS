@@ -146,13 +146,8 @@ namespace PISCoursework.Controllers.Reader
                 Id = id
             }).FirstOrDefault();
             _report.SaveContractReaderToWordFile(exportDirectory + "\\" + "договор" + id + ".docx", model);
-            // Путь к файлу
-            string file_path = Path.Combine(exportDirectory + "\\" + "договор" + id + ".docx");
-            // Тип файла - content-type
-            string file_type = "application/docx";
-            // Имя файла - необязательно
-            string file_name = "договор"+id + ".docx";
-            return PhysicalFile(file_path, file_type, file_name);
+            var fileName = Path.GetFileName(exportDirectory + "\\" + "договор" + id + ".docx");
+            return File("Export/" + fileName, "text/json", fileName);
         }
     }
 }
