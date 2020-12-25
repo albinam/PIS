@@ -226,7 +226,7 @@ namespace PISCoursework.Controllers
         }
         public bool checkLibrarian(int CountReport, int Id)
         {
-            if (Id != 0 && CountReport != 0)
+            if (Id != 0 && CountReport >= 0)
             {
                 return true;
             }
@@ -251,6 +251,17 @@ namespace PISCoursework.Controllers
         {
             var dat1 = new DateTime();
             if (date == dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool checkSalary(PaymentBindingModel model, string sum)
+        {
+            if (model.UserId != 0 && sum !=null && model.Date != null)
             {
                 return true;
             }

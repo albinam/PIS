@@ -55,7 +55,7 @@ namespace PISCoursework.Controllers.Accountant
                 _payment.CreateOrUpdate(new PaymentBindingModel
                 {
                     Date = model.Date,
-                    Sum = salary + com,
+                    Sum = Math.Round((salary + com),2),
                     UserId = Id,
                 });
                 ModelState.AddModelError("", "Зарплата начислена");
@@ -68,30 +68,45 @@ namespace PISCoursework.Controllers.Accountant
                 return View("Views/Accountant/Salary.cshtml");
             }
         }
-        public ActionResult CheckSalary(PaymentBindingModel model, int Id, int Sum)
+        public ActionResult CheckSalary(PaymentBindingModel model, string sum)
         {
             ViewBag.Users = _user.Read(null);
-            var pay = _payment.Read(new PaymentBindingModel
+            sum=sum.Replace(".", ",");
+            if (validation.checkSalary(model,sum))
             {
-                UserId = Id
-            });
-            foreach (var p in pay)
-            {
-                if (p.Date.Month == model.Date.Month && p.Date.Year == model.Date.Year)
+                var pay = _payment.Read(new PaymentBindingModel
                 {
-                    _payment.CreateOrUpdate(new PaymentBindingModel
+                    UserId = model.UserId
+                });
+                foreach (var p in pay)
+                {
+             
+                    if (p.Date.Month == model.Date.Month && p.Date.Year == model.Date.Year)
                     {
-                        Id = p.Id,
-                        Date = p.Date,
-                        Sum = p.Sum - Sum,
-                        UserId = p.UserId
-                    });
-                    ModelState.AddModelError("", "Изменено");
-                    return View("Views/Accountant/LeadSalary.cshtml");
+                        if (p.Sum < Convert.ToDouble(sum))
+                        {
+                            ModelState.AddModelError("", "Сумма превышает суммы платежа");
+                            return View("Views/Accountant/LeadSalary.cshtml");
+                        }
+                        _payment.CreateOrUpdate(new PaymentBindingModel
+                        {
+                            Id = p.Id,
+                            Date = p.Date,
+                            Sum = p.Sum - Convert.ToDouble(sum),
+                            UserId = p.UserId
+                        });
+                        ModelState.AddModelError("", "Изменено");
+                        return View("Views/Accountant/LeadSalary.cshtml");
+                    }
                 }
+                ModelState.AddModelError("", "Нет платежа по такому параметру");
+                return View("Views/Accountant/LeadSalary.cshtml");
             }
-            ModelState.AddModelError("", "Нет платежа по такому параметру");
-            return View("Views/Accountant/LeadSalary.cshtml");
+            else
+            {
+                ModelState.AddModelError("", "Выберите библиотекаря, дату и введите сумму");
+                return View("Views/Accountant/LeadSalary.cshtml");
+            }
         }
 
         public ActionResult SalaryAll(DateTime date)

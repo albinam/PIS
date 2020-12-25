@@ -61,7 +61,7 @@
         btnSave.addEventListener('click', function () {
             var doc = new jsPDF('l');
             doc.addImage(chart.getImageURI(), 0, 0);
-            doc.save('chart.pdf');
+            doc.save('Диаграмма стоимость заключенных договоров.pdf');
         }, false);
         return false;
     }
