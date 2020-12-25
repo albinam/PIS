@@ -182,17 +182,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Дата принятия на работу: 01.12.2020" },
-                        TextProperties = new WordParagraphProperties
-                        {
-                            Bold = false,
-                            Size = "24",
-                            JustificationValues = JustificationValues.Left
-                        }
-                    }));
-                    docBody.AppendChild(CreateParagraph(new WordParagraph
-                    {
-                        Texts = new List<string> { "Главный бухгалтер: Ефимова" },
+                        Texts = new List<string> { "Главный бухгалтер: Ефимова М.М." },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,

@@ -222,9 +222,9 @@ namespace PISCoursework.Controllers.Accountant
         }
         public ActionResult List()
         {
-            _report.SaveListToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
+            _report.SaveListToWordFile(exportDirectory + "\\" + "список.docx");
             // Путь к файлу
-            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//список.docx");
+            string file_path = Path.Combine(exportDirectory + "\\" + "список.docx");
             // Тип файла - content-type
             string file_type = "application/docx";
             // Имя файла - необязательно
@@ -238,9 +238,9 @@ namespace PISCoursework.Controllers.Accountant
             {
                 Id = id
             }).FirstOrDefault();
-            _report.SaveContractToWordFile("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx", model);
+            _report.SaveContractToWordFile(exportDirectory + "\\" + "Контракт c " + model.FIO + ".docx", model);
             // Путь к файлу
-            string file_path = Path.Combine("C://Users//marin.LAPTOP-0TUFHPTU//Рабочий стол//универ//3 курс//пис//отч//Контракт c " + model.FIO + ".docx");
+            string file_path = Path.Combine(exportDirectory + "\\" + "Контракт c " + model.FIO + ".docx");
             // Тип файла - content-type
             string file_type = "application/docx";
             // Имя файла - необязательно
