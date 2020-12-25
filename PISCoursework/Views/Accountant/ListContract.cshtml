@@ -1,0 +1,65 @@
+﻿@model PISBusinessLogic.BindingModels.ContractBindingModel
+@{
+    ViewData["Title"] = "Выборка данных о договорах";
+}
+<div class="text-center text-black-50">
+    <h1>Выборка данных о договорах</h1>
+</div>
+<hr />
+<form asp-controller="Accountant" asp-action="ListContract" method="get">
+    <div class="col-sm-8">
+        <p>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Библиотекарь:</label>
+                <div class="col-sm-4">
+                    <select class="custom-select custom-select-sm" name="Id" id="Id">
+                        <option value="" selected disabled hidden>Выберите библиотекаря</option>
+                        @foreach (PISBusinessLogic.ViewModels.UserViewModel user in ViewBag.Users)
+                        {
+                            if (@user.Role == 0)
+                            {
+                                <option value="@user.Id">@user.FIO</option>
+                            }
+                        }
+                    </select>
+                </div>
+            </div>
+        </p>
+        <p>
+            Месяц:
+            <input type="month" name="month"  />
+        </p>
+    </div>
+    <div class="col-sm-8">
+        <input type="submit" value="Найти" class="btn btn-dark btn-sm" />
+    </div>
+</form>
+@Html.ValidationSummary(true, "", new { @style = "color: black" })
+
+@if (ViewBag.Contract != null)
+{
+    <table class="table">
+        <tr>
+            <td>Дата</td>
+            <td>Библиотекарь</td>
+            <td>Дата возврата</td>
+            <td>Сумма, руб.</td>
+            <td>Штраф</td>
+            <td>Статус</td>
+            <td>Читатель</td>
+        </tr>
+        @foreach (var r in ViewBag.Contract)
+        {
+
+                    <tr>
+                        <td>@r.Date.ToShortDateString()</td>
+                        <td>@r.LibrarianFIO</td>
+                        <td>@r.DateReturn.ToShortDateString()</td>
+                        <td>@r.Sum</td>
+                        <td>@r.Fine</td>
+                        <td>@r.ContractStatus</td>
+                        <td>@r.ReaderFIO</td>
+                    </tr>
+        }
+    </table>
+}

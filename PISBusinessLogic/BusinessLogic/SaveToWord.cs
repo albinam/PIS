@@ -71,7 +71,7 @@ namespace PISBusinessLogic.HelperModels
                 {
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Название: "+info.book.Name },
+                        Texts = new List<string> { "Название: " + info.book.Name },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -81,7 +81,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> {"Автор: "+ info.book.Author },
+                        Texts = new List<string> { "Автор: " + info.book.Author },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -91,7 +91,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> {"Издательство: "+ info.book.PublishingHouse },
+                        Texts = new List<string> { "Издательство: " + info.book.PublishingHouse },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -101,7 +101,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Год: " +info.book.Year },
+                        Texts = new List<string> { "Год: " + info.book.Year },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -111,14 +111,14 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Дата формирования справки: " + DateTime.Now.ToShortDateString()},
+                        Texts = new List<string> { "Дата формирования справки: " + DateTime.Now.ToShortDateString() },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
                             Size = "24",
                             JustificationValues = JustificationValues.Left
                         }
-                    }));               
+                    }));
                 }
                 if (info.UserFIO != null)
                 {
@@ -182,17 +182,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Дата принятия на работу: 01.12.2020" },
-                        TextProperties = new WordParagraphProperties
-                        {
-                            Bold = false,
-                            Size = "24",
-                            JustificationValues = JustificationValues.Left
-                        }
-                    }));
-                    docBody.AppendChild(CreateParagraph(new WordParagraph
-                    {
-                        Texts = new List<string> { "Главный бухгалтер: Ефимова" },
+                        Texts = new List<string> { "Главный бухгалтер: Ефимова М.М." },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -215,7 +205,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Дата заключения: " + info.contract.Date},
+                        Texts = new List<string> { "Дата заключения: " + info.contract.Date },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -236,7 +226,7 @@ namespace PISBusinessLogic.HelperModels
                     double sum = info.contract.Sum + info.contract.Fine;
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Итоговая стоимость (включая штрафы): "+ sum},
+                        Texts = new List<string> { "Итоговая стоимость (включая штрафы): " + sum },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,
@@ -246,7 +236,7 @@ namespace PISBusinessLogic.HelperModels
                     }));
                     docBody.AppendChild(CreateParagraph(new WordParagraph
                     {
-                        Texts = new List<string> { "Штрафы:"+ info.contract.Fine },
+                        Texts = new List<string> { "Штрафы:" + info.contract.Fine },
                         TextProperties = new WordParagraphProperties
                         {
                             Bold = false,

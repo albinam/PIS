@@ -12,5 +12,6 @@ namespace PISDatabaseimplements.Models
         public double Sum { get; set; }
         public DateTime Date {get;set;}
         public int UserId { get; set; }
+        public virtual User Librarian { get; set; }
     }
 }

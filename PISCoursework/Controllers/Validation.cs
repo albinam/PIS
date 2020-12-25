@@ -226,7 +226,42 @@ namespace PISCoursework.Controllers
         }
         public bool checkLibrarian(int CountReport, int Id)
         {
-            if (Id != 0 && CountReport != 0)
+            if (Id != 0 && CountReport >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool listContract(int Id, DateTime month)
+        {
+            var dat1 = new DateTime();
+            if (Id != 0 && month != dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool distributionSalary(DateTime date)
+        {
+            var dat1 = new DateTime();
+            if (date == dat1)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public bool checkSalary(PaymentBindingModel model, string sum)
+        {
+            if (model.UserId != 0 && sum !=null && model.Date != null)
             {
                 return true;
             }
