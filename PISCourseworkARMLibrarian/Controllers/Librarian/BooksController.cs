@@ -86,14 +86,14 @@ namespace PISCourseworkARMLibrarian.Controllers.Librarian
                 {
                     Id = GenreId
                 }).FirstOrDefault();
-                Percent = Percent.Replace(".", ",");
-                double percent = Convert.ToDouble(Percent);
+                decimal percent = decimal.Parse(Percent);
+                decimal price = decimal.Parse(genre.Price.ToString());
                 _genre.CreateOrUpdate(new GenreBindingModel
                 {
                     Id = GenreId,
                     Name = genre.Name,
-                    Price = genre.Price * percent
-                });
+                    Price = Math.Round(Convert.ToDouble(price * percent), 2)
+                }); 
                 ModelState.AddModelError("", "Цена успешно изменена");
                 return View("Views/Librarian/BookPrice.cshtml");
             }

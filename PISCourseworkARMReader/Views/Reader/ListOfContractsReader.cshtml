@@ -6,6 +6,7 @@
     <h1>Договоры</h1>
 </div>
 <p>ФИО читателя: @ViewBag.Users.FIO</p>
+@if(ViewBag.Contracts.Count!=0){
 @foreach (var contract in ViewBag.Contracts)
 {
     <p>Номер: @contract.Id</p>
@@ -44,4 +45,5 @@
     <strong> <a class="btn btn-dark btn-sm" href="/Contract/ChangeDate/@contract.Id">изменить дату возврата</a></strong>
     <hr />
     <strong> <a class="btn btn-dark btn-sm" href="/Contract/PrintContract/@contract.Id">сохранить в формате docx</a></strong>
+}
 }
