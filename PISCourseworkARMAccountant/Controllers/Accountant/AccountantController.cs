@@ -67,9 +67,8 @@ namespace PISCourseworkARMAccountant.Controllers
                 {
                     Id = Id
                 }).FirstOrDefault();
-                ComissionPercent = ComissionPercent.Replace(".", ",");
-                double percent = Convert.ToDouble(ComissionPercent);
-                double salary = Convert.ToDouble(user.Salary);
+                decimal percent = decimal.Parse(ComissionPercent)/1000;           
+                decimal salary = decimal.Parse(user.Salary.ToString());
                 _user.CreateOrUpdate(new UserBindingModel
                 {
                     Id = Id,
@@ -77,7 +76,7 @@ namespace PISCourseworkARMAccountant.Controllers
                     Password=user.Password,
                     Email = user.Email,
                     Salary = user.Salary,
-                    Comission = (Math.Round(salary * (percent / 100), 2)).ToString(),
+                    Comission = (Math.Round(Convert.ToDouble(salary * percent), 2)).ToString(),
                     ComissionPercent = ComissionPercent,
                 });
                 ModelState.AddModelError("", "Процент успешно изменен");
@@ -101,10 +100,8 @@ namespace PISCourseworkARMAccountant.Controllers
                 {
                     if (us.Role == Roles.Библиотекарь)
                     {
-                        ComissionPercentAll = ComissionPercentAll.Replace(".", ",");
-                        double percent = Convert.ToDouble(ComissionPercentAll);
-                        double salary = Convert.ToDouble(us.Salary);
-                        double com = Math.Round(salary * (percent / 100), 2);
+                        decimal percent = decimal.Parse(ComissionPercentAll) /1000 ;
+                        decimal salary = decimal.Parse(us.Salary.ToString());
                         _user.CreateOrUpdate(new UserBindingModel
                         {
                             Id = us.Id,
@@ -112,7 +109,7 @@ namespace PISCourseworkARMAccountant.Controllers
                             Password = us.Password,
                             Email = us.Email,
                             Salary = us.Salary,
-                            Comission = (com).ToString(),
+                            Comission = (Math.Round(Convert.ToDouble(salary * percent), 2)).ToString(),
                             ComissionPercent = ComissionPercentAll,
                         });
                     }

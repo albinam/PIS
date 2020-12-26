@@ -31,7 +31,6 @@
             <td>ФИО</td>
             <td>Логин</td>
             <td>Читательский билет</td>
-            <td>Продление</td>
             <td>Заключить договор</td>
         </tr>
         @foreach (var user in ViewBag.Users)
@@ -41,9 +40,6 @@
                 <td>@user.Email</td>
                 <td>
                     <a class="btn btn-dark btn-sm" href="/Readers/AddLibraryCard/@user.Id">просмотреть читательский билет</a>
-                </td>
-                <td>
-                    @Html.ActionLink("продлить билет", "AddLibraryCard", new { id = @user.Id, prolong = true }, new { @class = "btn  btn-dark btn-sm" })
                 </td>
                 <td>
                     @Html.ActionLink("заключить договор", "AddContractBooks", new { email = @user.Email, id = ViewBag.Create }, new { @class = "btn btn-dark btn-sm" })
