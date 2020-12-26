@@ -10,7 +10,7 @@ using PISDatabaseImplements;
 namespace PISDatabaseImplement.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20201225184348_1")]
+    [Migration("20201223220229_1")]
     partial class _1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -202,8 +202,6 @@ namespace PISDatabaseImplement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Payments");
                 });
 
@@ -297,15 +295,6 @@ namespace PISDatabaseImplement.Migrations
             modelBuilder.Entity("PISDatabaseimplements.Models.LibraryCard", b =>
                 {
                     b.HasOne("PISDatabaseimplements.Models.User", "Reader")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PISDatabaseimplements.Models.Payment", b =>
-                {
-                    b.HasOne("PISDatabaseimplements.Models.User", "Librarian")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

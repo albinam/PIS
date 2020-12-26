@@ -200,8 +200,6 @@ namespace PISDatabaseImplement.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("Payments");
                 });
 
@@ -295,15 +293,6 @@ namespace PISDatabaseImplement.Migrations
             modelBuilder.Entity("PISDatabaseimplements.Models.LibraryCard", b =>
                 {
                     b.HasOne("PISDatabaseimplements.Models.User", "Reader")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("PISDatabaseimplements.Models.Payment", b =>
-                {
-                    b.HasOne("PISDatabaseimplements.Models.User", "Librarian")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
