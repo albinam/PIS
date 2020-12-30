@@ -26,10 +26,6 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
             {
                 UserId = Id
             });
-            if (pay.Count == 0)
-            {
-                return AddSalaries(model, Id);
-            }
             foreach (var p in pay)
             {
                 if (p.Date.Month == model.Date.Month && p.Date.Year == model.Date.Year)
@@ -39,11 +35,6 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
                     return View("Views/Accountant/Salary.cshtml");
                 }
             }
-            return AddSalaries(model, Id);
-        }
-
-        public ActionResult AddSalaries(PaymentBindingModel model, int Id)
-        {
             if (validation.addSalar(model, Id))
             {
                 ViewBag.Users = _user.Read(null);
@@ -51,12 +42,15 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
                 {
                     Id = Id
                 }).FirstOrDefault();
-                double salary = Convert.ToDouble(user.Salary);
-                double com = Convert.ToDouble(user.Comission);
+                string str = user.Salary.ToString();
+                str = str.Replace(",", ".");
+                decimal salary = decimal.Parse(str);
+                decimal com = decimal.Parse(user.Comission);
+                decimal sum = salary + com;
                 _payment.CreateOrUpdate(new PaymentBindingModel
                 {
                     Date = model.Date,
-                    Sum = Math.Round((salary + com),2),
+                    Sum = Math.Round(Convert.ToDouble(sum), 2),
                     UserId = Id,
                 });
                 ModelState.AddModelError("", "Зарплата начислена");
@@ -72,7 +66,6 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
         public ActionResult CheckSalary(PaymentBindingModel model, string sum)
         {
             ViewBag.Users = _user.Read(null);
-            sum=sum.Replace(".", ",");
             if (validation.checkSalary(model,sum))
             {
                 var pay = _payment.Read(new PaymentBindingModel

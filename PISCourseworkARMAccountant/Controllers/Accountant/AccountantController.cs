@@ -67,7 +67,7 @@ namespace PISCourseworkARMAccountant.Controllers
                 {
                     Id = Id
                 }).FirstOrDefault();
-                decimal percent = decimal.Parse(ComissionPercent)/1000;           
+                decimal percent = decimal.Parse(ComissionPercent)/10000;           
                 decimal salary = decimal.Parse(user.Salary.ToString());
                 _user.CreateOrUpdate(new UserBindingModel
                 {
@@ -100,7 +100,7 @@ namespace PISCourseworkARMAccountant.Controllers
                 {
                     if (us.Role == Roles.Библиотекарь)
                     {
-                        decimal percent = decimal.Parse(ComissionPercentAll) /1000 ;
+                        decimal percent = decimal.Parse(ComissionPercentAll) /10000 ;
                         decimal salary = decimal.Parse(us.Salary.ToString());
                         _user.CreateOrUpdate(new UserBindingModel
                         {
@@ -125,7 +125,7 @@ namespace PISCourseworkARMAccountant.Controllers
             }
         }
         public ActionResult ListOfLibrarian(UserBindingModel model)
-        {
+        {        
             var user = _user.Read(null);
             List<UserViewModel> users = new List<UserViewModel>();
             foreach (var us in user)

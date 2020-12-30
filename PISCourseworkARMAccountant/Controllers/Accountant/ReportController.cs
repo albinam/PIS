@@ -54,9 +54,12 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
                     var Contract = _contract.Read(null);
                     foreach (var contr in Contract)
                     {
-                        if (contr.LibrarianId == us.Id)
+                        if (contr.Date.Date == DateTime.Now.Date)
                         {
-                            sum += Convert.ToInt32(contr.Sum);
+                            if (contr.LibrarianId == us.Id)
+                            {
+                                sum += Convert.ToInt32(contr.Sum);
+                            }
                         }
                     }
                     chart.Add(new ChartLibrarian { UserFIO = us.FIO, Sum = sum });
@@ -167,7 +170,7 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
         public ActionResult LeadSalary(DateTime month)
         {
             ViewBag.Users = _user.Read(null);
-
+            double sum=0;
             int month1 = month.Month;
             if (!validation.leadSalary(month))
             {
@@ -180,9 +183,11 @@ namespace PISCourseworkARMAccountant.Controllers.Accountant
                     if (pay.Date.Month == month1)
                     {
                         pays.Add(pay);
+                        sum += pay.Sum;
                     }
                 }
                 ViewBag.Payment = pays;
+                ViewBag.Sum = Math.Round(sum,2);
                 return View("Views/Accountant/LeadSalary.cshtml");
             }
             else
